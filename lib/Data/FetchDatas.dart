@@ -14,10 +14,12 @@ class TMDBService {
 	static List<Map<String, dynamic>> the10movieTren = [];
 	static List<Map<String, dynamic>> the20movieRecent = [];
 	static List<Map<String, dynamic>> the20moviePop = [];
+	static List<Map<String, dynamic>> movieCateg = [];
 
 	static List<Map<String, dynamic>> the10serieTren = [];
 	static List<Map<String, dynamic>> the20seriePop = [];
-	static List<Map<String, dynamic>> the20serieRecent = [];
+	static List<Map<String, dynamic>> the20serieTop = [];
+	static List<Map<String, dynamic>> serieCateg = [];
 
 	///////////////////////////////////////////////////////////////
 	/// Fonction pour récupérer les têtes d'affiche (films aléatoires)
@@ -95,5 +97,24 @@ class TMDBService {
 				}
 			},
 		);
-	} 
+	}
+
+		///////////////////////////////////////////////////////////////
+	/// récupère les catégories des films / series
+	Future<List<Map<String, dynamic>>> fetchCateg(bool movie) async {
+		final List<Map<String, dynamic>> temp = [];
+		final response = await http.get(
+			Uri.parse('https://api.themoviedb.org/3/genre/${movie ? 'movie' : 'tv'}/list?api_key=$apiKey&language=fr'),
+		);
+
+		if (response.statusCode == 200) {
+			final data = json.decode(response.body);
+			final List<dynamic> results = data['genres'];
+
+			temp.addAll(results.take(results.length).map((e) => e as Map<String, dynamic>));
+		} else {
+			throw Exception('Failed to load movies');
+		}
+		return temp;
+	}
 }

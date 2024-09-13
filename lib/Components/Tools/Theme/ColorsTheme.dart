@@ -20,6 +20,6 @@ ThemeData darkTheme = ThemeData(
 		)
 	),
 	scaffoldBackgroundColor: const Color.fromRGBO(17, 17, 17, 1),
-	dividerColor: const Color.fromRGBO(230, 230, 230, 1),
+	dividerColor: const Color.fromARGB(255, 68, 67, 67),
 	shadowColor: Colors.grey
 );

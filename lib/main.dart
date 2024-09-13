@@ -27,19 +27,24 @@ class Main extends StatelessWidget {
 					} else if (snapshot.connectionState == ConnectionState.done) {
 						return const MyTabbar();
 					} else {
-						return Text("error");
+						return const Text("error");
 					}
 				}
 			)
 		);
 	}
 
+	///////////////////////////////////////////////////////////////
+	/// Télécharge les données de l'api TMDB en utilisant le gestionnaire custom TMDBService
 	Future<bool> downloadData() async {
-		TMDBService.the10movieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=en-US&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
-		TMDBService.the20moviePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=en-US&sort_by=popularity.desc", -1);
-		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=en-US&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
-		TMDBService.the10serieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/tv?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=en-US&sort_by=popularity.desc", 1);
-		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${TMDBService().apiKey}&language=en-US", -1);
-		TMDBService.the20serieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/tv?api_key=${TMDBService().apiKey}&first_air_date.gte=2024-01-01&first_air_date.lte=2024-12-25&include_adult=false&include_null_first_air_dates=false&language=en-US&sort_by=first_air_date.desc", -1);		return true;
+		TMDBService.the10movieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
+		TMDBService.the20moviePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&sort_by=popularity.desc", -1);
+		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
+		TMDBService.movieCateg = await TMDBService().fetchCateg(true);
+		TMDBService.the10serieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/tv/on_the_air?api_key=${TMDBService().apiKey}&language=fr-FR", -1);		
+		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${TMDBService().apiKey}&language=fr-FR", -1);
+		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${TMDBService().apiKey}&language=fr-FR", 1);
+		TMDBService.serieCateg = await TMDBService().fetchCateg(false);
+		return true;
 	}
 }

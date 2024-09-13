@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Components/ViewComponents/CategoriGen.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
+import 'package:homeflix/Components/ViewComponents/OpenCarouselSelec.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/Data/FetchDatas.dart';
 
@@ -35,7 +37,11 @@ class _SeriesState extends State<Series> {
 				TMDBService.the20seriePop[x]['id'].toString(),
 				150
 			));
-			
+			recentImg20.add(TMDBService().createImg(
+				TMDBService.the20serieTop[x]['poster_path'],
+				TMDBService.the20serieTop[x]['id'].toString(),
+				150
+			));
 		}
 	}
 
@@ -53,11 +59,26 @@ class _SeriesState extends State<Series> {
 					datas: TMDBService.the20moviePop
 				),
 				const Gap(35),
-				const Secondtitle(title: "Sorties cette année"),
+				const Secondtitle(title: "Les mieux notés"),
 				const Gap(10),
 				MovieListGen(
 					imgList: recentImg20,
-					datas: TMDBService.the20moviePop
+					datas: TMDBService.the20movieRecent
+				),
+				const Gap(35),
+				const Secondtitle(title: "Genres"),
+				const Gap(10),
+				SizedBox(
+					width: MediaQuery.sizeOf(context).width,
+					child: Padding(
+						padding: const EdgeInsets.symmetric(horizontal: 10),
+						child: Categorigen(
+							func: (index) {
+								print(TMDBService.serieCateg[index]['id']);
+							},
+							data: TMDBService.serieCateg,
+						)
+					),
 				),
 				const Gap(10)
 			]
@@ -87,34 +108,12 @@ class _SeriesState extends State<Series> {
 	}
 
 	///////////////////////////////////////////////////////////////
-	/// Bouton ouvrant l'un des 7 aléatoires (celui affiché)
+	/// Bouton ouvrant l'un des 10 trend
 	Widget openOnOf7() {
-		return Align(
-			alignment: Alignment.bottomCenter,
-			child: SizedBox(
-				width: 250,
-				height: 45,
-				child: ElevatedButton(
-					onPressed: () {
-						print(current10);
-					},
-					style: ElevatedButton.styleFrom(
-						backgroundColor: Theme.of(context).colorScheme.tertiary,
-						foregroundColor: Theme.of(context).primaryColor,
-						shape: RoundedRectangleBorder(
-							borderRadius: BorderRadius.circular(10)
-						)
-					),
-					child: Text(
-						"En savoir plus",
-						style: TextStyle(
-							fontSize: 16,
-							color: Theme.of(context).scaffoldBackgroundColor,
-							fontWeight: FontWeight.w600
-						),
-					),
-				),
-			)
-		);
+		return Opencarouselselec(
+      func: () {
+        print(TMDBService.the10serieTren[current10]['overview'].toString());
+      },
+    );
 	}
 }

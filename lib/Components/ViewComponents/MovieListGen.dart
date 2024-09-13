@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+///////////////////////////////////////////////////////////////
+/// composant générant une listView de films
 class MovieListGen extends StatefulWidget {
 	final List<Widget> imgList;
 	final List<Map<String, dynamic>> datas;
@@ -35,6 +37,8 @@ class _MovieListGenState extends State<MovieListGen> {
 		);
 	}
 
+  ///////////////////////////////////////////////////////////////
+  /// Ui du bouton image 
 	Widget imgButton(Widget img, int index) {
 		return SizedBox(
 			height: double.infinity,

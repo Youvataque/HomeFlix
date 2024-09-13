@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+///////////////////////////////////////////////////////////////
+/// Composant générant les sous titre de section d'une page
 class Secondtitle extends StatelessWidget {
 	final String title;
 	const Secondtitle({
