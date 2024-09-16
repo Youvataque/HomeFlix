@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData darkTheme = ThemeData(
 	brightness: Brightness.light,
 	splashColor:  Colors.transparent,
-	focusColor: const Color.fromARGB(255, 27, 44, 191),
+	focusColor: const Color.fromRGBO(238, 238, 238, 1),
 	primaryColor: const Color.fromRGBO(25, 25, 25, 1),
 	colorScheme: const ColorScheme.light(
 		secondary: Color.fromRGBO(238, 238, 238, 1),

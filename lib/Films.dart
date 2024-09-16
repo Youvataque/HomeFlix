@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Components/ViewComponents/CategView.dart';
 import 'package:homeflix/Components/ViewComponents/CategoriGen.dart';
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
@@ -80,9 +81,7 @@ class _FilmsState extends State<Films> {
 					child: Padding(
 						padding: const EdgeInsets.symmetric(horizontal: 10),
 						child: Categorigen(
-							func: (index) {
-								print(TMDBService.movieCateg[index]['id']);
-							},
+							func: (index) => toCategView(context, TMDBService.movieCateg[index], "Films"),
 							data: TMDBService.movieCateg,
 						)
 					),

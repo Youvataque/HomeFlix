@@ -59,7 +59,9 @@ class _ContentviewState extends State<Contentview> {
 						child: Column(
 							children: [
 								const Gap(105),
-								detailsPart()
+								detailsPart(),
+								const Gap(5),
+								descripZone()
 							],
 						),
 					),
@@ -96,7 +98,7 @@ class _ContentviewState extends State<Contentview> {
 	/// partie droite de la présentation avec toutes les infos importante
 	Widget rightDetailsPart() {
 		return SizedBox(
-			height: MediaQuery.sizeOf(context).width * 0.45 * 1.5,
+			height: MediaQuery.sizeOf(context).width * 0.38 * 1.5,
 			width: MediaQuery.sizeOf(context).width * 0.47,
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.end,
@@ -117,12 +119,7 @@ class _ContentviewState extends State<Contentview> {
 						crossAxisAlignment: CrossAxisAlignment.start,
 						children: [
 							Text(
-								"${numberWithCom(widget.datas['budget'])} \$",
-								style: sousText(),
-							),
-							const Gap(3),
-							Text(
-								"${numberWithCom(widget.datas['revenue'])} \$",
+								numberWithCom(widget.datas['budget']),
 								style: sousText(),
 							),
 							const Gap(3),
@@ -143,7 +140,7 @@ class _ContentviewState extends State<Contentview> {
 			child: Row(
 				children: [
 					SizedBox(
-						width: MediaQuery.sizeOf(context).width * 0.45,
+						width: MediaQuery.sizeOf(context).width * 0.38,
 						child: Container(
 							decoration: BoxDecoration(
 								borderRadius: BorderRadius.circular(8),
@@ -161,6 +158,22 @@ class _ContentviewState extends State<Contentview> {
 					const Gap(10),
 					rightDetailsPart()
 				],
+			),
+		);
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// partie affichant la description
+	Widget descripZone() {
+		return Padding(
+			padding: const EdgeInsets.symmetric(horizontal: 10),
+			child: Text(
+				widget.datas['overview'],
+				style: TextStyle(
+					color: Theme.of(context).colorScheme.secondary,
+					fontSize: 13,
+					fontWeight: FontWeight.w500
+				),
 			),
 		);
 	}

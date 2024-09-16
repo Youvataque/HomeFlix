@@ -78,9 +78,7 @@ class _SeriesState extends State<Series> {
 					child: Padding(
 						padding: const EdgeInsets.symmetric(horizontal: 10),
 						child: Categorigen(
-							func: (index) {
-								print(TMDBService.serieCateg[index]['id']);
-							},
+							func: (index) => toCategView(context, TMDBService.serieCateg[index], "Series"),
 							data: TMDBService.serieCateg,
 						)
 					),
