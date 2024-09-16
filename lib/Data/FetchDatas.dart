@@ -30,12 +30,12 @@ class TMDBService {
 		while (movies.length < count) {
 			final int randomPage = random.nextInt(15) + 1;
 			final response = await http.get(
-				Uri.parse("$link&page=${randomNb == -1 ? randomPage : randomNb.toString()}"),
+				Uri.parse("$link${count != 1 ? "&page=${randomNb == -1 ? randomPage : randomNb.toString()}" : ""}"),
 			);
 
 			if (response.statusCode == 200) {
 				final data = json.decode(response.body);
-				final List<dynamic> results = data['results'];
+				final List<dynamic> results = count != 1 ? data['results'] : [data];
 
 				movies.addAll(results.take(count - movies.length).map((e) => e as Map<String, dynamic>));
 			} else {

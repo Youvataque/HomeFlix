@@ -42,7 +42,7 @@ class Main extends StatelessWidget {
 		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
 		TMDBService.movieCateg = await TMDBService().fetchCateg(true);
 		TMDBService.the10serieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/tv/on_the_air?api_key=${TMDBService().apiKey}&language=fr-FR", -1);		
-		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${TMDBService().apiKey}&language=fr-FR", -1);
+		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${TMDBService().apiKey}&language=fr-FR&vote_average.gte=8&vote_count.gte=100", -1);
 		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${TMDBService().apiKey}&language=fr-FR", 1);
 		TMDBService.serieCateg = await TMDBService().fetchCateg(false);
 		return true;

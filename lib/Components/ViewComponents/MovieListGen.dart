@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 
 ///////////////////////////////////////////////////////////////
 /// composant générant une listView de films
 class MovieListGen extends StatefulWidget {
 	final List<Widget> imgList;
 	final List<Map<String, dynamic>> datas;
+	final bool movie;
+	final String leftWord;
 	const MovieListGen({
 		super.key,
 		required this.imgList,
 		required this.datas,
+		required this.movie,
+		required this.leftWord
 	});
 
 	@override
@@ -46,9 +51,7 @@ class _MovieListGenState extends State<MovieListGen> {
 				style: ElevatedButton.styleFrom(
 					padding: EdgeInsets.zero
 				),
-				onPressed: () {
-				  print(index);
-				},
+				onPressed: () => toContentView(context, widget.datas[index], img, widget.movie, widget.leftWord),
 				child: img,
 			),
 		);

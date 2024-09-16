@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/CategoriGen.dart';
+import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
 import 'package:homeflix/Components/ViewComponents/OpenCarouselSelec.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
@@ -56,14 +57,18 @@ class _SeriesState extends State<Series> {
 				const Gap(10),
 				MovieListGen(
 					imgList: img20,
-					datas: TMDBService.the20moviePop
+					datas: TMDBService.the20seriePop,
+					movie: false,
+					leftWord: "Séries",
 				),
 				const Gap(35),
 				const Secondtitle(title: "Les mieux notés"),
 				const Gap(10),
 				MovieListGen(
 					imgList: recentImg20,
-					datas: TMDBService.the20movieRecent
+					datas: TMDBService.the20serieTop,
+					movie: false,
+					leftWord: "Séries",
 				),
 				const Gap(35),
 				const Secondtitle(title: "Genres"),
@@ -111,9 +116,9 @@ class _SeriesState extends State<Series> {
 	/// Bouton ouvrant l'un des 10 trend
 	Widget openOnOf7() {
 		return Opencarouselselec(
-      func: () {
-        print(TMDBService.the10serieTren[current10]['overview'].toString());
-      },
-    );
+			func: () {
+				toContentView(context, TMDBService.the10serieTren[current10], img10[current10], false, "Séries");
+			},
+		);
 	}
 }

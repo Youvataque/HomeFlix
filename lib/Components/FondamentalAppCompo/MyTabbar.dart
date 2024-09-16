@@ -41,9 +41,9 @@ class _MyTabbarState extends State<MyTabbar> {
 		return Scaffold(
 			backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 			body: IndexedStack(
-					index: selectedIndex,
-					children: pagesBody,
-				),
+				index: selectedIndex,
+				children: pagesBody,
+			),
 			bottomNavigationBar: ClipRRect(
 				child: BottomNavigationBar(
 					elevation: 0,
