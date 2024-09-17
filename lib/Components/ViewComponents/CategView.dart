@@ -27,6 +27,44 @@ class Categview extends StatefulWidget {
 
 class _CategviewState extends State<Categview> {
 	List<Map<String, dynamic>> newData = [];
+	final ScrollController _scrollController = ScrollController();
+	bool _isLoading = false;
+	@override
+	void initState() {
+		super.initState();
+		newData = widget.allData;
+		_scrollController.addListener(_onScroll);
+	}
+
+	@override
+	void dispose() {
+		_scrollController.removeListener(_onScroll);
+		_scrollController.dispose();
+		super.dispose();
+	}
+
+	void _onScroll() {
+		if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !_isLoading) {
+		_loadMoreData();
+		}
+	}
+
+	Future<void> _loadMoreData() async {
+		setState(() {
+			_isLoading = true;
+		});
+
+		final data = await TMDBService().addMore(
+			'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=2e890027d6ed883dccce4fc5dc8f9007&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&sort_by=first_air_date.desc&vote_count.gte=100',
+			newData
+		);
+
+		setState(() {
+			newData = List.from(newData)..addAll(data);
+			_isLoading = false;
+		});
+	}
+
 	@override
 	Widget build(BuildContext context) {
 		newData = widget.allData;
@@ -35,13 +73,14 @@ class _CategviewState extends State<Categview> {
 			body: Stack(
 				children: [
 					SingleChildScrollView(
+						controller: _scrollController,
 						child: Column(
 							children: [
 								const Gap(105),
 								const Secondtitle(title: "Les plus aimés"),
 								const Gap(10),
 								MovieListGen(
-									imgList: List.generate(20, (x) {
+									imgList: List.generate(widget.favData.length, (x) {
 										final posterPath = widget.favData[x]['poster_path'];
 										if (posterPath == null) {
 											return noImg(x);
@@ -76,18 +115,9 @@ class _CategviewState extends State<Categview> {
 									movie: widget.movie,
 									leftWord: widget.details['name'],
 									imgWidth: (MediaQuery.sizeOf(context).width - 30) / 2,
+									isLoading: _isLoading,
 								),
-								const Gap(20),
-								ElevatedButton(
-									onPressed: () async {
-										final data = await TMDBService().addMore('https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=2e890027d6ed883dccce4fc5dc8f9007&with_genres=${widget.details['id']}include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', newData);
-										setState(() {
-										newData = data;
-										});
-									},
-									child: Text("more")
-								),
-								const Gap(30)
+								const Gap(50)
 							],
 						),
 					),

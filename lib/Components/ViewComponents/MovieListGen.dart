@@ -51,7 +51,10 @@ class _MovieListGenState extends State<MovieListGen> {
 			height: double.infinity,
 			child: ElevatedButton(
 				style: ElevatedButton.styleFrom(
-					padding: EdgeInsets.zero
+					padding: EdgeInsets.zero,
+					backgroundColor: Colors.transparent,
+					surfaceTintColor: Colors.transparent,
+					disabledBackgroundColor: Colors.transparent
 				),
 				onPressed: () => toContentView(context, selectData, img, widget.movie, widget.leftWord),
 				child: img,

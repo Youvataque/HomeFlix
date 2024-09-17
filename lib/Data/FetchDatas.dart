@@ -47,8 +47,9 @@ class TMDBService {
 	///////////////////////////////////////////////////////////////
 	/// Fonction pour update une liste d'élément et y ajouter une nouvelle page
 	Future<List<Map<String, dynamic>>> addMore(String link, List<Map<String, dynamic>> data) async {
-		int newPage = data.length ~/ 2 + 1;
-		data.addAll(await fetchRandom(1, link, newPage));
+		int newPage = (data.length ~/ 20) + 1; // Assurez-vous que la pagination est correcte
+		final newData = await fetchRandom(20, link, newPage); // Récupérez 20 éléments par page
+		data.addAll(newData);
 		return data;
 	}
 	
@@ -75,13 +76,10 @@ class TMDBService {
 	}
 
 	///////////////////////////////////////////////////////////////
-	/// crée une image à partir de la DB vie futureBuilder
+	/// crée une image à partir de la DB ou des fichiers interne vie futureBuilder
 	Widget createImg(String imgPath, String movieId, double width) {
 		return FutureBuilder<File?>(
-			future: TMDBService().downloadMovieImageTemp(
-				'https://image.tmdb.org/t/p/w500$imgPath',
-				movieId,
-			),
+			future: _getLocalImageOrDownload(imgPath, movieId),
 			builder: (context, snapshot) {
 				if (snapshot.connectionState == ConnectionState.done) {
 					if (snapshot.hasError) {
@@ -99,13 +97,39 @@ class TMDBService {
 						return const Text('Image non disponible');
 					}
 				} else {
-					return const CupertinoActivityIndicator(
-						radius: 7,
-						color: Colors.grey,
+					return Container(
+						width: width,
+						decoration: BoxDecoration(
+							borderRadius: BorderRadius.circular(10),
+							color: Theme.of(context).primaryColor
+						),
+						child: AspectRatio(
+							aspectRatio: 2 / 3,
+							child: CupertinoActivityIndicator(
+								radius: 10,
+								color: Theme.of(context).colorScheme.secondary,
+							),
+						),
 					);
 				}
 			},
 		);
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// recupère l'image dans la db si elle n'est pas déjà présente en mémoire
+	Future<File?> _getLocalImageOrDownload(String imgPath, String movieId) async {
+		final tempDir = Directory.systemTemp;
+		final file = File('${tempDir.path}/$movieId.jpg');
+
+		if (await file.exists()) {
+			return file;
+		} else {
+			return await TMDBService().downloadMovieImageTemp(
+				'https://image.tmdb.org/t/p/w500$imgPath',
+				movieId,
+			);
+		}
 	}
 
 		///////////////////////////////////////////////////////////////
