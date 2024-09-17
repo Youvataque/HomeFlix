@@ -40,7 +40,7 @@ class _ContentviewState extends State<Contentview> {
 	/// ui du titre de l'oeuvre
 	Text titleText() {
 		return Text(
-			widget.datas[widget.movie ? 'original_title' : 'original_name'],
+			widget.datas[widget.movie ? 'title' : 'name'],
 			style: TextStyle(
 				fontSize: 17,
 				fontWeight: FontWeight.w700,
@@ -66,7 +66,7 @@ class _ContentviewState extends State<Contentview> {
 						),
 					),
 					Secondtop(
-						title: widget.datas[widget.movie ? 'original_title' : 'original_name'],
+						title: widget.datas[widget.movie ? 'title' : 'name'],
 						leftWord: widget.leftWord,
 					),
 				],

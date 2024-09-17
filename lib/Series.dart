@@ -60,6 +60,7 @@ class _SeriesState extends State<Series> {
 					datas: TMDBService.the20seriePop,
 					movie: false,
 					leftWord: "Séries",
+					imgWidth: 150,
 				),
 				const Gap(35),
 				const Secondtitle(title: "Les mieux notés"),
@@ -69,6 +70,7 @@ class _SeriesState extends State<Series> {
 					datas: TMDBService.the20serieTop,
 					movie: false,
 					leftWord: "Séries",
+					imgWidth: 150,
 				),
 				const Gap(35),
 				const Secondtitle(title: "Genres"),
@@ -78,7 +80,10 @@ class _SeriesState extends State<Series> {
 					child: Padding(
 						padding: const EdgeInsets.symmetric(horizontal: 10),
 						child: Categorigen(
-							func: (index) => toCategView(context, TMDBService.serieCateg[index], "Series"),
+							func: (index) {
+								print(TMDBService.serieCateg[index]);
+								toCategView(context, TMDBService.serieCateg[index], "Series", false);
+							},
 							data: TMDBService.serieCateg,
 						)
 					),

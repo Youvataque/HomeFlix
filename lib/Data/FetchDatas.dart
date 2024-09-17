@@ -28,21 +28,28 @@ class TMDBService {
 		final random = Random();
 
 		while (movies.length < count) {
-			final int randomPage = random.nextInt(15) + 1;
+			final int randomPage = randomNb == -1 ? random.nextInt(15) + 1 : randomNb;
 			final response = await http.get(
-				Uri.parse("$link${count != 1 ? "&page=${randomNb == -1 ? randomPage : randomNb.toString()}" : ""}"),
+				Uri.parse("$link${count != 1 ? "&page=$randomPage" : ""}"),
 			);
-
 			if (response.statusCode == 200) {
 				final data = json.decode(response.body);
 				final List<dynamic> results = count != 1 ? data['results'] : [data];
-
-				movies.addAll(results.take(count - movies.length).map((e) => e as Map<String, dynamic>));
+				movies.addAll(results.map((e) => e as Map<String, dynamic>));
+				if (randomNb != -1) break;
 			} else {
 				throw Exception('Failed to load movies');
 			}
 		}
 		return movies;
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// Fonction pour update une liste d'élément et y ajouter une nouvelle page
+	Future<List<Map<String, dynamic>>> addMore(String link, List<Map<String, dynamic>> data) async {
+		int newPage = data.length ~/ 2 + 1;
+		data.addAll(await fetchRandom(1, link, newPage));
+		return data;
 	}
 	
 	///////////////////////////////////////////////////////////////
@@ -77,7 +84,9 @@ class TMDBService {
 			),
 			builder: (context, snapshot) {
 				if (snapshot.connectionState == ConnectionState.done) {
-					if (snapshot.hasData && snapshot.data != null) {
+					if (snapshot.hasError) {
+						return const Text('Erreur de téléchargement de l\'image');
+					} else if (snapshot.hasData && snapshot.data != null) {
 						final file = snapshot.data!;
 						return SizedBox(
 							width: width,

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 
-///////////////////////////////////////////////////////////////
-/// composant générant une listView de films
-class MovieListGen extends StatefulWidget {
+class MovieListGen2 extends StatefulWidget {
 	final List<Widget> imgList;
 	final List<Map<String, dynamic>> datas;
 	final bool movie;
 	final String leftWord;
 	final double imgWidth;
-	const MovieListGen({
+	const MovieListGen2({
 		super.key,
 		required this.imgList,
 		required this.datas,
@@ -20,27 +17,29 @@ class MovieListGen extends StatefulWidget {
 	});
 
 	@override
-	State<MovieListGen> createState() => _MovieListGenState();
+	State<MovieListGen2> createState() => _MovieListGen2State();
 }
 
-class _MovieListGenState extends State<MovieListGen> {
-	@override
-	Widget build(BuildContext context) {
+class _MovieListGen2State extends State<MovieListGen2> {
+  @override
+  Widget build(BuildContext context) {
 		return Padding(
 			padding: const EdgeInsets.symmetric(horizontal: 10),
-			child: SizedBox(
-				width: MediaQuery.sizeOf(context).width,
-				height: widget.imgWidth * 1.5,
-				child: ListView.separated(
-					separatorBuilder:(context, index) => const Gap(10),
-					scrollDirection: Axis.horizontal,
-					itemCount: widget.imgList.length,
-					itemBuilder: (context, index) => ClipRRect(
+			child: Wrap(
+				alignment: WrapAlignment.spaceBetween,
+				runSpacing: 30,
+				spacing: 10,
+				children: List.generate(
+					widget.imgList.length,
+					(index) => ClipRRect(
 						borderRadius: BorderRadius.circular(7.5),
-						child: imgButton(widget.imgList[index], widget.datas[index]),
+						child: SizedBox(
+							height: 1.5 * widget.imgWidth,
+							child: imgButton(widget.imgList[index], widget.datas[index]),
+						),
 					),
 				),
-			),
+			)
 		);
 	}
 

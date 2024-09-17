@@ -33,7 +33,7 @@ class _SecondtopState extends State<Secondtop> {
 				child: Container(
 					width: MediaQuery.sizeOf(context).width,
 					height: 95,
-					color: Theme.of(context).dividerColor.withOpacity(0.2),
+					color: Theme.of(context).primaryColor.withOpacity(0.5),
 					child: Center(
 						child: Padding(
 							padding: const EdgeInsets.only(top: 45),
@@ -73,13 +73,21 @@ class _SecondtopState extends State<Secondtop> {
 									size: 22,
 									color: Theme.of(context).colorScheme.secondary,
 								),
-								Text(
-									widget.leftWord,
-									style: TextStyle(
-										color: Theme.of(context).colorScheme.secondary,
-										fontSize: 14,
-										fontWeight: FontWeight.w500
-									),
+								SizedBox(
+									width: 68,
+									height: 40,
+									child: Align(
+										alignment: Alignment.centerLeft,
+										child: Text(
+											widget.leftWord,
+											overflow: TextOverflow.ellipsis,
+											style: TextStyle(
+												color: Theme.of(context).colorScheme.secondary,
+												fontSize: 14,
+												fontWeight: FontWeight.w500
+											),
+										),
+									)
 								)
 							],
 						),
