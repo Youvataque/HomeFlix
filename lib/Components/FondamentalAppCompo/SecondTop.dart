@@ -8,10 +8,16 @@ import 'package:gap/gap.dart';
 class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 	final String title;
 	final String leftWord;
+	final Color color;
+	final bool searchMode;
+	final List<Widget> searchZone;
 	const Secondtop({
 		super.key,
 		required this.title,
-		required this.leftWord
+		required this.leftWord,
+		required this.color,
+		this.searchZone = const [],
+		this.searchMode = false
 	});
 
 	@override
@@ -33,17 +39,20 @@ class _SecondtopState extends State<Secondtop> {
 				child: Container(
 					width: MediaQuery.sizeOf(context).width,
 					height: 95,
-					color: Theme.of(context).primaryColor.withOpacity(0.5),
+					color: widget.color,
 					child: Center(
 						child: Padding(
 							padding: const EdgeInsets.only(top: 45),
 							child: Row(
 								mainAxisAlignment: MainAxisAlignment.spaceBetween,
-								children: [
-									leftZone(),
-									titleWidget(),
-									rightZone()
-								],
+								children: widget.searchMode ?
+										widget.searchZone
+									:
+										[
+											leftZone(),
+											titleWidget(),
+											rightZone()
+										],
 							),
 						)
 					),

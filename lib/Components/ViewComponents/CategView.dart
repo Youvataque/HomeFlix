@@ -83,7 +83,7 @@ class _CategviewState extends State<Categview> {
 									imgList: List.generate(widget.favData.length, (x) {
 										final posterPath = widget.favData[x]['poster_path'];
 										if (posterPath == null) {
-											return noImg(x);
+											return const SizedBox.shrink();
 										}
 										return TMDBService().createImg(
 											posterPath,
@@ -103,7 +103,7 @@ class _CategviewState extends State<Categview> {
 									imgList: List.generate(newData.length, (x) {
 										final posterPath = newData[x]['poster_path'];
 										if (posterPath == null) {
-											return noImg(x);
+											return const SizedBox.shrink();
 										}
 										return TMDBService().createImg(
 											posterPath,
@@ -124,44 +124,10 @@ class _CategviewState extends State<Categview> {
 					Secondtop(
 						title: widget.details['name'],
 						leftWord: widget.leftWord,
+						color: Theme.of(context).primaryColor.withOpacity(0.5),
 					),
 				],
 			)
-		);
-	}
-
-	///////////////////////////////////////////////////////////////
-	/// condition en cas de non présence d'image dans la db
-	Widget noImg(int x) {
-		return Container(
-			width: (MediaQuery.sizeOf(context).width - 30) / 2,
-			height: 1.5 * (MediaQuery.sizeOf(context).width - 30) / 2,
-			decoration: BoxDecoration(
-				borderRadius: BorderRadius.circular(7),
-				color: Theme.of(context).primaryColor,
-				border: Border.all(
-					color: Theme.of(context).dividerColor,
-				)
-			),
-			child: Column(
-				mainAxisAlignment: MainAxisAlignment.center,
-				children: [
-					Icon(
-						Icons.panorama_sharp,
-						color: Theme.of(context).colorScheme.secondary,
-						size: 70,
-					),
-					const Gap(20),
-					Text(
-						widget.favData[x]['original_name'],
-						textAlign: TextAlign.center,
-						style: TextStyle(
-							color: Theme.of(context).colorScheme.secondary,
-							fontSize: 15
-						),
-					)
-				],
-			),
 		);
 	}
 }

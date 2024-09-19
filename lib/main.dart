@@ -5,12 +5,17 @@ import 'package:homeflix/Components/Tools/Theme/ColorsTheme.dart';
 import 'package:homeflix/Data/FetchDatas.dart';
 
 void main() {
-	runApp(const Main());
+	runApp(Main(key: GlobalKey<MainState>()));
 }
 
-class Main extends StatelessWidget {
+class Main extends StatefulWidget {
 	const Main({super.key});
 
+  @override
+  State<Main> createState() => MainState();
+}
+
+class MainState extends State<Main> {
 	@override
 	Widget build(BuildContext context) {
 		return MaterialApp(
@@ -46,5 +51,9 @@ class Main extends StatelessWidget {
 		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${TMDBService().apiKey}&language=fr-FR", 1);
 		TMDBService.serieCateg = await TMDBService().fetchCateg(false);
 		return true;
+	}
+
+	void rebuildMain() {
+		setState(() {});
 	}
 }

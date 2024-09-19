@@ -68,6 +68,7 @@ class _ContentviewState extends State<Contentview> {
 					Secondtop(
 						title: widget.datas[widget.movie ? 'title' : 'name'],
 						leftWord: widget.leftWord,
+						color: Theme.of(context).primaryColor.withOpacity(0.5),
 					),
 				],
 			)

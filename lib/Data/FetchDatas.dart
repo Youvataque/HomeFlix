@@ -38,7 +38,6 @@ class TMDBService {
 				movies.addAll(results.map((e) => e as Map<String, dynamic>));
 				if (randomNb != -1) break;
 			} else {
-				throw Exception('Failed to load movies');
 			}
 		}
 		return movies;
@@ -132,7 +131,7 @@ class TMDBService {
 		}
 	}
 
-		///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	/// récupère les catégories des films / series
 	Future<List<Map<String, dynamic>>> fetchCateg(bool movie) async {
 		final List<Map<String, dynamic>> temp = [];
@@ -150,4 +149,18 @@ class TMDBService {
 		}
 		return temp;
 	}
+
+	///////////////////////////////////////////////////////////////
+	/// télécharge des films à partir d'une recherche
+	Future<List<dynamic>> searchMovies(String query) async {
+       final url = 'https://api.themoviedb.org/3/search/multi?query=$query&include_adult=true&api_key=$apiKey&language=fr-FR';
+       final response = await http.get(Uri.parse(url));
+
+       if (response.statusCode == 200) {
+         final data = json.decode(response.body);
+         return data['results'];
+       } else {
+         throw Exception('Erreur lors du chargement des données');
+       }
+     }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/TopOfView.dart';
+import 'package:homeflix/Components/ViewComponents/SearchPage.dart';
 
 //Pages
 import 'package:homeflix/Films.dart';
 import 'package:homeflix/MyData.dart';
 import 'package:homeflix/Series.dart';
+import 'package:homeflix/main.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Appbar de l'application
@@ -101,10 +103,14 @@ class _MyTabbarState extends State<MyTabbar> {
 					)
 				),
 				TopOfView(
-					refresh: () async  {
-						
+					refresh: () {
+						Navigator.pushAndRemoveUntil(
+							context,
+							MaterialPageRoute(builder: (context) => const Main()),
+							(_) => false
+						);
 					},
-					search: () {}
+					search: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Searchpage()))
 				),
 			],
 		);
