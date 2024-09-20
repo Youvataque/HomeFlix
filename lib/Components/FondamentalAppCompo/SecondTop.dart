@@ -9,6 +9,7 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 	final String title;
 	final String leftWord;
 	final Color color;
+	final VoidCallback? func;
 	final bool searchMode;
 	final List<Widget> searchZone;
 	const Secondtop({
@@ -16,6 +17,7 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 		required this.title,
 		required this.leftWord,
 		required this.color,
+		this.func,
 		this.searchZone = const [],
 		this.searchMode = false
 	});
@@ -116,7 +118,7 @@ class _SecondtopState extends State<Secondtop> {
 				child: Padding(
 					padding: const EdgeInsets.only(right: 12),
 					child: InkWell(
-						onTap: () {},
+						onTap: widget.func!,
 						splashColor: Colors.transparent,
 						highlightColor: Colors.transparent,
 						child: Icon(

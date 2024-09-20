@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/ViewComponents/CategView.dart';
 import 'package:homeflix/Components/ViewComponents/ContentView.dart';
 import 'package:homeflix/Data/FetchDatas.dart';
@@ -13,7 +14,7 @@ BoxShadow myShadow(BuildContext context) {
 }
 
 void toContentView(BuildContext context, Map<String, dynamic> datas, Widget img, bool movie, String leftWord) async {
-	List<Map<String, dynamic>> bigData = await TMDBService().fetchRandom(1, "https://api.themoviedb.org/3/${movie ? "movie" : "tv"}/${datas['id']}?api_key=2e890027d6ed883dccce4fc5dc8f9007&language=fr-FR", 1);
+	List<Map<String, dynamic>> bigData = await TMDBService().fetchRandom(1, "https://api.themoviedb.org/3/${movie ? "movie" : "tv"}/${datas['id']}?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
 	Navigator.push(
 		context,
 		MaterialPageRoute(builder: (context) => Contentview(
@@ -26,8 +27,8 @@ void toContentView(BuildContext context, Map<String, dynamic> datas, Widget img,
 }
 
 void toCategView(BuildContext context, Map<String, dynamic> details, String leftWord, bool movie) async {
-	List<Map<String, dynamic>> favData = await TMDBService().fetchRandom(20, 'https://api.themoviedb.org/3/discover/${movie ? 'movie' : 'tv'}?api_key=2e890027d6ed883dccce4fc5dc8f9007&with_genres=${details['id']}&vote_count.gte=100&sort_by=vote_average.desc&language=fr-FR', -1);
-	List<Map<String, dynamic>> allData = await TMDBService().fetchRandom(20, 'https://api.themoviedb.org/3/discover/${movie ? 'movie' : 'tv'}?api_key=2e890027d6ed883dccce4fc5dc8f9007&with_genres=${details['id']}include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', 1);
+	List<Map<String, dynamic>> favData = await TMDBService().fetchRandom(20, 'https://api.themoviedb.org/3/discover/${movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${details['id']}&vote_count.gte=100&sort_by=vote_average.desc&language=fr-FR', -1);
+	List<Map<String, dynamic>> allData = await TMDBService().fetchRandom(20, 'https://api.themoviedb.org/3/discover/${movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${details['id']}include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', 1);
 	Navigator.push(
 		context,
 		MaterialPageRoute(builder: (context) => Categview(

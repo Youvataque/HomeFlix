@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/MyTabbar.dart';
 import 'package:homeflix/Components/Tools/Theme/ColorsTheme.dart';
 import 'package:homeflix/Data/FetchDatas.dart';
 
-void main() {
+void main() async {
+	WidgetsFlutterBinding.ensureInitialized();
+ 	await dotenv.load(fileName: ".env");
 	runApp(Main(key: GlobalKey<MainState>()));
 }
 
@@ -42,13 +45,13 @@ class MainState extends State<Main> {
 	///////////////////////////////////////////////////////////////
 	/// Télécharge les données de l'api TMDB en utilisant le gestionnaire custom TMDBService
 	Future<bool> downloadData() async {
-		TMDBService.the10movieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
-		TMDBService.the20moviePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&sort_by=popularity.desc", -1);
-		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${TMDBService().apiKey}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
+		TMDBService.the10movieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
+		TMDBService.the20moviePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=true&include_video=false&language=fr-FR&sort_by=popularity.desc", -1);
+		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
 		TMDBService.movieCateg = await TMDBService().fetchCateg(true);
-		TMDBService.the10serieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/tv/on_the_air?api_key=${TMDBService().apiKey}&language=fr-FR", -1);		
-		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${TMDBService().apiKey}&language=fr-FR&vote_average.gte=8&vote_count.gte=100", -1);
-		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${TMDBService().apiKey}&language=fr-FR", 1);
+		TMDBService.the10serieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/tv/on_the_air?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", -1);		
+		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR&vote_average.gte=8&vote_count.gte=100", -1);
+		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
 		TMDBService.serieCateg = await TMDBService().fetchCateg(false);
 		return true;
 	}

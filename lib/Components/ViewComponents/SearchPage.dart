@@ -225,6 +225,7 @@ class _SearchpageState extends State<Searchpage> {
 								children: [
 									Text(
 										selectData[selectData['media_type'] == "movie" ? 'title' : 'name'],
+										maxLines: 2,
 										style: TextStyle(
 											color: Theme.of(context).colorScheme.secondary,
 											fontWeight: FontWeight.w600,

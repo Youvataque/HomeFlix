@@ -38,6 +38,7 @@ dependencies:
   gap: ^3.0.1
   http: ^1.2.2
   carousel_slider: ^5.0.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +58,7 @@ dev_dependencies:
 flutter:
   assets:
     - src/images/
+    - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

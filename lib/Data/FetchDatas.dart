@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 final fourMonthsAgo = DateTime.now().subtract(const Duration(days: 120)).toIso8601String();
@@ -10,7 +11,6 @@ final fourMonthsAgo = DateTime.now().subtract(const Duration(days: 120)).toIso86
 ///////////////////////////////////////////////////////////////
 /// gestionnaire de téléchargement TMDB API
 class TMDBService {
-	final String apiKey = '2e890027d6ed883dccce4fc5dc8f9007';
 	static List<Map<String, dynamic>> the10movieTren = [];
 	static List<Map<String, dynamic>> the20movieRecent = [];
 	static List<Map<String, dynamic>> the20moviePop = [];
@@ -136,7 +136,7 @@ class TMDBService {
 	Future<List<Map<String, dynamic>>> fetchCateg(bool movie) async {
 		final List<Map<String, dynamic>> temp = [];
 		final response = await http.get(
-			Uri.parse('https://api.themoviedb.org/3/genre/${movie ? 'movie' : 'tv'}/list?api_key=$apiKey&language=fr'),
+			Uri.parse('https://api.themoviedb.org/3/genre/${movie ? 'movie' : 'tv'}/list?api_key=${dotenv.get('TMDB_KEY')}&language=fr'),
 		);
 
 		if (response.statusCode == 200) {
@@ -153,7 +153,7 @@ class TMDBService {
 	///////////////////////////////////////////////////////////////
 	/// télécharge des films à partir d'une recherche
 	Future<List<dynamic>> searchMovies(String query) async {
-       final url = 'https://api.themoviedb.org/3/search/multi?query=$query&include_adult=true&api_key=$apiKey&language=fr-FR';
+       final url = 'https://api.themoviedb.org/3/search/multi?query=$query&include_adult=true&api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR';
        final response = await http.get(Uri.parse(url));
 
        if (response.statusCode == 200) {

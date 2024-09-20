@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
@@ -27,6 +28,7 @@ class Categview extends StatefulWidget {
 
 class _CategviewState extends State<Categview> {
 	List<Map<String, dynamic>> newData = [];
+	List<Map<String, dynamic>> favData = [];
 	final ScrollController _scrollController = ScrollController();
 	bool _isLoading = false;
 	@override
@@ -55,7 +57,7 @@ class _CategviewState extends State<Categview> {
 		});
 
 		final data = await TMDBService().addMore(
-			'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=2e890027d6ed883dccce4fc5dc8f9007&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&sort_by=first_air_date.desc&vote_count.gte=100',
+			'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.env['API_KEY'] ?? ''}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&sort_by=first_air_date.desc&vote_count.gte=100',
 			newData
 		);
 
@@ -68,6 +70,7 @@ class _CategviewState extends State<Categview> {
 	@override
 	Widget build(BuildContext context) {
 		newData = widget.allData;
+		favData = widget.favData;
 		return Scaffold(
 			backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 			body: Stack(
@@ -80,8 +83,8 @@ class _CategviewState extends State<Categview> {
 								const Secondtitle(title: "Les plus aimés"),
 								const Gap(10),
 								MovieListGen(
-									imgList: List.generate(widget.favData.length, (x) {
-										final posterPath = widget.favData[x]['poster_path'];
+									imgList: List.generate(favData.length, (x) {
+										final posterPath = favData[x]['poster_path'];
 										if (posterPath == null) {
 											return const SizedBox.shrink();
 										}
@@ -91,7 +94,7 @@ class _CategviewState extends State<Categview> {
 											(MediaQuery.sizeOf(context).width - 30) / 2
 										);
 									}),
-									datas: widget.favData,
+									datas: favData,
 									movie: widget.movie,
 									leftWord: widget.details['name'],
 									imgWidth: (MediaQuery.sizeOf(context).width - 30) / 2,
@@ -125,6 +128,22 @@ class _CategviewState extends State<Categview> {
 						title: widget.details['name'],
 						leftWord: widget.leftWord,
 						color: Theme.of(context).primaryColor.withOpacity(0.5),
+						func: () async {
+							final fetchedFavData = await TMDBService().fetchRandom(
+								20, 
+								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.env['API_KEY'] ?? ''}&with_genres=${widget.details['id']}&vote_count.gte=100&sort_by=vote_average.desc&language=fr-FR', 
+								-1
+							);
+							final fetchedNewData = await TMDBService().fetchRandom(
+								20, 
+								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.env['API_KEY'] ?? ''}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', 
+								1
+							);
+							setState(() {
+								favData = fetchedFavData;
+								newData = fetchedNewData;
+							});
+						},
 					),
 				],
 			)
