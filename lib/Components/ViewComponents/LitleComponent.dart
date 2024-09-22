@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/ViewComponents/CategView.dart';
-import 'package:homeflix/Components/ViewComponents/ContentView.dart';
-import 'package:homeflix/Data/FetchDatas.dart';
+import 'package:homeflix/Components/ViewComponents/ContentPages/ContentView.dart';
+import 'package:homeflix/Data/FetchTmdbDatas.dart';
 
 ///////////////////////////////////////////////////////////////
 /// ombre de l'app

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
-import 'package:homeflix/Data/FetchDatas.dart';
+import 'package:homeflix/Data/FetchTmdbDatas.dart';
 import 'dart:async';
 
 ///////////////////////////////////////////////////////////////

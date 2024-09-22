@@ -1,9 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
 import 'package:homeflix/Components/Tools/FormatTool/NumberWithCom.dart';
+import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Affiche le contenu d'un film ou d'une série et permet son téléchargement
@@ -50,19 +53,42 @@ class _ContentviewState extends State<Contentview> {
 	}
 
 	@override
-	Widget build(BuildContext context) {
+		Widget build(BuildContext context) {
 		return Scaffold(
 			backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 			body: Stack(
 				children: [
-					SingleChildScrollView(
-						child: Column(
-							children: [
-								const Gap(105),
-								detailsPart(),
-								const Gap(5),
-								descripZone()
-							],
+					Positioned.fill(
+						child: Transform.scale(
+								scale: 1,
+								child: Image.asset(
+									"src/images/contentBack.png",
+									fit: BoxFit.cover,
+								),
+							),
+					),
+					
+					SizedBox(
+						height: MediaQuery.sizeOf(context).height,
+						child: SingleChildScrollView(
+							child: Column(
+								children: [
+									const Gap(105),
+									detailsPart(),
+									const Gap(5),
+									descripZone(),
+									const Gap(10),
+									Padding(
+										padding: const EdgeInsets.symmetric(horizontal: 10),
+										child: Ygggestionnary(
+											name: widget.datas['origin_country'][0] == "US" ? 
+													widget.datas[widget.movie ? 'original_title' : 'original_name']
+												:
+													widget.datas[widget.movie ? 'title' : 'name']
+											),
+									)
+								],
+							),
 						),
 					),
 					Secondtop(

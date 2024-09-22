@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/MyTabbar.dart';
 import 'package:homeflix/Components/Tools/Theme/ColorsTheme.dart';
-import 'package:homeflix/Data/FetchDatas.dart';
+import 'package:homeflix/Data/FetchTmdbDatas.dart';
 
 void main() async {
 	WidgetsFlutterBinding.ensureInitialized();

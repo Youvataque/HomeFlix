@@ -5,7 +5,7 @@ import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen2.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
-import 'package:homeflix/Data/FetchDatas.dart';
+import 'package:homeflix/Data/FetchTmdbDatas.dart';
 
 class Categview extends StatefulWidget {
 	final Map<String, dynamic> details;
@@ -57,7 +57,7 @@ class _CategviewState extends State<Categview> {
 		});
 
 		final data = await TMDBService().addMore(
-			'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.env['API_KEY'] ?? ''}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&sort_by=first_air_date.desc&vote_count.gte=100',
+			'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&sort_by=first_air_date.desc&vote_count.gte=100',
 			newData
 		);
 
@@ -131,12 +131,12 @@ class _CategviewState extends State<Categview> {
 						func: () async {
 							final fetchedFavData = await TMDBService().fetchRandom(
 								20, 
-								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.env['API_KEY'] ?? ''}&with_genres=${widget.details['id']}&vote_count.gte=100&sort_by=vote_average.desc&language=fr-FR', 
+								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${widget.details['id']}&vote_count.gte=100&sort_by=vote_average.desc&language=fr-FR', 
 								-1
 							);
 							final fetchedNewData = await TMDBService().fetchRandom(
 								20, 
-								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.env['API_KEY'] ?? ''}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', 
+								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', 
 								1
 							);
 							setState(() {

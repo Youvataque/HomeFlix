@@ -6,7 +6,7 @@ import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
 import 'package:homeflix/Components/ViewComponents/OpenCarouselSelec.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
-import 'package:homeflix/Data/FetchDatas.dart';
+import 'package:homeflix/Data/FetchTmdbDatas.dart';
 
 class Series extends StatefulWidget {
 	const Series({super.key});
