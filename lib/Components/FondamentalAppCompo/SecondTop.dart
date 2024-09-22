@@ -9,6 +9,7 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 	final String title;
 	final String leftWord;
 	final Color color;
+	final IconData icon;
 	final VoidCallback? func;
 	final bool searchMode;
 	final List<Widget> searchZone;
@@ -17,6 +18,7 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 		required this.title,
 		required this.leftWord,
 		required this.color,
+		this.icon = Icons.refresh,
 		this.func,
 		this.searchZone = const [],
 		this.searchMode = false
@@ -122,7 +124,7 @@ class _SecondtopState extends State<Secondtop> {
 						splashColor: Colors.transparent,
 						highlightColor: Colors.transparent,
 						child: Icon(
-							Icons.refresh,
+							widget.icon,
 							size: 22,
 							color: Theme.of(context).colorScheme.secondary,
 						),

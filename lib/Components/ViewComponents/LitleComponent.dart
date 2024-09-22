@@ -18,7 +18,7 @@ void toContentView(BuildContext context, Map<String, dynamic> datas, Widget img,
 	Navigator.push(
 		context,
 		MaterialPageRoute(builder: (context) => Contentview(
-			datas: bigData[0],
+			datas: bigData.first,
 			img: img,
 			movie: movie,
 			leftWord: leftWord,

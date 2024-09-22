@@ -10,7 +10,7 @@ class YGGService {
 		final List<Map<String, dynamic>> movies = [];
 
 		final response = await http.get(
-			Uri.parse("https://yggapi.eu/torrents?page=$page&q=$query&order_by=uploaded_at&per_page=25"),
+			Uri.parse("https://yggapi.eu/torrents?page=$page&q=$query&order_by=seeders&per_page=25"),
 		);
 		if (response.statusCode == 200) {
 			final data = json.decode(response.body);

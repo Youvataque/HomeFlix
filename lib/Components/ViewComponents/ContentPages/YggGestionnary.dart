@@ -56,7 +56,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 				onPressed: () => func(),
 				style: ElevatedButton.styleFrom(
 					backgroundColor: Theme.of(context).primaryColor,
-					foregroundColor: Theme.of(context).colorScheme.secondary,
+					foregroundColor: Theme.of(context).colorScheme.tertiary,
 					padding: EdgeInsets.zero,
 					surfaceTintColor: Colors.transparent,
 					shape: RoundedRectangleBorder(
@@ -143,6 +143,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 					),
 					padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
 					backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.6),
+					foregroundColor: Theme.of(context).colorScheme.tertiary,
 					surfaceTintColor: Colors.transparent,
 					shadowColor: Colors.transparent
 				),
@@ -163,7 +164,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 									results[index]['leechers'].toString()
 								),
 								Text(
-									"${(results[index]['size'] / (1024 * 1024 * 1024)).toString().substring(0, 4)} Go",
+									"${((results[index]['size'] / (1024 * 1024 * 1024)).toStringAsFixed(2))} Go",
 									style: sousText(),
 								)
 							],
@@ -179,7 +180,8 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 
 	@override
 	Widget build(BuildContext context) {
-		final nameForSearch = multiSplit(widget.name, " :,.").join("+");
+		final splitResult = multiSplit(widget.name, " :,.");
+		final nameForSearch = splitResult.isNotEmpty ? splitResult.join("%2B") : "default";
 		return Column(
 			children: [
 				gestionnaryBar(),
@@ -230,6 +232,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 	///////////////////////////////////////////////////////////////
 	/// Télécharge les liens 
 	Widget gestionnaryContent(String nameForSearch) {
+		print(widget.name);
 		return FutureBuilder(
 			future: YGGService().fetchQueryTorrent(currentPage, nameForSearch),
 			builder: (context, snapshot) {

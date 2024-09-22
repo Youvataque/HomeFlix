@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -7,6 +6,7 @@ import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
 import 'package:homeflix/Components/Tools/FormatTool/NumberWithCom.dart';
 import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.dart';
+import 'package:homeflix/Components/ViewComponents/PopUpTemplate.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Affiche le contenu d'un film ou d'une série et permet son téléchargement
@@ -28,6 +28,19 @@ class Contentview extends StatefulWidget {
 }
 
 class _ContentviewState extends State<Contentview> {
+	TextEditingController controller = TextEditingController();
+	String searchName = "";
+	
+	@override
+	void initState() {
+		super.initState();
+		final temp = widget.datas['origin_country'] as List<dynamic>;
+		searchName = temp.contains("US") ? 
+			widget.datas[widget.movie ? 'original_title' : 'original_name']
+		:
+			widget.datas[widget.movie ? 'title' : 'name'];
+		controller.text = searchName;
+	}
 
 	///////////////////////////////////////////////////////////////
 	/// UI des sous texts
@@ -53,7 +66,7 @@ class _ContentviewState extends State<Contentview> {
 	}
 
 	@override
-		Widget build(BuildContext context) {
+	Widget build(BuildContext context) {
 		return Scaffold(
 			backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 			body: Stack(
@@ -81,11 +94,9 @@ class _ContentviewState extends State<Contentview> {
 									Padding(
 										padding: const EdgeInsets.symmetric(horizontal: 10),
 										child: Ygggestionnary(
-											name: widget.datas['origin_country'][0] == "US" ? 
-													widget.datas[widget.movie ? 'original_title' : 'original_name']
-												:
-													widget.datas[widget.movie ? 'title' : 'name']
-											),
+											key: ValueKey(searchName),
+											name: searchName
+										),
 									)
 								],
 							),
@@ -95,7 +106,22 @@ class _ContentviewState extends State<Contentview> {
 						title: widget.datas[widget.movie ? 'title' : 'name'],
 						leftWord: widget.leftWord,
 						color: Theme.of(context).primaryColor.withOpacity(0.5),
-						func: () => print("test"),
+						icon: Icons.movie_edit,
+						func: () => showCupertinoModalPopup(
+							context: context,
+							filter: ImageFilter.blur(
+								sigmaX: 10,
+								sigmaY: 10
+							),
+							builder: (context) => PopUpTemplate(
+								padding: MediaQuery.sizeOf(context).height * 18 / 100,
+								heigth: 240,
+								child: Padding(
+									padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+									child: modalUI(context)
+								)
+							)
+						)
 					),
 				],
 			)
@@ -203,6 +229,80 @@ class _ContentviewState extends State<Contentview> {
 					fontWeight: FontWeight.w500
 				),
 			),
+		);
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// Modal PopUp permettant l'édition de la recherche de film
+	Widget modalUI(BuildContext modalContext) {
+		return Column(
+			children: [
+				Align(
+					alignment: Alignment.centerLeft,
+					child: Text(
+						"Plus de détails ?",
+						style: TextStyle(
+							fontSize: 20,
+							fontWeight: FontWeight.w700,
+							color: Theme.of(context).colorScheme.secondary
+						),
+					),
+				),
+				const Gap(20),
+				SizedBox(
+					height: 45,
+					child: TextField(
+						controller: controller,
+						style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+						decoration: InputDecoration(
+							contentPadding: const EdgeInsets.only(left: 10),
+							hintText: 'Titre de l\'oeuvre',
+							hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+							enabledBorder: OutlineInputBorder(
+								borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+								borderRadius: BorderRadius.circular(7.5)
+							),
+							focusedBorder: OutlineInputBorder(
+								borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+								borderRadius: BorderRadius.circular(7.5)
+							),
+						),
+						cursorColor: Theme.of(context).colorScheme.secondary,
+					),
+				),
+				const Gap(50), 
+				Align(
+					alignment: Alignment.bottomRight,
+					child: ElevatedButton(
+						onPressed: () {
+							setState(() {
+								searchName = controller.text;
+							});
+							Navigator.pop(modalContext);
+						},
+						style: ElevatedButton.styleFrom(
+							backgroundColor: Theme.of(context).primaryColor,
+							foregroundColor: Theme.of(context).colorScheme.secondary,
+							padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+							shape: RoundedRectangleBorder(
+								borderRadius: BorderRadius.circular(10),
+								side: BorderSide(
+									color: Theme.of(context).colorScheme.secondary,
+									width: 1
+								)
+							)
+						),
+						child: Text(
+							"Valider",
+							style: TextStyle(
+								color: Theme.of(context).colorScheme.secondary,
+								fontSize: 16,
+								fontWeight: FontWeight.w600
+							),
+						),
+					),
+				),
+			],
 		);
 	}
 }
