@@ -46,8 +46,8 @@ class TMDBService {
 	///////////////////////////////////////////////////////////////
 	/// Fonction pour update une liste d'élément et y ajouter une nouvelle page
 	Future<List<Map<String, dynamic>>> addMore(String link, List<Map<String, dynamic>> data) async {
-		int newPage = (data.length ~/ 20) + 1; // Assurez-vous que la pagination est correcte
-		final newData = await fetchRandom(20, link, newPage); // Récupérez 20 éléments par page
+		int newPage = (data.length ~/ 20) + 1; 
+		final newData = await fetchRandom(20, link, newPage); 
 		data.addAll(newData);
 		return data;
 	}
@@ -75,10 +75,33 @@ class TMDBService {
 	}
 
 	///////////////////////////////////////////////////////////////
+	/// Télécharge les poster_path puis les images pour composants sans.
+	Future<File?> fetchAndDownloadMovieImage(String movieId, bool movie) async {
+		final apiKey = dotenv.get('TMDB_KEY');
+		final url = 'https://api.themoviedb.org/3/${movie ? "movie" : "tv"}/$movieId?api_key=$apiKey';
+		final response = await http.get(Uri.parse(url));
+
+		if (response.statusCode == 200) {
+			final data = json.decode(response.body);
+			final posterPath = data['poster_path'];
+			if (posterPath != null) {
+				final imageUrl = 'https://image.tmdb.org/t/p/w500$posterPath';
+				return await downloadMovieImageTemp(imageUrl, movieId.toString());
+			} else {
+				print('Aucune image trouvée pour le film avec ID: $movieId');
+				return null;
+			}
+		} else {
+			print('Erreur lors de la récupération des détails du film: ${response.statusCode}');
+			return null;
+		}
+	}
+
+	///////////////////////////////////////////////////////////////
 	/// crée une image à partir de la DB ou des fichiers interne vie futureBuilder
-	Widget createImg(String imgPath, String movieId, double width) {
+	Widget createImg(String movieId, double width, bool movie) {
 		return FutureBuilder<File?>(
-			future: _getLocalImageOrDownload(imgPath, movieId),
+			future: _getLocalImageOrDownload(movieId, movie),
 			builder: (context, snapshot) {
 				if (snapshot.connectionState == ConnectionState.done) {
 					if (snapshot.hasError) {
@@ -93,7 +116,7 @@ class TMDBService {
 							),
 						);
 					} else {
-						return const Text('Image non disponible');
+						return Text("Image non disponible $movieId");
 					}
 				} else {
 					return Container(
@@ -117,17 +140,14 @@ class TMDBService {
 
 	///////////////////////////////////////////////////////////////
 	/// recupère l'image dans la db si elle n'est pas déjà présente en mémoire
-	Future<File?> _getLocalImageOrDownload(String imgPath, String movieId) async {
+	Future<File?> _getLocalImageOrDownload(String movieId, bool movie) async {
 		final tempDir = Directory.systemTemp;
 		final file = File('${tempDir.path}/$movieId.jpg');
 
 		if (await file.exists()) {
 			return file;
 		} else {
-			return await TMDBService().downloadMovieImageTemp(
-				'https://image.tmdb.org/t/p/w500$imgPath',
-				movieId,
-			);
+			return await TMDBService().fetchAndDownloadMovieImage(movieId, movie);
 		}
 	}
 

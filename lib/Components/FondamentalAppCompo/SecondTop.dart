@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 ///////////////////////////////////////////////////////////////
@@ -13,6 +14,8 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 	final VoidCallback? func;
 	final bool searchMode;
 	final List<Widget> searchZone;
+	final bool dataMode;
+	final TextEditingController? query;
 	const Secondtop({
 		super.key,
 		required this.title,
@@ -21,7 +24,9 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 		this.icon = Icons.refresh,
 		this.func,
 		this.searchZone = const [],
-		this.searchMode = false
+		this.searchMode = false,
+		this.dataMode = false,
+		this.query
 	});
 
 	@override
@@ -32,6 +37,8 @@ class Secondtop extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _SecondtopState extends State<Secondtop> {
+	bool isSearch = false;
+
 	@override
 	Widget build(BuildContext context) {
 		return ClipRect(
@@ -54,8 +61,8 @@ class _SecondtopState extends State<Secondtop> {
 									:
 										[
 											leftZone(),
-											titleWidget(),
-											rightZone()
+											widget.dataMode ? const SizedBox.shrink() : titleWidget(),
+											widget.dataMode ? rightZone2() : rightZone()
 										],
 							),
 						)
@@ -112,7 +119,7 @@ class _SecondtopState extends State<Secondtop> {
 
 	///////////////////////////////////////////////////////////////
 	/// zone de refresh des details pages
-	Widget rightZone() {
+	SizedBox rightZone() {
 		return SizedBox(
 			width: 100,
 			child: Align(
@@ -131,6 +138,76 @@ class _SecondtopState extends State<Secondtop> {
 					)
 				),
 			)
+		);
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// zone de recherche animé pour les datas
+	Widget rightZone2() {
+		return AnimatedCrossFade(
+			firstChild: Row(
+				children: [
+					SizedBox(
+						width: MediaQuery.sizeOf(context).width - 200,
+						child: titleWidget(),
+					),
+					SizedBox(
+						width: 100,
+						child: Align(
+							alignment: Alignment.centerRight,
+							child: Padding(
+								padding: const EdgeInsets.only(right: 12),
+								child: InkWell(
+									onTap: () {
+										setState(() {
+										isSearch = true;
+										});
+									},
+									splashColor: Colors.transparent,
+									highlightColor: Colors.transparent,
+									child: Icon(
+										widget.icon,
+										size: 22,
+										color: Theme.of(context).colorScheme.secondary,
+									),
+								)
+							),
+						)
+					),
+				],
+			),
+			secondChild: SizedBox(
+				height: 35,
+				width: MediaQuery.sizeOf(context).width - 100,
+				child: Padding(
+					padding: const EdgeInsets.only(right: 10),
+					child: TextField(
+						onSubmitted: (value) => setState(() {
+							isSearch = false;
+						}),
+						controller: widget.query!,
+						style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+						decoration: InputDecoration(
+							contentPadding: const EdgeInsets.only(left: 10),
+							hintText: 'Titre de l\'oeuvre',
+							hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
+							enabledBorder: OutlineInputBorder(
+								borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+								borderRadius: BorderRadius.circular(7.5)
+							),
+							focusedBorder: OutlineInputBorder(
+								borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+								borderRadius: BorderRadius.circular(7.5)
+							),
+						),
+						cursorColor: Theme.of(context).colorScheme.secondary,
+					),
+				)
+			),
+			crossFadeState: isSearch ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+			duration: const Duration(milliseconds: 200),
+			firstCurve: Curves.easeIn,
+			secondCurve: Curves.easeOut,
 		);
 	}
 

@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MultiSplit.dart';
-import 'package:homeflix/Data/FetchYggDatas.dart';
+import 'package:homeflix/Data/YggServices.dart';
 
 ///////////////////////////////////////////////////////////////
 /// composant gérant le téléchargement et l'affichage des torrents
@@ -132,7 +133,9 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 			height: 80,
 			width: MediaQuery.sizeOf(context).width,
 			child: ElevatedButton(
-				onPressed: () {},
+				onPressed: () async {
+					await YGGService().sendDownloadRequest('https://yggapi.eu/torrent/${results[index]['id']}/download?passkey=${dotenv.get("YGG_PASSKEY")}', results[index]['title']);
+				},
 				style: ElevatedButton.styleFrom(
 					shape: RoundedRectangleBorder(
 						borderRadius: BorderRadius.circular(7.5),

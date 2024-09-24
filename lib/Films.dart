@@ -6,7 +6,7 @@ import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
 import 'package:homeflix/Components/ViewComponents/OpenCarouselSelec.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
-import 'package:homeflix/Data/FetchTmdbDatas.dart';
+import 'package:homeflix/Data/TmdbServices.dart';
 
 class Films extends StatefulWidget {
 	const Films({super.key});
@@ -29,21 +29,21 @@ class _FilmsState extends State<Films> {
 	void addImg() {
 		for (int x = 0; x < 10; x++) {
 			img10.add(TMDBService().createImg(
-				TMDBService.the10movieTren[x]['poster_path'],
 				TMDBService.the10movieTren[x]['id'].toString(),
-				MediaQuery.of(context).size.width
+				MediaQuery.of(context).size.width,
+				true
 			));
 		}
 		for (int x = 0; x < 20; x++) {
 			img20.add(TMDBService().createImg(
-				TMDBService.the20moviePop[x]['poster_path'],
 				TMDBService.the20moviePop[x]['id'].toString(),
-				150
+				150,
+				true
 			));
 			recentImg20.add(TMDBService().createImg(
-				TMDBService.the20movieRecent[x]['poster_path'],
 				TMDBService.the20movieRecent[x]['id'].toString(),
-				150
+				150,
+				true
 			));
 		}
 	}

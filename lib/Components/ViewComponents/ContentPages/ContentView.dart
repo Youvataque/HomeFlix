@@ -7,6 +7,7 @@ import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
 import 'package:homeflix/Components/Tools/FormatTool/NumberWithCom.dart';
 import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.dart';
 import 'package:homeflix/Components/ViewComponents/PopUpTemplate.dart';
+import 'package:homeflix/Data/NightServices.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Affiche le contenu d'un film ou d'une série et permet son téléchargement
@@ -35,7 +36,7 @@ class _ContentviewState extends State<Contentview> {
 	void initState() {
 		super.initState();
 		final temp = widget.datas['origin_country'] as List<dynamic>;
-		searchName = temp.contains("US") ? 
+		searchName = temp.contains("US") || temp.contains("CA") ? 
 			widget.datas[widget.movie ? 'original_title' : 'original_name']
 		:
 			widget.datas[widget.movie ? 'title' : 'name'];
@@ -61,6 +62,44 @@ class _ContentviewState extends State<Contentview> {
 				fontSize: 17,
 				fontWeight: FontWeight.w700,
 				color: Theme.of(context).colorScheme.secondary
+			),
+		);
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// UI du composant affiché si le film est déjà téléchargé
+	Padding alreadyInDB() {
+		return Padding(
+			padding: const EdgeInsets.symmetric(horizontal: 10),
+			child: Container(
+				width: MediaQuery.sizeOf(context).width,
+				height: 40,
+				decoration: BoxDecoration(
+					color: Theme.of(context).scaffoldBackgroundColor,
+					border: Border.all(
+						color: Theme.of(context).colorScheme.secondary,
+						width: 0.5
+					),
+					borderRadius: BorderRadius.circular(5)
+				),
+				child: Center(
+					child: Row(
+						mainAxisAlignment: MainAxisAlignment.center,
+						children: [
+							Icon(
+								Icons.check,
+								color: Theme.of(context).colorScheme.secondary,
+								size: 20,
+							),
+							const Gap(5),
+							Text(
+								"Contenue déjà téléchargé. Bon visionnage !",
+								textAlign: TextAlign.center,
+								style: sousText(),
+							),
+						],
+					)
+				)
 			),
 		);
 	}
@@ -91,13 +130,16 @@ class _ContentviewState extends State<Contentview> {
 									const Gap(5),
 									descripZone(),
 									const Gap(10),
-									Padding(
-										padding: const EdgeInsets.symmetric(horizontal: 10),
-										child: Ygggestionnary(
-											key: ValueKey(searchName),
-											name: searchName
-										),
-									)
+									!(NIGHTServices.dataStatus["movie"][widget.datas['id'].toString()] != null) ?
+											Padding(
+												padding: const EdgeInsets.symmetric(horizontal: 10),
+												child: Ygggestionnary(
+													key: ValueKey(searchName),
+													name: searchName
+												),
+											)
+										:
+											alreadyInDB()
 								],
 							),
 						),

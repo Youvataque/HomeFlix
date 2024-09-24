@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
-import 'package:homeflix/Data/FetchTmdbDatas.dart';
+import 'package:homeflix/Data/TmdbServices.dart';
 import 'dart:async';
 
 ///////////////////////////////////////////////////////////////
@@ -104,9 +104,9 @@ class _SearchpageState extends State<Searchpage> {
 			itemBuilder: (context, index) {
 				final result = results[index];
 				final img = result['poster_path'] != null ? TMDBService().createImg(
-					result['poster_path'],
 					result['id'].toString(),
 					100,
+					result['media_type'] == "movie" ? true : false,
 				) :  const SizedBox.shrink();
 				return result['poster_path'] != null ?
 						Padding(

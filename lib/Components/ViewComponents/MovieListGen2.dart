@@ -57,8 +57,8 @@ class _MovieListGen2State extends State<MovieListGen2> {
 		);
 	}
 
-  ///////////////////////////////////////////////////////////////
-  /// Ui du bouton image 
+	///////////////////////////////////////////////////////////////
+	/// Ui du bouton image 
 	Widget imgButton(Widget img, Map<String, dynamic> selectData) {
 		return SizedBox(
 			height: double.infinity,

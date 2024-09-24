@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/ViewComponents/CategView.dart';
 import 'package:homeflix/Components/ViewComponents/ContentPages/ContentView.dart';
-import 'package:homeflix/Data/FetchTmdbDatas.dart';
+import 'package:homeflix/Data/TmdbServices.dart';
 
 ///////////////////////////////////////////////////////////////
 /// ombre de l'app

@@ -5,7 +5,7 @@ import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen.dart';
 import 'package:homeflix/Components/ViewComponents/MovieListGen2.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
-import 'package:homeflix/Data/FetchTmdbDatas.dart';
+import 'package:homeflix/Data/TmdbServices.dart';
 
 class Categview extends StatefulWidget {
 	final Map<String, dynamic> details;
@@ -89,9 +89,9 @@ class _CategviewState extends State<Categview> {
 											return const SizedBox.shrink();
 										}
 										return TMDBService().createImg(
-											posterPath,
 											widget.favData[x]['id'].toString(),
-											(MediaQuery.sizeOf(context).width - 30) / 2
+											(MediaQuery.sizeOf(context).width - 30) / 2,
+											widget.movie
 										);
 									}),
 									datas: favData,
@@ -109,9 +109,9 @@ class _CategviewState extends State<Categview> {
 											return const SizedBox.shrink();
 										}
 										return TMDBService().createImg(
-											posterPath,
 											newData[x]['id'].toString(),
-											(MediaQuery.sizeOf(context).width - 30) / 2
+											(MediaQuery.sizeOf(context).width - 30) / 2,
+											widget.movie
 										);
 									}),
 									datas: newData,
