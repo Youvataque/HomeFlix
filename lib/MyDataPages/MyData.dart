@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/MyDataPages/DataView.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
+import 'package:homeflix/MyDataPages/DownloadPages.dart';
 
 class MyData extends StatefulWidget {
 	const MyData({super.key});
@@ -120,7 +121,10 @@ class _MyDataState extends State<MyData> {
 					"En téléchargement",
 					MediaQuery.sizeOf(context).width - 20,
 					"src/images/downloadImg.png",
-					() {}
+					() => Navigator.push(
+						context,
+						MaterialPageRoute(builder: (context) => const Downloadpages(secTitle: "Téléchargement"))
+					),
 				),
 				const Gap(35),
 				const Secondtitle(title: "Information serveur"),

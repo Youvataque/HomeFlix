@@ -3,15 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MultiSplit.dart';
+import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/YggServices.dart';
 
 ///////////////////////////////////////////////////////////////
 /// composant gérant le téléchargement et l'affichage des torrents
 class Ygggestionnary extends StatefulWidget {
 	final String name;
+	final Map<String, dynamic> selectData;
+	final bool movie;
 	const Ygggestionnary({
 		super.key,
-		required this.name
+		required this.name,
+		required this.selectData,
+		required this.movie
 	});
 
 	@override
@@ -135,6 +140,16 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 			child: ElevatedButton(
 				onPressed: () async {
 					await YGGService().sendDownloadRequest('https://yggapi.eu/torrent/${results[index]['id']}/download?passkey=${dotenv.get("YGG_PASSKEY")}', results[index]['title']);
+					await NIGHTServices().postDataStatus(
+						{
+							"id": widget.selectData['id'].toString(),
+							'title': widget.name,
+							'name': results[index]['title'],
+							'media': widget.movie,
+							'percent': 0.0
+						},
+						"queue"
+					);
 				},
 				style: ElevatedButton.styleFrom(
 					shape: RoundedRectangleBorder(

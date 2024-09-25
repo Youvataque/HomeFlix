@@ -135,7 +135,9 @@ class _ContentviewState extends State<Contentview> {
 												padding: const EdgeInsets.symmetric(horizontal: 10),
 												child: Ygggestionnary(
 													key: ValueKey(searchName),
-													name: searchName
+													name: searchName,
+													selectData: widget.datas,
+													movie: widget.movie,
 												),
 											)
 										:

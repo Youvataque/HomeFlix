@@ -4,7 +4,7 @@ import 'package:homeflix/Components/ViewComponents/SearchPage.dart';
 
 //Pages
 import 'package:homeflix/Films.dart';
-import 'package:homeflix/MyData.dart';
+import 'package:homeflix/MyDataPages/MyData.dart';
 import 'package:homeflix/Series.dart';
 import 'package:homeflix/main.dart';
 
