@@ -10,13 +10,17 @@ import 'package:homeflix/Data/YggServices.dart';
 /// composant gérant le téléchargement et l'affichage des torrents
 class Ygggestionnary extends StatefulWidget {
 	final String name;
+	final String originalName;
 	final Map<String, dynamic> selectData;
 	final bool movie;
+	final VoidCallback func;
 	const Ygggestionnary({
 		super.key,
 		required this.name,
+		required this.originalName,
 		required this.selectData,
-		required this.movie
+		required this.movie,
+		required this.func
 	});
 
 	@override
@@ -144,12 +148,15 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 						{
 							"id": widget.selectData['id'].toString(),
 							'title': widget.name,
+							'originalTitle': widget.originalName,
 							'name': results[index]['title'],
 							'media': widget.movie,
 							'percent': 0.0
 						},
 						"queue"
 					);
+					NIGHTServices.dataStatus = await NIGHTServices().fetchDataStatus();
+					widget.func();
 				},
 				style: ElevatedButton.styleFrom(
 					shape: RoundedRectangleBorder(

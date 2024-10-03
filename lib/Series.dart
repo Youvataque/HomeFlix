@@ -80,10 +80,7 @@ class _SeriesState extends State<Series> {
 					child: Padding(
 						padding: const EdgeInsets.symmetric(horizontal: 10),
 						child: Categorigen(
-							func: (index) {
-								print(TMDBService.serieCateg[index]);
-								toCategView(context, TMDBService.serieCateg[index], "Series", false);
-							},
+							func: (index) => toCategView(context, TMDBService.serieCateg[index], "Series", false),
 							data: TMDBService.serieCateg,
 						)
 					),
@@ -97,7 +94,8 @@ class _SeriesState extends State<Series> {
 	/// zone des films du moment
 	Widget trendZone() {
 		return SizedBox(
-			height: MediaQuery.sizeOf(context).height * 0.72,
+			height: MediaQuery.sizeOf(context).width * 1.5 + 15,
+			width: MediaQuery.sizeOf(context).width,
 			child: Stack(
 				children: [
 					CarouselSlider(

@@ -31,7 +31,7 @@ class Contentview extends StatefulWidget {
 class _ContentviewState extends State<Contentview> {
 	TextEditingController controller = TextEditingController();
 	String searchName = "";
-	
+	String originalName = "";
 	@override
 	void initState() {
 		super.initState();
@@ -40,6 +40,10 @@ class _ContentviewState extends State<Contentview> {
 			widget.datas[widget.movie ? 'original_title' : 'original_name']
 		:
 			widget.datas[widget.movie ? 'title' : 'name'];
+		originalName = temp.contains("US") || temp.contains("CA") ? 
+			widget.datas[widget.movie ? 'title' : 'name']
+		:
+			widget.datas[widget.movie ? 'original_title' : 'original_name'];
 		controller.text = searchName;
 	}
 
@@ -68,7 +72,7 @@ class _ContentviewState extends State<Contentview> {
 
 	///////////////////////////////////////////////////////////////
 	/// UI du composant affiché si le film est déjà téléchargé
-	Padding alreadyInDB() {
+	Padding alreadyInDB(String message) {
 		return Padding(
 			padding: const EdgeInsets.symmetric(horizontal: 10),
 			child: Container(
@@ -93,7 +97,7 @@ class _ContentviewState extends State<Contentview> {
 							),
 							const Gap(5),
 							Text(
-								"Contenue déjà téléchargé. Bon visionnage !",
+								message,
 								textAlign: TextAlign.center,
 								style: sousText(),
 							),
@@ -119,7 +123,6 @@ class _ContentviewState extends State<Contentview> {
 								),
 							),
 					),
-					
 					SizedBox(
 						height: MediaQuery.sizeOf(context).height,
 						child: SingleChildScrollView(
@@ -130,18 +133,32 @@ class _ContentviewState extends State<Contentview> {
 									const Gap(5),
 									descripZone(),
 									const Gap(10),
-									!(NIGHTServices.dataStatus["movie"][widget.datas['id'].toString()] != null) ?
+									NIGHTServices.dataStatus["movie"][widget.datas['id'].toString()] == null && NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] == null ?
 											Padding(
 												padding: const EdgeInsets.symmetric(horizontal: 10),
 												child: Ygggestionnary(
 													key: ValueKey(searchName),
+													originalName: originalName,
 													name: searchName,
 													selectData: widget.datas,
 													movie: widget.movie,
+													func: () {
+														Future.delayed(
+															const Duration(seconds: 2),
+															() => CupertinoActivityIndicator(
+																radius: 20,
+																color: Theme.of(context).colorScheme.secondary,
+															)
+														);
+														setState(() {});
+													}
 												),
 											)
 										:
-											alreadyInDB()
+											NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] != null ? 
+													alreadyInDB("En cours de téléchargement ! C'est pour bientôt.")
+												:
+													alreadyInDB("Contenue déjà téléchargé. Bon visionnage !")
 								],
 							),
 						),
@@ -224,7 +241,6 @@ class _ContentviewState extends State<Contentview> {
 						],
 					),
 					popularityZone(),
-					
 				],
 			),
 		);

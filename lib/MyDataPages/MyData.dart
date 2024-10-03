@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Components/ViewComponents/SpecWidget.dart';
 import 'package:homeflix/MyDataPages/DataView.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/MyDataPages/DownloadPages.dart';
@@ -128,6 +129,8 @@ class _MyDataState extends State<MyData> {
 				),
 				const Gap(35),
 				const Secondtitle(title: "Information serveur"),
+				const Gap(10),
+				const SpecWidget()
 			],
 		);
 	}

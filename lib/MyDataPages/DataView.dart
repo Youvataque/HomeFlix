@@ -102,13 +102,21 @@ class _DataviewState extends State<Dataview> {
 	///////////////////////////////////////////////////////////////
 	/// contenu de la page
 	Wrap contentBody() {
+		List<MapEntry> filteredEntries = datas[widget.where].entries.where((entry) {
+			return cleanString(entry.value["title"].toString()).contains(cleanString(queryController.text));
+		}).toList();
+
+		if (filteredEntries.isNotEmpty) {
+			filteredEntries.sort((a, b) {
+				return a.value["title"].toString().compareTo(b.value["title"].toString());
+			});
+		}
+
 		return Wrap(
 			spacing: 10,
 			runSpacing: 20,
 			alignment: WrapAlignment.start,
-			children: datas[widget.where].entries.where((entry) {
-				return cleanString(entry.value["title"].toString()).contains(cleanString(queryController.text));
-			}).map<Widget>((entry) {
+			children: filteredEntries.map<Widget>((entry) {
 				return ClipRRect(
 					borderRadius: BorderRadius.circular(7.5),
 					child: SizedBox(

@@ -34,7 +34,7 @@ class _MovieListGenState extends State<MovieListGen> {
 				child: ListView.separated(
 					separatorBuilder:(context, index) => const Gap(10),
 					scrollDirection: Axis.horizontal,
-					itemCount: widget.imgList.length,
+					itemCount: 20,
 					itemBuilder: (context, index) => ClipRRect(
 						borderRadius: BorderRadius.circular(7.5),
 						child: imgButton(widget.imgList[index], widget.datas[index]),

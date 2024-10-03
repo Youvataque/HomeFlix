@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
@@ -16,10 +17,41 @@ class Downloadpages extends StatefulWidget {
 	State<Downloadpages> createState() => _DownloadpagesState();
 }
 
-class _DownloadpagesState extends State<Downloadpages> {
+class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateMixin{
 	Map<String, dynamic> datas = NIGHTServices.dataStatus["queue"];
+	Timer? _timer;
 
+	@override
+	void initState() {
+		super.initState();
+		_startPeriodicFetch();
+	}
 
+	@override
+	void dispose() {
+		_timer?.cancel();
+		super.dispose();
+	}
+
+	void _startPeriodicFetch() {
+		_timer = Timer.periodic(const Duration(seconds: 4), (timer) async {
+			NIGHTServices.dataStatus = await NIGHTServices().fetchDataStatus();
+			setState(() {
+			  datas = NIGHTServices.dataStatus["queue"]
+;			});
+		});
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// UI des sous texts
+	TextStyle sousText() {
+		return TextStyle(
+			fontSize: 14,
+			fontWeight: FontWeight.w400,
+			color: Theme.of(context).colorScheme.secondary
+		);
+	}
+	
 	///////////////////////////////////////////////////////////////
 	/// Ui du bouton image 
 	Widget imgButton(Widget img, Map<String, dynamic> selectData) {
@@ -59,7 +91,7 @@ class _DownloadpagesState extends State<Downloadpages> {
 										child: contentBody(),
 									),
 								),
-								const Gap(50)
+								const Gap(40)
 							],
 						),
 					),
@@ -75,34 +107,55 @@ class _DownloadpagesState extends State<Downloadpages> {
 		);
 	}
 
+	///////////////////////////////////////////////////////////////
+	/// corp de la file d'attente
 	Widget contentBody() {
 		return Column(
 			children: datas.entries.map<Widget>((entry) {
-				print(entry.value);
-				return Row(
-					mainAxisAlignment: MainAxisAlignment.center,
-					children: [
-						ClipRRect(
-							borderRadius: BorderRadius.circular(7.5),
-							child: SizedBox(
-								height: 1.5 * 100,
-								child: imgButton(
-									TMDBService().createImg(
+				return Padding(
+					padding: const EdgeInsets.only(bottom: 10),
+					child: Row(
+						children: [
+							ClipRRect(
+								borderRadius: BorderRadius.circular(7.5),
+								child: SizedBox(
+									height: 1.5 * 70,
+									child: TMDBService().createImg(
 										entry.key,
-										100,
+										70,
 										entry.value['media']
 									),
-									entry.value
-								),
-							)
-						),
-						Text(
-							entry.value['percent'].toString(),
-							style: TextStyle(
-								color: Theme.of(context).colorScheme.secondary
+								)
 							),
-						)
-					],
+							const Gap(10),
+							SizedBox(
+								height: 1.5 * 70,
+								width: MediaQuery.sizeOf(context).width - 105,
+								child: Column(
+								mainAxisAlignment: MainAxisAlignment.end,
+								crossAxisAlignment: CrossAxisAlignment.start,
+								children: [
+									Text(
+										entry.value['title'].toString(),
+										maxLines: 3,
+										style: sousText()
+									),
+									const Gap(10),
+									SizedBox(
+										height: 10,
+										width: 200,
+										child: LinearProgressIndicator(
+											value: entry.value['percent'] / 100,
+											borderRadius: BorderRadius.circular(3),
+											color: Theme.of(context).colorScheme.tertiary,
+										),
+									),
+									const Gap(2)
+								],
+							),
+							)
+						],
+					),
 				);
 			}).toList()
 		);

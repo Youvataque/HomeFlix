@@ -144,10 +144,19 @@ class _SecondtopState extends State<Secondtop> {
 	Widget rightZone2() {
 		return AnimatedCrossFade(
 			firstChild: Row(
+				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children: [
 					SizedBox(
 						width: MediaQuery.sizeOf(context).width - 200,
-						child: titleWidget(),
+						child: Text(
+							widget.title,
+							textAlign: TextAlign.center,
+							style: TextStyle(
+								color: Theme.of(context).colorScheme.secondary,
+								fontSize: 17,
+								fontWeight: FontWeight.w600
+							),
+						),
 					),
 					SizedBox(
 						width: 100,
@@ -158,7 +167,7 @@ class _SecondtopState extends State<Secondtop> {
 								child: InkWell(
 									onTap: () {
 										setState(() {
-										isSearch = true;
+											isSearch = true;
 										});
 									},
 									splashColor: Colors.transparent,

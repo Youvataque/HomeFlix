@@ -39,6 +39,11 @@ dependencies:
   http: ^1.2.2
   carousel_slider: ^5.0.0
   flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.14.1
+flutter_launcher_icons:
+  image_path: "src/images/icon.jpg"
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:

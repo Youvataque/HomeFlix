@@ -96,7 +96,8 @@ class _FilmsState extends State<Films> {
 	/// zone des films du moment
 	Widget trendZone() {
 		return SizedBox(
-			height: MediaQuery.sizeOf(context).height * 0.72,
+			width: MediaQuery.sizeOf(context).width,
+			height: MediaQuery.sizeOf(context).width * 1.5 + 20,
 			child: Stack(
 				children: [
 					CarouselSlider(
