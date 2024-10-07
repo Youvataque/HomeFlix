@@ -1,0 +1,373 @@
+{
+  "tv": {
+    "877": {
+      "title": "Caprica",
+      "name": "Caprica S01 BR EAC3 VFF VO 1080p x265 10Bits T0M",
+      "size": 35763791680,
+      "maxSize": 35763791680
+    },
+    "1403": {
+      "title": "Marvel Les Agents Du SHIELD",
+      "name": "Marvel Les Agents Du SHIELD - Integrale - Multi HEVC-2Mbps AC3-384kbps",
+      "size": 38497715383,
+      "maxSize": 38497715383
+    },
+    "1972": {
+      "title": "Battlestar Galactica",
+      "name": "Battlestar Galactica (int�grale de la s�rie de 2004) MULTI 1080p HEVC",
+      "size": 56817890969,
+      "maxSize": 56817890969
+    },
+    "5835": {
+      "title": "Chair de poule",
+      "name": "chair de poule",
+      "size": 51977019741,
+      "maxSize": 51977019741
+    },
+    "12971": {
+      "title": "Dragon Ball Z",
+      "originalTitle": "ドラゴンボールゼット",
+      "name": "Dragon Ball Z 1989-1996 [30Th Anniversary] REMASTERED IntÃ©gral (291EP) NC MULTI 1080p HDLight BluRay AC3 x265-Thebatou8652",
+      "media": false,
+      "percent": 100
+    },
+    "33240": {
+      "title": "Battlestar Galactica: Blood & Chrome",
+      "originalTitle": "Battlestar Galactica : Blood & Chrome",
+      "name": "Battlestar.Galactica.Blood.And.Chrome.2012.FRENCH.1080p.Bluray.x265.10bits.DTS.5.1-Amen",
+      "media": false,
+      "percent": 100
+    },
+    "63247": {
+      "title": "Westworld",
+      "originalTitle": "Westworld",
+      "name": "Westworld.S01.MULTi.1080p.WEBRip.5.1.x265-R3MiX",
+      "media": false,
+      "percent": 100
+    },
+    "72710": {
+      "title": "The Continental: From the World of John Wick",
+      "name": "The.Continental.From.the.World.of.John.Wick.S01.REPACK.MULTi.1080p.WEB.H265-FW (Le Continental : d'après l'univers de John Wick)",
+      "media": false,
+      "percent": 100
+    },
+    "84958": {
+      "title": "loki",
+      "name": "loki s2",
+      "size": 16691043319,
+      "maxSize": 16691043319
+    },
+    "91363": {
+      "title": "What If",
+      "name": "What If.S01.MULTI.VF2.1080p.WEB-DL.H264-FTMVHD",
+      "size": 16014511244,
+      "maxSize": 16014511244
+    },
+    "206586": {
+      "title": "The Walking Dead The Ones Who Live",
+      "name": "The.Walking.Dead.The.Ones.Who.Live.S01.FRENCH.1080p.AMZN.WEB-DL.H264-BraD",
+      "size": 19853491060,
+      "maxSize": 19853491060
+    }
+  },
+  "movie": {
+    "11": {
+      "title": "Star Wars IV",
+      "originalTitle": "La Guerre des étoiles",
+      "name": "Star.Wars.IV.[1080p].MULTi.(1977).BluRay.x264-PopHD(Un.nouvel.espoir.4)",
+      "media": true,
+      "percent": 100
+    },
+    "238": {
+      "title": "The Godfather",
+      "originalTitle": "Le Parrain",
+      "name": "Le Parrain  (1972) MULTi VFI 2160p 10bit 4KLight DOLBY VISION DDP 5.1 x265-QTZ (The Godfather)",
+      "media": true,
+      "percent": 100
+    },
+    "240": {
+      "title": "The Godfather Part II",
+      "originalTitle": "Le Parrain 2",
+      "name": "Le Parrain, 2e partie (1974) MULTi VFI 2160p 10bit 4KLight DOLBY VISION DDP 5.1 x265-QTZ (The Godfather Part II)",
+      "media": true,
+      "percent": 100
+    },
+    "242": {
+      "title": "The Godfather Part III",
+      "originalTitle": "Le parrain, 3e partie",
+      "name": "Le Parrain, 3e partie (1990) Directors Cut MULTi VFI 2160p 10bit 4KLight DOLBY VISION DDP 5.1 x265-QTZ (The Godfather Part III)",
+      "media": true,
+      "percent": 100
+    },
+    "1389": {
+      "title": "Hors d'atteinte",
+      "name": "Hors d'atteinte (Out of Sight)",
+      "size": 1580102215,
+      "maxSize": 1580102215
+    },
+    "1726": {
+      "title": "Iron Man",
+      "name": "Iron-Man.1.VFF.Blu-Ray.1080.x265.HEVC-LOULOU",
+      "size": 11156751152,
+      "maxSize": 11156751152
+    },
+    "1858": {
+      "title": "Transformers 1",
+      "name": "Transformers IMAX Collection (2007-2017) MULTi VF2 [1080p] BluRay x264-PopHD/Transformers",
+      "size": 4300090294,
+      "maxSize": 4300090294
+    },
+    "1891": {
+      "title": "Star Wars V",
+      "originalTitle": "L'Empire contre-attaque",
+      "name": "Star Wars Ãpisode V - L'Empire contre-attaque (1980) 1080p BluRay HDLight MULTi VFI x265 10-bit AC3 [GWEN] (Star Wars: Episode V - The Empire Strikes Back)",
+      "media": true,
+      "percent": 100
+    },
+    "1892": {
+      "title": "Star Wars VI",
+      "originalTitle": "Le Retour du Jedi",
+      "name": "Star Wars Ãpisode VI - Le Retour du Jedi (1983) 1080p BluRay HDLight MULTi VFI x265 10-bit AC3 [GWEN] (Star Wars: Episode VI - Return of the Jedi)",
+      "media": true,
+      "percent": 100
+    },
+    "1893": {
+      "title": "Star Wars: Episode I - The Phantom Menace",
+      "originalTitle": "Star Wars, épisode I - La Menace fantôme",
+      "name": "Star Wars Episode I - La Menace fantôme (1999) 1080p BluRay HDLight MULTi VFF x265 10-bit AC3 [GWEN] (Star Wars: Episode I - The Phantom Menace)",
+      "media": true,
+      "percent": 100
+    },
+    "1894": {
+      "title": "Star Wars: Episode II - Attack of the Clones",
+      "originalTitle": "Star Wars, épisode II - L'Attaque des clones",
+      "name": "Star Wars Ãpisode II - L'Attaque des clones (2002) 1080p BluRay HDLight MULTi VFF x265 10-bit AC3 [GWEN] (Star Wars: Episode II - Attack of the Clones)",
+      "media": true,
+      "percent": 100
+    },
+    "1895": {
+      "title": "Star Wars: Episode III - Revenge of the Sith",
+      "originalTitle": "Star Wars, épisode III - La Revanche des Sith",
+      "name": "Star Wars Ãpisode III - La Revanche des Sith (2005) 1080p BluRay HDLight MULTi VFF x265 10-bit AC3 [GWEN] (Star Wars: Episode III - Revenge of the Sith)",
+      "media": true,
+      "percent": 100
+    },
+    "8373": {
+      "title": "Transformers 2",
+      "name": "Transformers IMAX Collection (2007-2017) MULTi VF2 [1080p] BluRay x264-PopHD/Transformers 2",
+      "size": 4621818033,
+      "maxSize": 4621818033
+    },
+    "10138": {
+      "title": "Iron Man 2",
+      "name": "Iron-Man.2.VFF.Blu-Ray.1080.x265.HEVC-LOULOU",
+      "size": 7979622870,
+      "maxSize": 7979622870
+    },
+    "24428": {
+      "title": "Avengers 1",
+      "name": "The Avengers 2012",
+      "size": 3002880355,
+      "maxSize": 3002880355
+    },
+    "37169": {
+      "title": "The Human Centipede 1",
+      "name": "The.Human.Centipede.I.2009.MULTi.TRUEFRENCH.1080p.BluRay.x264.DTS-AX50",
+      "size": 9504598060,
+      "maxSize": 9504598060
+    },
+    "38356": {
+      "title": "Transformers 3",
+      "name": "Transformers IMAX Collection (2007-2017) MULTi VF2 [1080p] BluRay x264-PopHD/Transformers 3",
+      "size": 4743606290,
+      "maxSize": 4743606290
+    },
+    "62206": {
+      "title": "30 Minutes Maximum",
+      "name": "30.Minutes.Maximum.2011.TRUEFRENCH.BRRIP.XviD-FUZION/30 Minutes Maximum.(30 Minutes or Less).2011.FRENCH.BRRIP.XviD-FUZION",
+      "size": 735258624,
+      "maxSize": 735258624
+    },
+    "68721": {
+      "title": "Iron Man 3",
+      "name": "Iron-Man.3.VFF.Blu-Ray.1080.x265.HEVC-LOULOU",
+      "size": 10169826181,
+      "maxSize": 10169826181
+    },
+    "76170": {
+      "title": "The Wolverine",
+      "name": "Wolverine - Le combat de l'immortel (2013) EXTENDED MULTi VFF 1080p 10bit HDLight BluRay x265 AAC 7.1 - QTZ (The Wolverine)",
+      "media": true
+    },
+    "91314": {
+      "title": "Transformers 4",
+      "name": "Transformers IMAX Collection (2007-2017) MULTi VF2 [1080p] BluRay x264-PopHD/Transformers 4",
+      "size": 4962066408,
+      "maxSize": 4962066408
+    },
+    "99861": {
+      "title": "Avengers 2 L'�re d'Ultron",
+      "name": "Avengers 1080P/Avengers 2 L'�re d'Ultron (2015)",
+      "size": 8397908465,
+      "maxSize": 8397908465
+    },
+    "198663": {
+      "title": "The Maze Runner",
+      "originalTitle": "Le Labyrinthe",
+      "name": "Le Labyrinthe (2014) MULTi VFF 2160p 10bit 4KLight HDR BluRay AC3 5.1 x265-QTZ (The Maze Runner)",
+      "media": true,
+      "percent": 100
+    },
+    "245891": {
+      "title": "John Wick",
+      "name": "John Wick (2014) [1080p] MULTi BluRay x264-PopHD.mkv",
+      "media": true,
+      "percent": 100
+    },
+    "293660": {
+      "title": "Deadpool",
+      "name": "Deadpool (2016) MULTi VFF 2160p 10bit 4KLight HDR BluRay x265 AAC 7.1 - QTZ",
+      "media": true
+    },
+    "299534": {
+      "title": "Avengers 4 Endgame",
+      "name": "Avengers 1080P/Avengers 4 Endgame (2019)",
+      "size": 9234321342,
+      "maxSize": 9234321342
+    },
+    "299536": {
+      "title": "Avengers 3 Infinity War",
+      "name": "Avengers 1080P/Avengers 3 Infinity War (2018)",
+      "size": 7609786484,
+      "maxSize": 7609786484
+    },
+    "315635": {
+      "title": "Spider-Man: Homecoming",
+      "originalTitle": "Spider-Man : Homecoming",
+      "name": "Spider-Man - Homecoming (2017) MULTi VFF 2160p 10bit 4KLight HDR BluRay x265 AAC 5.1 - QTZ",
+      "media": true,
+      "percent": 100
+    },
+    "324552": {
+      "title": "John Wick: Chapter 2",
+      "name": "John Wick Chapter 2 (2017) MULTi VFF [1080p] BluRay x264-PopHD",
+      "media": true,
+      "percent": 100
+    },
+    "335988": {
+      "title": "Transformers 5",
+      "name": "Transformers IMAX Collection (2007-2017) MULTi VF2 [1080p] BluRay x264-PopHD/Transformers 5",
+      "size": 4636076000,
+      "maxSize": 4636076000
+    },
+    "383498": {
+      "title": "Deadpool 2",
+      "name": "Deadpool 2 (2018) Super Duper Cut MULTi VFF 2160p 10bit 4KLight HDR BluRay x265 AAC 7.1 - QTZ",
+      "media": true
+    },
+    "429617": {
+      "title": "Spider-Man: Far From Home",
+      "originalTitle": "Spider-Man : Far From Home",
+      "name": "Spider-Man - Far from Home (2019) MULTi VFF 2160p 10bit 4KLight HDR BluRay x265 AAC 7.1-QTZ",
+      "media": true,
+      "percent": 100
+    },
+    "442062": {
+      "title": "Chair de poule 2",
+      "name": "Goosebumps.2.2018.MULTI.TRUEFRENCH.1080p.BluRay.HDLight.x264.AC3-TOXIC",
+      "size": 2202273313,
+      "maxSize": 2202273313
+    },
+    "458156": {
+      "title": "John Wick: Chapter 3 - Parabellum",
+      "name": "John Wick Chapter 3 Parabellum (2019) MULTi VFF 1080p 10bit HDLight BluRay x265 HE-AAC 7.1-QTZ",
+      "media": true,
+      "percent": 0
+    },
+    "500664": {
+      "title": "Upgrade",
+      "originalTitle": "Upgrade",
+      "name": "Upgrade (2018) MULTi VF2 [1080p] BluRay x264-PopHD",
+      "media": true,
+      "percent": 100
+    },
+    "533535": {
+      "title": "Deadpool et Wolverine",
+      "originalTitle": "Deadpool and Wolverine",
+      "name": "Deadpool.and.Wolverine.2024.iNTERNAL.MULTi.VF2.1080p.WEB.H265-FW",
+      "media": true,
+      "percent": 100
+    },
+    "603692": {
+      "title": "John Wick: Chapter 4",
+      "originalTitle": "John Wick: Chapitre 4",
+      "name": "John.Wick.Chapter.4.2023.MULTI.VFF.1080p.10bit.Bluray.6CH.x265.HEVC-FERVEX (John Wick : Chapitre 4)",
+      "media": true,
+      "percent": 100
+    },
+    "634649": {
+      "title": "SpiderMan No Way Home",
+      "name": "Spider-Man.No.Way.Home.2021.VFF.1080p.BluRay.mHD.x264.AC3-ROMKENT/Spider-Man.No.Way.Home.2021.VFF.1080p.BluRay.mHD.x264.AC3-ROMKENT",
+      "size": 5514503510,
+      "maxSize": 5514503510
+    },
+    "640146": {
+      "title": "Ant-Man et la Gu�pe Quantumania",
+      "name": "Ant-Man et la Gu�pe - Quantumania (2023)",
+      "size": 2122105467,
+      "maxSize": 2122105467
+    },
+    "666035": {
+      "title": "Wanted Man",
+      "name": "Wanted.Man.2024.VOSTFR.1080p.WEB.H264-FW",
+      "size": 4583071636,
+      "maxSize": 4584877588,
+      "media": true
+    },
+    "667538": {
+      "title": "Transformers: Rise of the Beasts",
+      "name": "Transformers.Rise.of.the.Beasts.2023.MULTI.1080p.10bit.WEBRip.6CH.x265.HEVC-Elcrackito",
+      "media": true,
+      "percent": 100
+    },
+    "748783": {
+      "title": "The Garfield Movie",
+      "name": "The.Garfield.Movie.2024.MULTi.VFF.1080p.WEB.H265-FW (Garfield, Héros malgré lui)",
+      "size": 2477680134,
+      "maxSize": 2477680134
+    },
+    "957452": {
+      "title": "The Crow",
+      "name": "The.Crow.2024.MULTi.VFQ.1080p.WEB.H265-FW/The.Crow.2024.MULTi.VFQ.1080p.WEB.H265-FW",
+      "size": 3267056346,
+      "maxSize": 3267056346
+    },
+    "1062215": {
+      "title": "Afraid",
+      "originalTitle": "L’I.A. du Mal",
+      "name": "Afraid.2024.MULTi.1080p.WEB.H265-FW (L'I.A. du mal)",
+      "media": true,
+      "percent": 100
+    },
+    "1114513": {
+      "title": "Speak No Evil",
+      "originalTitle": "Speak No Evil",
+      "name": "Speak.No.Evil.2024.MULTi.VFQ.1080p.WEB.H265-FW",
+      "media": true,
+      "percent": 100
+    },
+    "1146972": {
+      "title": "Gundam Seed Freedom",
+      "name": "gundam_seed_freedom_1080p_vostfr",
+      "size": 2855840714,
+      "maxSize": 2855840714
+    }
+  },
+  "queue": {},
+  "spec": {
+    "cpu": "48.0 °C",
+    "fan": "2297 RPM",
+    "dlSpeed": "0.00",
+    "vpnActive": true
+  }
+}
