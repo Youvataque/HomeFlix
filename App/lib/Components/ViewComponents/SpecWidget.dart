@@ -21,7 +21,7 @@ class _SpecWidgetState extends State<SpecWidget> {
 	/// mise à jour des données
 	void _startFetchingData() {
 		Future.delayed(const Duration(seconds: 6), () async {
-			NIGHTServices.dataStatus = await NIGHTServices().fetchDataStatus();
+			NIGHTServices.specStatus = await NIGHTServices().fetchSpecStatus();
 			setState(() {
 			});
 			_startFetchingData(); 
@@ -77,12 +77,12 @@ class _SpecWidgetState extends State<SpecWidget> {
 			runSpacing: 10,
 			spacing: 10,
 			children: [
-				vignette(NIGHTServices.dataStatus['spec']['cpu'], "Température CPU :"),
-				vignette(NIGHTServices.dataStatus['spec']['ram'], "Utilisation RAM :"),
-				vignette(NIGHTServices.dataStatus['spec']['fan'], "Vitesse ventilateur :"),
-				vignette(NIGHTServices.dataStatus['spec']['storage'], "Espace utilisé :"),
-				vignette("${NIGHTServices.dataStatus['spec']['dlSpeed']} Mo/s", "Débit actuel :"),
-				vignette(NIGHTServices.dataStatus['spec']['vpnActive'] ? "Online" : "Offline", "VPN :")
+				vignette(NIGHTServices.specStatus['spec']['cpu'], "Température CPU :"),
+				vignette(NIGHTServices.specStatus['spec']['ram'], "Utilisation RAM :"),
+				vignette(NIGHTServices.specStatus['spec']['fan'], "Vitesse ventilateur :"),
+				vignette(NIGHTServices.specStatus['spec']['storage'], "Espace utilisé :"),
+				vignette("${NIGHTServices.specStatus['spec']['dlSpeed']} Mo/s", "Débit actuel :"),
+				vignette(NIGHTServices.specStatus['spec']['vpnActive'] ? "Online" : "Offline", "VPN :")
 			],
 		);
 	}

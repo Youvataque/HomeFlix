@@ -133,32 +133,7 @@ class _ContentviewState extends State<Contentview> {
 									const Gap(5),
 									descripZone(),
 									const Gap(10),
-									NIGHTServices.dataStatus["movie"][widget.datas['id'].toString()] == null && NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] == null ?
-											Padding(
-												padding: const EdgeInsets.symmetric(horizontal: 10),
-												child: Ygggestionnary(
-													key: ValueKey(searchName),
-													originalName: originalName,
-													name: searchName,
-													selectData: widget.datas,
-													movie: widget.movie,
-													func: () {
-														Future.delayed(
-															const Duration(seconds: 2),
-															() => CupertinoActivityIndicator(
-																radius: 20,
-																color: Theme.of(context).colorScheme.secondary,
-															)
-														);
-														setState(() {});
-													}
-												),
-											)
-										:
-											NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] != null ? 
-													alreadyInDB("En cours de téléchargement ! C'est pour bientôt.")
-												:
-													alreadyInDB("Contenue déjà téléchargé. Bon visionnage !")
+									downloadZone(),
 								],
 							),
 						),
@@ -289,6 +264,41 @@ class _ContentviewState extends State<Contentview> {
 					fontWeight: FontWeight.w500
 				),
 			),
+		);
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// partie gérant l'affichage du YggGestionnary ou des messages de téléchargement
+	Widget downloadZone() {
+		return AnimatedCrossFade(
+			firstChild: Padding(
+					padding: const EdgeInsets.symmetric(horizontal: 10),
+					child: Ygggestionnary(
+						key: ValueKey(searchName),
+						originalName: originalName,
+						name: searchName,
+						selectData: widget.datas,
+						movie: widget.movie,
+						func: () {
+							Future.delayed(
+								const Duration(seconds: 2),
+								() => CupertinoActivityIndicator(
+									radius: 20,
+									color: Theme.of(context).colorScheme.secondary,
+								)
+							);
+							setState(() {});
+						}
+					),
+			),
+			secondChild: AnimatedCrossFade(
+				duration: const Duration(milliseconds: 300),
+				firstChild: alreadyInDB("En cours de téléchargement ! C'est pour bientôt."),
+				secondChild: alreadyInDB("Contenue déjà téléchargé. Bon visionnage !"),
+				crossFadeState: NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+			),
+			crossFadeState: NIGHTServices.dataStatus["movie"][widget.datas['id'].toString()] == null && NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+			duration: const Duration(milliseconds: 300),
 		);
 	}
 

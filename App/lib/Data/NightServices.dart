@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NIGHTServices {
 	static Map<String, dynamic> dataStatus = {};
+	static Map<String, dynamic> specStatus = {};
 
 	///////////////////////////////////////////////////////////////
 	/// méthode pour récupérer les données des contenues téléchargés sur le server
@@ -20,6 +21,23 @@ class NIGHTServices {
 		}
 		return results;
 	}
+
+	///////////////////////////////////////////////////////////////
+	/// méthode pour récupérer les données des contenues téléchargés sur le server
+	Future<Map<String, dynamic>> fetchSpecStatus() async {
+		Map<String, dynamic> results = {};
+		final response = await http.get(
+			Uri.parse("http://84.4.230.45:4000/api/specStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
+		);
+		if (response.statusCode == 200) {
+			final data = json.decode(response.body);
+			results = data;
+		} else {
+			print("error on the status -> ${response.reasonPhrase}");
+		}
+		return results;
+	}
+	
 
 	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur

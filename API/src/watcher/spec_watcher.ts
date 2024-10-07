@@ -3,7 +3,7 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const JSON_FILE_PATH = path.join(__dirname, '../../onTheServer.json');
+const JSON_FILE_PATH = path.join(__dirname, '../../specData.json');
 
 /////////////////////////////////////////////////////////////////////////////////
 // interface pour la lisibilité du code
@@ -24,9 +24,6 @@ interface MediaItem {
 }
 
 interface DataStructure {
-	tv: any;
-	movie: any;
-	queue: any;
 	spec:  MediaItem;
 }
 

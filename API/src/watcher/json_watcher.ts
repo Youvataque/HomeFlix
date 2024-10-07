@@ -3,7 +3,7 @@ import path from 'path';
 import axios from 'axios';
 
 const DIRECTORY_TO_WATCH = '/home/youvataque/data_disk/cloud_data';
-const JSON_FILE_PATH = path.join(__dirname, '../../onTheServer.json');
+const JSON_CONTENT_PATH = path.join(__dirname, '../../contentData.json');
 
 /////////////////////////////////////////////////////////////////////////////////
 // interface  pour faciliter la lisibilité
@@ -19,7 +19,6 @@ interface DataStructure {
     tv: Record<string, MediaItem>;
     movie: Record<string, MediaItem>;
     queue: Record<string, MediaItem>;
-	spec: any;
 }
 
 const qbittorrentAPI = axios.create({
@@ -65,7 +64,7 @@ async function getTorrentProgress(torrentName: string, originalName: string): Pr
 // fonction pour vérifer l'état des films dans la queu, l'enregistrer et déplacer si besoin les contenu  terminés
 async function checkAndProcessQueue() {
 	try {
-		const data = await fs.promises.readFile(JSON_FILE_PATH, 'utf8');
+		const data = await fs.promises.readFile(JSON_CONTENT_PATH, 'utf8');
 		const jsonData: DataStructure = JSON.parse(data);
 		if (Object.keys(jsonData.queue).length === 0) return;
 
@@ -90,7 +89,7 @@ async function checkAndProcessQueue() {
 		}
 
 		try {
-			await fs.promises.writeFile(JSON_FILE_PATH, JSON.stringify(jsonData, null, 2), 'utf8');
+			await fs.promises.writeFile(JSON_CONTENT_PATH, JSON.stringify(jsonData, null, 2), 'utf8');
 			console.log('Fichier JSON mis à jour avec succès');
 		} catch (err) {
 			console.error('Erreur lors de l\'écriture du fichier JSON:', err);

@@ -19,9 +19,9 @@ const apiKeyMiddleware = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////
-// Route pour récupérer des données
+// Route pour récupérer des données de contenu
 router.get('/contentStatus', apiKeyMiddleware,(req: Request, res: Response) => {
-    const filePath = path.join(__dirname, '../../onTheServer.json');
+    const filePath = path.join(__dirname, '../../contentData.json');
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             res.status(500).json({ error: 'Erreur lors de la lecture du fichier JSON' });
@@ -32,9 +32,22 @@ router.get('/contentStatus', apiKeyMiddleware,(req: Request, res: Response) => {
 });
 
 /////////////////////////////////////////////////////////////////////////////////
+// Route pour récupérer des données de spec
+router.get('/specStatus', apiKeyMiddleware,(req: Request, res: Response) => {
+    const filePath = path.join(__dirname, '../../specData.json');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            res.status(500).json({ error: 'Erreur lors de la lecture du fichier JSON 2' });
+            return;
+        }
+        res.json(JSON.parse(data));
+    });
+});
+
+/////////////////////////////////////////////////////////////////////////////////
 // Route pour ajouter des données
 router.post('/contentStatus', apiKeyMiddleware, (req: Request, res: Response) => {
-    const filePath = path.join(__dirname, '../../onTheServer.json');
+    const filePath = path.join(__dirname, '../../contentData.json');
     const {newData, where} = req.body;
 
     fs.readFile(filePath, 'utf8', (err, data) => {
@@ -104,7 +117,5 @@ router.post('/contentDl', apiKeyMiddleware, async (req, res) => {
         return res.status(500).json({ message: 'Erreur lors de la requête HTTP.' });
     }
 });
-
-
 
 export default router;

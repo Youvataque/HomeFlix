@@ -122,6 +122,4 @@ class _FilmsState extends State<Films> {
 			func: () => toContentView(context, TMDBService.the10movieTren[current10], img10[current10], true, "Films")
 		);
 	}
-
-	
 }

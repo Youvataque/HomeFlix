@@ -48,6 +48,7 @@ class MainState extends State<Main> {
 	/// Télécharge les données de l'api TMDB en utilisant le gestionnaire custom TMDBService
 	Future<bool> downloadData() async {
 		NIGHTServices.dataStatus = await NIGHTServices().fetchDataStatus();
+		NIGHTServices.specStatus = await NIGHTServices().fetchSpecStatus();
 		TMDBService.the10movieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
 		TMDBService.the20moviePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=true&include_video=false&language=fr-FR&sort_by=popularity.desc", -1);
 		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=true&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
