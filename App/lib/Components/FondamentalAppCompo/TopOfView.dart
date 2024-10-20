@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 class TopOfView extends StatefulWidget {
@@ -76,7 +77,10 @@ class _TopOfViewState extends State<TopOfView> {
 				child: BackdropFilter(
 					filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
 					child: ElevatedButton(
-						onPressed: () => func(),
+						onPressed: () {
+							HapticFeedback.lightImpact();
+							func();
+						},
 						style: ElevatedButton.styleFrom(
 							padding: EdgeInsets.zero,
 							backgroundColor: Theme.of(context).dividerColor.withOpacity(0.2),

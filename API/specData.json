@@ -1,8 +1,10 @@
 {
-	"spec": {
-		"cpu": "48.0 Â°C",
-		"fan": "2297 RPM",
-		"dlSpeed": "0.00",
-		"vpnActive": true
-	}
+  "spec": {
+    "cpu": "51.0 °C",
+    "fan": "2302 RPM",
+    "dlSpeed": "0.00",
+    "vpnActive": true,
+    "ram": "11.09%",
+    "storage": "622G / 3,6T"
+  }
 }

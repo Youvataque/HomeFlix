@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/SpecWidget.dart';
 import 'package:homeflix/MyDataPages/DataView.dart';
@@ -59,7 +60,10 @@ class _MyDataState extends State<MyData> {
 							child: BackdropFilter(
 								filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
 								child: ElevatedButton(
-									onPressed: () => func(),
+									onPressed: () {
+										HapticFeedback.lightImpact();
+										func();
+									},
 									style: ElevatedButton.styleFrom(
 										backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
 										foregroundColor: Theme.of(context).colorScheme.tertiary,

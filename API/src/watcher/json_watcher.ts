@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
+import { qbittorrentAPI, removeAccents } from '../tools';
 
 const DIRECTORY_TO_WATCH = '/home/youvataque/data_disk/cloud_data';
 const JSON_CONTENT_PATH = path.join(__dirname, '../../contentData.json');
@@ -19,17 +20,6 @@ interface DataStructure {
     tv: Record<string, MediaItem>;
     movie: Record<string, MediaItem>;
     queue: Record<string, MediaItem>;
-}
-
-const qbittorrentAPI = axios.create({
-  baseURL: 'http://localhost:8080/api/v2',
-  timeout: 3700,
-});
-
-/////////////////////////////////////////////////////////////////////////////////
-// fonction pour retirer les accents des titres avant comparaison
-function removeAccents(str: string): string {
-	return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 /////////////////////////////////////////////////////////////////////////////////

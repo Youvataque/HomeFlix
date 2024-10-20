@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
 ///////////////////////////////////////////////////////////////
@@ -167,6 +168,7 @@ class _SecondtopState extends State<Secondtop> {
 								child: InkWell(
 									onTap: () {
 										setState(() {
+											HapticFeedback.lightImpact();
 											isSearch = true;
 										});
 									},
@@ -190,6 +192,7 @@ class _SecondtopState extends State<Secondtop> {
 					padding: const EdgeInsets.only(right: 10),
 					child: TextField(
 						onSubmitted: (value) => setState(() {
+							HapticFeedback.lightImpact();
 							isSearch = false;
 						}),
 						controller: widget.query!,

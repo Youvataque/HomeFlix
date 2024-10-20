@@ -28,7 +28,7 @@ class _CategorigenState extends State<Categorigen> {
 				widget.data.length,
 				(index) => SizedBox(
 					height: 70,
-					width: (MediaQuery.sizeOf(context).width - 40) / 3,
+					width: (MediaQuery.sizeOf(context).width - 45) / 3,
 					child: myButton(index)
 				)
 			),

@@ -18,6 +18,13 @@
       "size": 56817890969,
       "maxSize": 56817890969
     },
+    "4269": {
+      "title": "Transformers",
+      "originalTitle": "Transformers",
+      "name": "Transformers_Le Film 1986 TrueFrench DvdRip X264 AC3",
+      "media": false,
+      "percent": 100
+    },
     "5835": {
       "title": "Chair de poule",
       "name": "chair de poule",
@@ -42,6 +49,20 @@
       "title": "Westworld",
       "originalTitle": "Westworld",
       "name": "Westworld.S01.MULTi.1080p.WEBRip.5.1.x265-R3MiX",
+      "media": false,
+      "percent": 100
+    },
+    "69740": {
+      "title": "Ozark",
+      "originalTitle": "Ozark",
+      "name": "Ozark.S01.MULTi.1080p.WEBRip.DDP5.1.x265-R3MiX",
+      "media": false,
+      "percent": 100
+    },
+    "71694": {
+      "title": "Snowfall",
+      "originalTitle": "Snowfall",
+      "name": "Snowfall.S01.Multi.1080p.x265.E-AC3.5.1.REPACK.STFR-menkon",
       "media": false,
       "percent": 100
     },
@@ -336,11 +357,25 @@
       "size": 2477680134,
       "maxSize": 2477680134
     },
+    "840326": {
+      "title": "Sisu : De l'or et du sang",
+      "originalTitle": "Sisu",
+      "name": "Sisu : De l'or et du sang (2022) MULTi VFI 2160p 10bit 4KLight DV HDR BluRay DDP 5.1 Atmos x265-QTZ (Sisu)",
+      "media": true,
+      "percent": 100
+    },
     "957452": {
       "title": "The Crow",
       "name": "The.Crow.2024.MULTi.VFQ.1080p.WEB.H265-FW/The.Crow.2024.MULTi.VFQ.1080p.WEB.H265-FW",
       "size": 3267056346,
       "maxSize": 3267056346
+    },
+    "1022789": {
+      "title": "Inside Out 2",
+      "originalTitle": "Vice-versa 2",
+      "name": "Inside.Out.2.2024.MULTi.VFQ.1080p.WEB.H265-FW (Vice-versa 2)",
+      "media": true,
+      "percent": 100
     },
     "1062215": {
       "title": "Afraid",

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 
@@ -25,7 +26,10 @@ class Opencarouselselec extends StatelessWidget {
 					]
 				),
 				child: ElevatedButton(
-					onPressed: () => func(),
+					onPressed: () {
+						HapticFeedback.lightImpact();
+						func();
+					},
 					style: ElevatedButton.styleFrom(
 						backgroundColor: Theme.of(context).colorScheme.tertiary,
 						foregroundColor: Theme.of(context).primaryColor,

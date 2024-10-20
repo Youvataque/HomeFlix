@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/Tools/CheckTool/searchScript.dart';
+import 'package:homeflix/Components/ViewComponents/MenueItem.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
@@ -43,21 +45,45 @@ class _DataviewState extends State<Dataview> {
 
 	///////////////////////////////////////////////////////////////
 	/// Ui du bouton image 
-	Widget imgButton(Widget img, Map<String, dynamic> selectData) {
-		return SizedBox(
-			height: double.infinity,
-			child: ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					padding: EdgeInsets.zero,
-					backgroundColor: Colors.transparent,
-					surfaceTintColor: Colors.transparent,
-					disabledBackgroundColor: Colors.transparent
-				),
-				onPressed: () {
-					print(selectData["name"]);
-				},
-				child: img,
-			),
+	Widget imgButton(Widget img, Map<String, dynamic> selectData, String id) {
+		return GestureDetector(
+			onTap: () {
+				print(selectData["name"]);
+			},
+			onLongPressStart: (LongPressStartDetails details) {
+				HapticFeedback.heavyImpact();
+				final Offset tapPosition = details.globalPosition;
+				showMenu(
+					context: context,
+					color: Theme.of(context).primaryColor,
+					shape: RoundedRectangleBorder(
+						borderRadius: BorderRadius.circular(7.5)
+					),
+					position: RelativeRect.fromLTRB(
+						tapPosition.dx,
+						tapPosition.dy,
+						tapPosition.dx + 1,
+						tapPosition.dy + 1,
+					),
+					items: [
+						Menueitem(
+							title: "Supprimer",
+							icon: CupertinoIcons.trash,
+							color: Theme.of(context).colorScheme.tertiary,
+							func: () async {
+								await NIGHTServices().deleteData({
+									"id": id,
+									'title': selectData['title'].toString(),
+									'originalTitle': selectData['originalTitle'].toString(),
+									"where": widget.where
+								});
+								await NIGHTServices.dataStatus[widget.where].remove(id);
+							}
+						)
+					],
+				);
+			},
+			child: img
 		);
 	}
 
@@ -127,7 +153,8 @@ class _DataviewState extends State<Dataview> {
 								(MediaQuery.of(context).size.width / 2 - 15),
 								widget.where == "movie" ? true : false
 							),
-							entry.value
+							entry.value,
+							entry.key
 						),
 					)
 				);

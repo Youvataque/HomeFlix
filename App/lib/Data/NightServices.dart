@@ -38,13 +38,29 @@ class NIGHTServices {
 		return results;
 	}
 	
-
 	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
 	Future<void> postDataStatus(Map<String, dynamic> newData, String where) async {
 		final url = Uri.parse("http://84.4.230.45:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
 		final headers = {'Content-Type': 'application/json'};
 		final body = jsonEncode({'newData': newData, 'where': where});
+
+		final response = await http.post(url, headers: headers, body: body);
+
+		if (response.statusCode == 201) {
+			print('Données ajoutées avec succès');
+		} else {
+			print('Erreur: ${response.statusCode}');
+			print('Message: ${response.body}');
+		}
+  	}
+
+	///////////////////////////////////////////////////////////////
+	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
+	Future<void> deleteData(Map<String, dynamic> newData) async {
+		final url = Uri.parse("http://84.4.230.45:4000/api/contentErase?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
+		final headers = {'Content-Type': 'application/json'};
+		final body = jsonEncode({'newData': newData});
 
 		final response = await http.post(url, headers: headers, body: body);
 
