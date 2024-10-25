@@ -11,7 +11,7 @@ class NIGHTServices {
 	Future<Map<String, dynamic>> fetchDataStatus() async {
 		Map<String, dynamic> results = {};
 		final response = await http.get(
-			Uri.parse("http://84.4.230.45:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
+			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
 		);
 		if (response.statusCode == 200) {
 			final data = json.decode(response.body);
@@ -27,7 +27,7 @@ class NIGHTServices {
 	Future<Map<String, dynamic>> fetchSpecStatus() async {
 		Map<String, dynamic> results = {};
 		final response = await http.get(
-			Uri.parse("http://84.4.230.45:4000/api/specStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
+			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/specStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
 		);
 		if (response.statusCode == 200) {
 			final data = json.decode(response.body);
@@ -41,7 +41,7 @@ class NIGHTServices {
 	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
 	Future<void> postDataStatus(Map<String, dynamic> newData, String where) async {
-		final url = Uri.parse("http://84.4.230.45:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
+		final url = Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
 		final headers = {'Content-Type': 'application/json'};
 		final body = jsonEncode({'newData': newData, 'where': where});
 
@@ -58,7 +58,7 @@ class NIGHTServices {
 	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
 	Future<void> deleteData(Map<String, dynamic> newData) async {
-		final url = Uri.parse("http://84.4.230.45:4000/api/contentErase?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
+		final url = Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentErase?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
 		final headers = {'Content-Type': 'application/json'};
 		final body = jsonEncode({'newData': newData});
 
