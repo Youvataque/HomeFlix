@@ -22,7 +22,7 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Créer un fichier .env et créer une clé API (ça peut être n'importe quoi, elle sera utilisée pour la connexion avec l'application).
 
-### (optionnel) VPN
+### (optionnel mais fortement recommandé) VPN
 
 - Installer votre VPN favori avec un fichier de configuration openVPN (car celui-ci ne réécrit pas systématiquement les priorités des interfaces réseaux).
 
@@ -34,11 +34,15 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Vous devrez ajouter un fichier .env à la racine du dossier de l'application.
 
-- Ajouter votre pass_key ygg.re.
+- Ajouter votre pass_key ygg.re (YGG_PASSKEY=...).
 
-- Ajouter votre clé API https://themoviedb.org/.
+- Ajouter votre clé API https://themoviedb.org/ (TMDB_KEY=...).
 
-- Ajouter la clé API du serveur (celle que vous avez choisie précédemment).
+- Ajouter la clé API du serveur (NIGHTCENTER_KEY=...) (celle que vous avez choisie précédemment).
+  
+- Ajouter l'ip du serveur (NIGHTCENTER_IP=...) (votre ip public en cas d'ouverture ou privé sur votre réseau local)
+
+- Enfin il ne vous reste plus qu'à build l'application pour l'os souhaité (il vous faudra une licence payante pour iOS).
 
 ### En cas de besoin ou de suggestion
 
