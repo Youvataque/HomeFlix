@@ -10,7 +10,7 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Il vous faudra installer Linux sur une machine.
 
-- Paramétrer un partage FTP pour l'accès distant aux films et séries.
+- Paramétrer un partage FTP (idéalement SFTP) pour l'accès distant aux films et séries.
 
 - Installer qbittorrent.
 
