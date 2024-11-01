@@ -87,7 +87,7 @@ class _FilmsState extends State<Films> {
 						)
 					),
 				),
-				const Gap(10)
+				const Gap(20)
 			]
 		);
 	}

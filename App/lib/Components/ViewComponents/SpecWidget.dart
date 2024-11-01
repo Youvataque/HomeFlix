@@ -83,7 +83,7 @@ class _SpecWidgetState extends State<SpecWidget> {
 				vignette(NIGHTServices.specStatus['spec']['storage'], "Espace utilisé :"),
 				vignette("${NIGHTServices.specStatus['spec']['dlSpeed']} Mo/s", "Débit actuel :"),
 				vignette(NIGHTServices.specStatus['spec']['vpnActive'] ? "Online" : "Offline", "VPN :"),
-				vignette(NIGHTServices.specStatus['spec']['nbUser'], "Foyers connectés")
+				vignette(NIGHTServices.specStatus['spec']['nbUser'], "Foyers connectés :")
 			],
 		);
 	}

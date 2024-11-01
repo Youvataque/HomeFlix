@@ -185,9 +185,15 @@ class _SearchpageState extends State<Searchpage> {
 				const Gap(10),
 				Text(
 					movie ? 
-							selectData['release_date'].toString().split('-').sublist(0, 2).join('/')
+							(selectData['release_date'] != null && selectData['release_date'].toString().split('-').length >= 2) ? 
+									selectData['release_date'].toString().split('-').sublist(0, 2).join('/')
+								: 
+									'Date inconnue'
 						:
-							selectData['first_air_date'].toString().split('-').sublist(0, 2).join('/'),
+							(selectData['first_air_date'] != null && selectData['first_air_date'].toString().split('-').length >= 2) ? 
+									selectData['first_air_date'].toString().split('-').sublist(0, 2).join('/')
+								: 
+									'Date inconnue',
 					style: sousText()
 				),
 			],

@@ -134,7 +134,8 @@ class _MyDataState extends State<MyData> {
 				const Gap(35),
 				const Secondtitle(title: "Information serveur"),
 				const Gap(10),
-				const SpecWidget()
+				const SpecWidget(),
+				const Gap(20)
 			],
 		);
 	}

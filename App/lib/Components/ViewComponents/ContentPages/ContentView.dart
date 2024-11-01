@@ -194,13 +194,19 @@ class _ContentviewState extends State<Contentview> {
 				mainAxisAlignment: MainAxisAlignment.end,
 				crossAxisAlignment: CrossAxisAlignment.start,
 				children: [
-					titleText(),
+					titleText(), 
 					const Gap(5),
 					Text(
 						widget.movie ? 
-								"${widget.datas['release_date'].toString().split('-').sublist(0, 2).join('/')} - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
+								(widget.datas['release_date'] != null && widget.datas['release_date'].toString().split('-').length >= 2) ? 
+										"${widget.datas['release_date'].toString().split('-').sublist(0, 2).join('/')} - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
+									:
+										"Date inconnue - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
 							:
-								"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}",
+								(widget.datas['first_air_date'] != null && widget.datas['first_air_date'].toString().split('-').isNotEmpty) ? 
+										"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}"
+									: 
+										"Date inconnue - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}",
 						style: sousText(),
 					),
 					const Gap(3),

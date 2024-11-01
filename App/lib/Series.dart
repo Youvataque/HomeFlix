@@ -85,7 +85,7 @@ class _SeriesState extends State<Series> {
 						)
 					),
 				),
-				const Gap(10)
+				const Gap(20)
 			]
 		);
 	}
