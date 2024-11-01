@@ -101,6 +101,7 @@ class _SearchpageState extends State<Searchpage> {
 	Widget searchContent(List<dynamic> results) {
 		return ListView.builder(
 			itemCount: results.length,
+			shrinkWrap: true,
 			itemBuilder: (context, index) {
 				final result = results[index];
 				final img = result['poster_path'] != null ? TMDBService().createImg(

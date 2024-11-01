@@ -77,12 +77,13 @@ class _SpecWidgetState extends State<SpecWidget> {
 			runSpacing: 10,
 			spacing: 10,
 			children: [
-				vignette(NIGHTServices.specStatus['spec']['cpu'], "Température CPU :"),
+				vignette("${NIGHTServices.specStatus['spec']['cpu']} °C", "Température CPU :"),
 				vignette(NIGHTServices.specStatus['spec']['ram'], "Utilisation RAM :"),
 				vignette(NIGHTServices.specStatus['spec']['fan'], "Vitesse ventilateur :"),
 				vignette(NIGHTServices.specStatus['spec']['storage'], "Espace utilisé :"),
 				vignette("${NIGHTServices.specStatus['spec']['dlSpeed']} Mo/s", "Débit actuel :"),
-				vignette(NIGHTServices.specStatus['spec']['vpnActive'] ? "Online" : "Offline", "VPN :")
+				vignette(NIGHTServices.specStatus['spec']['vpnActive'] ? "Online" : "Offline", "VPN :"),
+				vignette(NIGHTServices.specStatus['spec']['nbUser'], "Foyers connectés")
 			],
 		);
 	}

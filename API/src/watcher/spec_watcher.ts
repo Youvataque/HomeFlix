@@ -20,7 +20,8 @@ interface MediaItem {
 	ram: string,
 	storage: string
 	dlSpeed:string,
-	vpnActive: boolean
+	vpnActive: boolean,
+	nbUser: string
 }
 
 interface DataStructure {
@@ -43,7 +44,7 @@ function getSystemInfo(): Promise<infoSpec> {
 				return;
 			}
 			const cpuMatch = stdout.match(/Package id 0:\s+\+([\d.]+)°C/);
-			const cpu = cpuMatch ? `${cpuMatch[1]} °C` : 'Aucune information sur la température du CPU trouvée.';
+			const cpu = cpuMatch ? cpuMatch[1] : 'Aucune information sur la température du CPU trouvée.';
 			const fanMatch = stdout.match(/Exhaust\s+:\s+(\d+)\sRPM/);
 			const fanSpeed = fanMatch ? `${fanMatch[1]} RPM` : 'Aucune information sur les ventilateurs trouvée.';
 			exec('free -m', (error, stdout) => {
@@ -103,6 +104,21 @@ async function getQbittorrentStats(): Promise<string> {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+// récupère le nombre de personne qui visionnent un film
+async function getNbUser(): Promise<string> {
+	return new Promise((resolve) => {
+		exec('netstat -tu | grep ESTABLISHED | grep NightCenter:ftp | grep -v 10.170.88.92.rev | cut -d: -f2 | sort | uniq | wc -l', (error:any, stdout:string) => {
+			if (error) {
+				console.error(`Erreur: ${error.message}`);
+				resolve("no value");
+				return;
+			}
+			resolve(stdout);
+		});
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 // lances toutes les fonctions précédente et enregistre leurs résultats dans une section du json
 async function runAllChecks() {
 	const data = await fs.promises.readFile(JSON_FILE_PATH, 'utf8');
@@ -114,6 +130,7 @@ async function runAllChecks() {
 	jsonData.spec.storage = systemInfo.storage;
 	jsonData.spec.vpnActive = await checkVpnStatus();
 	jsonData.spec.dlSpeed = await getQbittorrentStats();
+	jsonData.spec.nbUser = await getNbUser();
 	try {
 		await fs.promises.writeFile(JSON_FILE_PATH, JSON.stringify(jsonData, null, 2), 'utf8');
 		console.log('Specs ajoutés avec succés au json');
