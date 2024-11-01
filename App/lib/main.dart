@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/MyTabbar.dart';
 import 'package:homeflix/Components/Tools/Theme/ColorsTheme.dart';
@@ -10,6 +11,10 @@ import 'package:homeflix/Data/TmdbServices.dart';
 void main() async {
 	WidgetsFlutterBinding.ensureInitialized();
  	await dotenv.load(fileName: ".env");
+	SystemChrome.setPreferredOrientations([
+		DeviceOrientation.portraitUp,
+		DeviceOrientation.portraitDown,
+	]);
 	runApp(Main(key: GlobalKey<MainState>()));
 }
 

@@ -35,14 +35,11 @@ async function getTorrentProgress(torrentName: string, originalName: string): Pr
 			searchTerms.every(term => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/).includes(term)) ||
 			originalSearchTerms.every(term => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/).includes(term))
 		);
-		console.log("args de recherche : " + searchTerms);
-		console.log("args de recherche original : " + originalSearchTerms);
-		console.log("Liste des torrents : ", response.data.map((t: any) => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/)));
 		if (torrent) {
 			console.log("Torrent trouvé : ", torrent.name);
 			return parseFloat((torrent.progress * 100).toFixed(2));
 		} else {
-			console.log(`Torrent "${torrentName}" ou "${originalName}" non trouvé.`);
+			console.error(`Torrent "${torrentName}" ou "${originalName}" non trouvé.`);
 		}
 	} catch (error) {
 		console.error('Erreur lors de la récupération de l\'état du torrent:', error);
