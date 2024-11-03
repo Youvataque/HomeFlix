@@ -77,6 +77,7 @@ class _DataviewState extends State<Dataview> {
 									'originalTitle': selectData['originalTitle'].toString(),
 									"where": widget.where
 								});
+								mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
 							}
 						)
 					],
