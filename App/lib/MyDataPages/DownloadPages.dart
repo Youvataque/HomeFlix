@@ -1,16 +1,15 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
-import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
+import 'package:homeflix/main.dart';
 
 class Downloadpages extends StatefulWidget {
 	final String secTitle;
 	const Downloadpages({
 		super.key,
-		required this.secTitle
+		required this.secTitle,
 	});
 
 	@override
@@ -18,29 +17,6 @@ class Downloadpages extends StatefulWidget {
 }
 
 class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateMixin{
-	Map<String, dynamic> datas = NIGHTServices.dataStatus["queue"];
-	Timer? _timer;
-
-	@override
-	void initState() {
-		super.initState();
-		_startPeriodicFetch();
-	}
-
-	@override
-	void dispose() {
-		_timer?.cancel();
-		super.dispose();
-	}
-
-	void _startPeriodicFetch() {
-		_timer = Timer.periodic(const Duration(seconds: 4), (timer) async {
-			NIGHTServices.dataStatus = await NIGHTServices().fetchDataStatus();
-			setState(() {
-			  datas = NIGHTServices.dataStatus["queue"]
-;			});
-		});
-	}
 
 	///////////////////////////////////////////////////////////////
 	/// UI des sous texts
@@ -88,7 +64,13 @@ class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateM
 									padding: const EdgeInsets.symmetric(horizontal: 10),
 									child: SizedBox(
 										width: MediaQuery.sizeOf(context).width,
-										child: contentBody(),
+										child: ValueListenableBuilder<Map<String, dynamic>>(
+											valueListenable: mainKey.currentState!.dataStatusNotifier,
+											builder: (context, dataStatus, child) {
+												print(dataStatus);
+												return contentBody(dataStatus["queue"]);
+											},
+										)
 									),
 								),
 								const Gap(40)
@@ -109,7 +91,7 @@ class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateM
 
 	///////////////////////////////////////////////////////////////
 	/// corp de la file d'attente
-	Widget contentBody() {
+	Widget contentBody(Map<String, dynamic> datas) {
 		return Column(
 			children: datas.entries.map<Widget>((entry) {
 				return Padding(

@@ -8,6 +8,7 @@ import 'package:homeflix/Components/ViewComponents/MenueItem.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
+import 'package:homeflix/main.dart';
 
 class Dataview extends StatefulWidget {
 	final String secTitle;
@@ -15,7 +16,7 @@ class Dataview extends StatefulWidget {
 	const Dataview({
 		super.key,
 		required this.secTitle,
-		required this.where
+		required this.where,
 	});
 
 	@override
@@ -23,7 +24,6 @@ class Dataview extends StatefulWidget {
 }
 
 class _DataviewState extends State<Dataview> {
-	Map<String, dynamic> datas = NIGHTServices.dataStatus;
 	TextEditingController queryController = TextEditingController();
 
 	void _updateContent() {
@@ -77,7 +77,6 @@ class _DataviewState extends State<Dataview> {
 									'originalTitle': selectData['originalTitle'].toString(),
 									"where": widget.where
 								});
-								await NIGHTServices.dataStatus[widget.where].remove(id);
 							}
 						)
 					],
@@ -105,7 +104,13 @@ class _DataviewState extends State<Dataview> {
 									padding: const EdgeInsets.symmetric(horizontal: 10),
 									child: SizedBox(
 										width: MediaQuery.sizeOf(context).width,
-										child: contentBody(),
+										child: ValueListenableBuilder<Map<String, dynamic>>(
+											valueListenable: mainKey.currentState!.dataStatusNotifier,
+											builder: (context, dataStatus, child) {
+												print(dataStatus);
+												return contentBody(dataStatus);
+											},
+										)
 									),
 								),
 								const Gap(50)
@@ -127,7 +132,7 @@ class _DataviewState extends State<Dataview> {
 
 	///////////////////////////////////////////////////////////////
 	/// contenu de la page
-	Wrap contentBody() {
+	Wrap contentBody(Map<String, dynamic> datas) {
 		List<MapEntry> filteredEntries = datas[widget.where].entries.where((entry) {
 			return cleanString(entry.value["title"].toString()).contains(cleanString(queryController.text));
 		}).toList();
@@ -139,6 +144,7 @@ class _DataviewState extends State<Dataview> {
 		}
 
 		return Wrap(
+			key: ValueKey(datas),
 			spacing: 10,
 			runSpacing: 20,
 			alignment: WrapAlignment.start,

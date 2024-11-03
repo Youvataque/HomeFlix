@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MultiSplit.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/YggServices.dart';
+import 'package:homeflix/main.dart';
 
 ///////////////////////////////////////////////////////////////
 /// composant gérant le téléchargement et l'affichage des torrents
@@ -155,7 +156,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 						},
 						"queue"
 					);
-					NIGHTServices.dataStatus = await NIGHTServices().fetchDataStatus();
+					mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
 					widget.func();
 				},
 				style: ElevatedButton.styleFrom(

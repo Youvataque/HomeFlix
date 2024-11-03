@@ -7,7 +7,7 @@ import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
 import 'package:homeflix/Components/Tools/FormatTool/NumberWithCom.dart';
 import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.dart';
 import 'package:homeflix/Components/ViewComponents/PopUpTemplate.dart';
-import 'package:homeflix/Data/NightServices.dart';
+import 'package:homeflix/main.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Affiche le contenu d'un film ou d'une série et permet son téléchargement
@@ -301,9 +301,9 @@ class _ContentviewState extends State<Contentview> {
 				duration: const Duration(milliseconds: 300),
 				firstChild: alreadyInDB("En cours de téléchargement ! C'est pour bientôt."),
 				secondChild: alreadyInDB("Contenue déjà téléchargé. Bon visionnage !"),
-				crossFadeState: NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+				crossFadeState: mainKey.currentState!.dataStatusNotifier.value["queue"][widget.datas['id'].toString()] != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
 			),
-			crossFadeState: NIGHTServices.dataStatus["movie"][widget.datas['id'].toString()] == null && NIGHTServices.dataStatus["queue"][widget.datas['id'].toString()] == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+			crossFadeState: mainKey.currentState!.dataStatusNotifier.value["movie"][widget.datas['id'].toString()] == null && mainKey.currentState!.dataStatusNotifier.value["queue"][widget.datas['id'].toString()] == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
 			duration: const Duration(milliseconds: 300),
 		);
 	}

@@ -6,6 +6,7 @@ import 'package:homeflix/Components/ViewComponents/SpecWidget.dart';
 import 'package:homeflix/MyDataPages/DataView.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/MyDataPages/DownloadPages.dart';
+import 'package:homeflix/main.dart';
 
 class MyData extends StatefulWidget {
 	const MyData({super.key});
@@ -105,7 +106,10 @@ class _MyDataState extends State<MyData> {
 							"src/images/avengers.jpg",
 							() => Navigator.push(
 								context,
-								MaterialPageRoute(builder: (context) => const Dataview(secTitle: "Films", where: "movie"))
+								MaterialPageRoute(builder: (context) => const Dataview(
+									secTitle: "Films",
+									where: "movie",
+								))
 							),
 						),
 						const Gap(10),
@@ -115,7 +119,10 @@ class _MyDataState extends State<MyData> {
 							"src/images/suits.jpeg",
 							() => Navigator.push(
 								context,
-								MaterialPageRoute(builder: (context) => const Dataview(secTitle: "Séries", where: "tv"))
+								MaterialPageRoute(builder: (context) => const Dataview(
+									secTitle: "Séries",
+									where: "tv",
+								))
 							),
 						),
 						const Gap(10),
@@ -128,7 +135,10 @@ class _MyDataState extends State<MyData> {
 					"src/images/downloadImg.png",
 					() => Navigator.push(
 						context,
-						MaterialPageRoute(builder: (context) => const Downloadpages(secTitle: "Téléchargement"))
+						MaterialPageRoute(builder: (context) => Downloadpages(
+							key: ValueKey(mainKey.currentState!.dataStatusNotifier),
+							secTitle: "Téléchargement",
+						))
 					),
 				),
 				const Gap(35),

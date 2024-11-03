@@ -173,7 +173,7 @@ class TMDBService {
 	///////////////////////////////////////////////////////////////
 	/// télécharge des films à partir d'une recherche
 	Future<List<dynamic>> searchMovies(String query) async {
-       final url = 'https://api.themoviedb.org/3/search/multi?query=$query&include_adult=true&api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR';
+       final url = 'https://api.themoviedb.org/3/search/multi?query=$query&include_adult=false&api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR';
        final response = await http.get(Uri.parse(url));
 
        if (response.statusCode == 200) {
