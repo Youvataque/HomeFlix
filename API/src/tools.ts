@@ -80,3 +80,14 @@ export async function removeFromJson(where:string, id:string):Promise<boolean> {
 	);
 	return false;
 }
+
+/////////////////////////////////////////////////////////////////////////////////
+// vérifie qu'un fichier json est  valide avant d'écrire dessus
+export function isValidJson(jsonString: string): boolean {
+	try {
+		JSON.parse(jsonString);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}

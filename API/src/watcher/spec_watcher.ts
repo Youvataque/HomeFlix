@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { isValidJson } from '../tools';
 
 const JSON_FILE_PATH = path.join(__dirname, '../../specData.json');
 
@@ -121,21 +122,28 @@ async function getNbUser(): Promise<string> {
 /////////////////////////////////////////////////////////////////////////////////
 // lances toutes les fonctions précédente et enregistre leurs résultats dans une section du json
 async function runAllChecks() {
-	const data = await fs.promises.readFile(JSON_FILE_PATH, 'utf8');
-	const jsonData: DataStructure = JSON.parse(data);
-	const systemInfo = await getSystemInfo();
-	jsonData.spec.cpu = systemInfo.cpu;
-	jsonData.spec.fan = systemInfo.fan;
-	jsonData.spec.ram = systemInfo.ram;
-	jsonData.spec.storage = systemInfo.storage;
-	jsonData.spec.vpnActive = await checkVpnStatus();
-	jsonData.spec.dlSpeed = await getQbittorrentStats();
-	jsonData.spec.nbUser = await getNbUser();
 	try {
-		await fs.promises.writeFile(JSON_FILE_PATH, JSON.stringify(jsonData, null, 2), 'utf8');
-		console.log('Specs ajoutés avec succés au json');
+		const data = await fs.promises.readFile(JSON_FILE_PATH, 'utf8');
+		const jsonData: DataStructure = JSON.parse(data);
+		const systemInfo = await getSystemInfo();
+		jsonData.spec.cpu = systemInfo.cpu;
+		jsonData.spec.fan = systemInfo.fan;
+		jsonData.spec.ram = systemInfo.ram;
+		jsonData.spec.storage = systemInfo.storage;
+		jsonData.spec.vpnActive = await checkVpnStatus();
+		jsonData.spec.dlSpeed = await getQbittorrentStats();
+		jsonData.spec.nbUser = await getNbUser();
+
+		// Vérification de la validité du JSON avant l'écriture
+		const jsonString = JSON.stringify(jsonData, null, 2);
+		if (isValidJson(jsonString)) {
+			await fs.promises.writeFile(JSON_FILE_PATH, jsonString, 'utf8');
+			console.log('Specs ajoutés avec succès au json');
+		} else {
+			console.error('JSON mal formé, écriture annulée');
+		}
 	} catch (err) {
-		console.error('Erreur lors de l\'écriture du fichier JSON:', err);
+		console.error('Erreur lors de la lecture ou de l\'écriture du fichier JSON:', err);
 	}
 }
 

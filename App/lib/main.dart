@@ -49,10 +49,7 @@ class MainState extends State<Main> {
 		_timer = Timer.periodic(const Duration(seconds: 4), (timer) async {
 			final newDataStatus = await NIGHTServices().fetchDataStatus();
 			if (!mapsAreEqual(dataStatusNotifier.value, newDataStatus)) {
-				print("Differences detected");
 				dataStatusNotifier.value = newDataStatus;
-			} else {
-				print("No change in dataStatusNotifier");
 			}
 		});
 	}
@@ -98,9 +95,5 @@ class MainState extends State<Main> {
 		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
 		TMDBService.serieCateg = await TMDBService().fetchCateg(false);
 		return true;
-	}
-
-	void rebuildMain() {
-		setState(() {});
 	}
 }
