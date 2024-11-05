@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { execFile } from 'child_process';
+import dotenv from 'dotenv';
 
-const DIRECTORY_TO_WATCH = '/home/youvataque/data_disk/cloud_data/temp_torrent';
+dotenv.config();
+const DIRECTORY_TO_WATCH = process.env.TORRENT_FOLDER ?? "";
 
 /////////////////////////////////////////////////////////////////////////////////
 // Fonction pour ouvrir le fichier après l'écriture complète

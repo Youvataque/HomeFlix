@@ -102,7 +102,7 @@ router.post('/contentDl', apiKeyMiddleware, async (req, res) => {
                 }
             }
         }
-        const filePath = path.resolve(__dirname, '/home/youvataque/data_disk/cloud_data/temp_torrent', finalFilename);
+        const filePath = path.resolve(__dirname, process.env.TORRENT_FOLDER ?? "", finalFilename);
         const writer = fs.createWriteStream(filePath);
 
         response.data.pipe(writer);

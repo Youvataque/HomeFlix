@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import axios from 'axios';
+import dotenv from 'dotenv';
 import { qbittorrentAPI, removeAccents } from '../tools';
 
-const DIRECTORY_TO_WATCH = '/home/youvataque/data_disk/cloud_data';
+dotenv.config();
+const DIRECTORY_TO_WATCH = process.env.CONTENT_FOLDER ?? "";
 const JSON_CONTENT_PATH = path.join(__dirname, '../../contentData.json');
 
 /////////////////////////////////////////////////////////////////////////////////

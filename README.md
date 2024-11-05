@@ -20,9 +20,15 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - (Optionnel) ouvrir les ports 4000, 20 et 21 sur votre box pour que le serveur fonctionne en dehors de votre réseau.
 
-- Ajouter l'API et modifier les différents chemins d'accès.
+- Copiez le fichier API dans votre home
 
-- Créer un fichier .env et créer une clé API (ça peut être n'importe quoi, elle sera utilisée pour la connexion avec l'application).
+- Créer un fichier .env à la racine du dossier API.
+
+- Ajouter [API_KEY="ce que vous voulez"] à votre .env.
+
+- Ajouter [TORRENT_FOLDER="le chemin d'accès de vos fichier .torrent"] à votre .env
+
+- 1jouter [CONTENT_FOLDER="le chemin d'accès de vos films et serie"] à votre .env
 
 ### (optionnel mais fortement recommandé) VPN
 
