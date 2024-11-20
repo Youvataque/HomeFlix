@@ -67,7 +67,6 @@ class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateM
 										child: ValueListenableBuilder<Map<String, dynamic>>(
 											valueListenable: mainKey.currentState!.dataStatusNotifier,
 											builder: (context, dataStatus, child) {
-												print(dataStatus);
 												return contentBody(dataStatus["queue"]);
 											},
 										)

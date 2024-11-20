@@ -204,7 +204,7 @@ class _ContentviewState extends State<Contentview> {
 										"Date inconnue - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
 							:
 								(widget.datas['first_air_date'] != null && widget.datas['first_air_date'].toString().split('-').isNotEmpty) ? 
-										"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}"
+										"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].length - 1}saisons - ${widget.datas['origin_country'][0]}"
 									: 
 										"Date inconnue - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}",
 						style: sousText(),

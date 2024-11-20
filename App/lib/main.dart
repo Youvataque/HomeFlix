@@ -55,7 +55,7 @@ class MainState extends State<Main> {
 	}
 
 	bool mapsAreEqual(Map<String, dynamic> map1, Map<String, dynamic> map2) {
-	return jsonEncode(map1) == jsonEncode(map2);
+		return jsonEncode(map1) == jsonEncode(map2);
 	}
 
 	@override

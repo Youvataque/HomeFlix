@@ -6,13 +6,15 @@ class PopUpTemplate extends StatelessWidget {
   final double width;
   final double padding;
   final double radius;
+  final Alignment alignement;
   const PopUpTemplate({
     super.key,
     required this.child,
     required this.heigth,
 	this.radius = 20,
 	this.width = 350,
-    this.padding = 60
+    this.padding = 60,
+	this.alignement = Alignment.topCenter
   });
 
 	@override
@@ -20,7 +22,7 @@ class PopUpTemplate extends StatelessWidget {
 		return Padding(
 			padding: EdgeInsets.only(top: padding),
 			child: Align(
-				alignment: Alignment.topCenter,
+				alignment: alignement,
 				child: ClipRRect(
 					borderRadius: BorderRadius.circular(radius),
 					child: Container(

@@ -1,8 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MultiSplit.dart';
+import 'package:homeflix/Components/ViewComponents/ContentPages/DownloadPopUp.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/YggServices.dart';
 import 'package:homeflix/main.dart';
@@ -143,22 +145,24 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 			height: 80,
 			width: MediaQuery.sizeOf(context).width,
 			child: ElevatedButton(
-				onPressed: () async {
-					await YGGService().sendDownloadRequest('https://yggapi.eu/torrent/${results[index]['id']}/download?passkey=${dotenv.get("YGG_PASSKEY")}', results[index]['title']);
-					await NIGHTServices().postDataStatus(
-						{
-							"id": widget.selectData['id'].toString(),
-							'title': widget.name,
-							'originalTitle': widget.originalName,
-							'name': results[index]['title'],
-							'media': widget.movie,
-							'percent': 0.0
-						},
-						"queue"
-					);
-					mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
-					widget.func();
-				},
+				onPressed: () => showCupertinoModalPopup(
+					context: context,
+					filter: ImageFilter.blur(
+						sigmaX: 10,
+						sigmaY: 10
+					),
+					builder: (context) => DownloadPopUp(
+						movie: widget.movie,
+						func: (seasonEp) async => startDownload(
+							results,
+							index, 
+							seasonEp,
+						),
+						title: results[index]['title'],
+						tmdbId: widget.selectData['id'].toString(),
+						nbSaisons: widget.movie ? -1 : widget.selectData['seasons'].length,
+					)
+				),
 				style: ElevatedButton.styleFrom(
 					shape: RoundedRectangleBorder(
 						borderRadius: BorderRadius.circular(7.5),
@@ -285,5 +289,38 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 				}
 			},
 		);
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////// fonction du widget
+
+	///////////////////////////////////////////////////////////////
+	/// télécharge le contenu sélectionné dans le serveur
+	void startDownload(List<dynamic> results, int index, Map<String, dynamic> seasonEpi) async {
+		Map<String, dynamic> result = {};
+		if (widget.movie) {
+			result = {
+				"id": widget.selectData['id'].toString(),
+				'title': widget.name,
+				'originalTitle': widget.originalName,
+				'name': results[index]['title'],
+				'media': widget.movie,
+				'percent': 0.0
+			};
+		} else {
+			result = {
+				"id": widget.selectData['id'].toString(),
+				'title': widget.name,
+				'originalTitle': widget.originalName,
+				'name': results[index]['title'],
+				'media': widget.movie,
+				'seasons': seasonEpi["seasons"],
+				'percent': 0.0
+			};
+		}
+		await YGGService().sendDownloadRequest('https://yggapi.eu/torrent/${results[index]['id']}/download?passkey=${dotenv.get("YGG_PASSKEY")}', results[index]['title']);
+		await NIGHTServices().postDataStatus(result, "queue");
+		mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
+		widget.func();
 	}
 }
