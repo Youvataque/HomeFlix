@@ -64,7 +64,7 @@ router.post('/contentStatus', apiKeyMiddleware, (req: Request, res: Response) =>
 			"name": newData['name'],
 			"media": newData['media'],
 			"percent": newData['percent'],
-			"seasonsEpi": newData['seasonsEpi']
+			"seasons": newData['seasons']
 		}
 
 		fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), 'utf8', (err) => {
