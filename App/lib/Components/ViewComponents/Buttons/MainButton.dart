@@ -23,7 +23,7 @@ class MainButton extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
 		return SizedBox(
-			height: 35,
+			height: 45,
 			width: double.infinity,
 			child: ElevatedButton(
 				onPressed: () {
@@ -42,7 +42,7 @@ class MainButton extends StatelessWidget {
 						title!,
 						style: TextStyle(
 						fontWeight: FontWeight.w700,
-						fontSize: 16,
+						fontSize: 17,
 						color: titleColor
 						),
 					),

@@ -126,7 +126,7 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 	Widget build(BuildContext context2) {
 		return PopUpTemplate(
 			padding: MediaQuery.sizeOf(context).height * 18 / 100,
-			heigth: widget.movie ? 250 : 317,
+			heigth: widget.movie ? 250 : 329,
 			child: ValueListenableBuilder<Map<String, dynamic>>(
 				valueListenable: mainKey.currentState!.dataStatusNotifier,
 				builder: (context, dataStatus, child) {
@@ -183,14 +183,18 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 				title("Quelques précision !"),
 				const Gap(10),
 				Column(
-					crossAxisAlignment: CrossAxisAlignment.start,
 					children: [
-						seriesText(widget.title, Theme.of(context).colorScheme.tertiary),
-						const Gap(10),
-						ButtonCheckBox(
-							titles: const ["Saison", "Épisode"],
-							isIn: isIn,
-							onChanged: (value) => setState(() {isIn = value;})
+						Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+							children: [
+								seriesText(widget.title, Theme.of(context).colorScheme.tertiary),
+								const Gap(10),
+								ButtonCheckBox(
+									titles: const ["Saison", "Épisode"],
+									isIn: isIn,
+									onChanged: (value) => setState(() {isIn = value;})
+								),
+							],
 						),
 						const Gap(30),
 						AnimatedCrossFade(
@@ -280,19 +284,19 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 		if (isIn == 0) {
 			if (datas.seasonStart == 0) {
 				setState(() {
-					error = "Erreur, il faut une première saison à votre sélection !";
+					error = "Erreur, il faut une première saison!";
 				});
 				return false;
 			}
 			if (datas.seasonEnd == 0) {
 				setState(() {
-					error = "Erreur, il faut une dernière saison à votre sélection !";
+					error = "Erreur, il faut une dernière saison !";
 				});
 				return false;
 			}
 			if (datas.seasonEnd < datas.seasonStart) {
 				setState(() {
-					error = "Erreur, il faut que la dernière saison soit >= à la première !";
+					error = "Erreur, dernière saison < à la première !";
 				});
 				return false;
 			}

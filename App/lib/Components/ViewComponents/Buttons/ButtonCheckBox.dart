@@ -55,7 +55,7 @@ class _ButtonCheckBoxState extends State<ButtonCheckBox> with SingleTickerProvid
 			child: AnimatedContainer(
 				duration: const Duration(milliseconds: 200),
 				curve: Curves.easeInOut,
-				padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+				padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
 				decoration: BoxDecoration(
 					color: isSelected ? Theme.of(context).colorScheme.secondary : Colors.transparent,
 					borderRadius: BorderRadius.circular(7),

@@ -51,7 +51,7 @@ class _SeasonPickerState extends State<SeasonPicker> {
 
 	SizedBox pickerButton() {
 		return SizedBox(
-			height: 30,
+			height: 35,
 			width: MediaQuery.sizeOf(context).width * 35 / 100,
 			child: ElevatedButton(
 				onPressed: () => showCupertinoDialog(
