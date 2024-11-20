@@ -187,6 +187,7 @@ class _ContentviewState extends State<Contentview> {
 	///////////////////////////////////////////////////////////////
 	/// partie droite de la présentation avec toutes les infos importante
 	Widget rightDetailsPart() {
+		print(widget.datas['seasons']);
 		return SizedBox(
 			height: MediaQuery.sizeOf(context).width * 0.38 * 1.5,
 			width: MediaQuery.sizeOf(context).width * 0.47,
@@ -204,7 +205,7 @@ class _ContentviewState extends State<Contentview> {
 										"Date inconnue - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
 							:
 								(widget.datas['first_air_date'] != null && widget.datas['first_air_date'].toString().split('-').isNotEmpty) ? 
-										"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].length - 1}saisons - ${widget.datas['origin_country'][0]}"
+										"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].where((season) => season['name'].toString().toLowerCase().contains('saison')).length} saisons - ${widget.datas['origin_country'][0]}"
 									: 
 										"Date inconnue - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}",
 						style: sousText(),

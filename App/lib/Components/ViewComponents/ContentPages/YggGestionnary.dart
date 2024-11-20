@@ -160,7 +160,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 						),
 						title: results[index]['title'],
 						tmdbId: widget.selectData['id'].toString(),
-						nbSaisons: widget.movie ? -1 : widget.selectData['seasons'].length,
+						nbSaisons: widget.movie ? -1 : widget.selectData['seasons'].where((season) => season['name'].toString().toLowerCase().contains('saison')).length,
 					)
 				),
 				style: ElevatedButton.styleFrom(
