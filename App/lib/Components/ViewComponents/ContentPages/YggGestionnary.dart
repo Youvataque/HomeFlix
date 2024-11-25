@@ -141,6 +141,10 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 	///////////////////////////////////////////////////////////////
 	/// UI des boutons de téléchargement
 	SizedBox linkButton(List<dynamic> results, int index) {
+		List<dynamic> seasons = [];
+		for (int x = 0; x < widget.selectData['seasons'].length; x++) {
+			if (widget.selectData['seasons'][x]['season_number'] > 0) seasons.add(widget.selectData['seasons'][x]);
+		}
 		return SizedBox(
 			height: 80,
 			width: MediaQuery.sizeOf(context).width,
@@ -160,7 +164,8 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 						),
 						title: results[index]['title'],
 						tmdbId: widget.selectData['id'].toString(),
-						nbSaisons: widget.movie ? -1 : widget.selectData['seasons'].where((season) => season['name'].toString().toLowerCase().contains('saison')).length,
+						nbSaisons: widget.movie ? -1 : seasons.length,
+						seasons: widget.movie ? [] : seasons
 					)
 				),
 				style: ElevatedButton.styleFrom(

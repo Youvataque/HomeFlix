@@ -17,13 +17,15 @@ class DownloadPopUp extends StatefulWidget {
 	final String title;
 	final String tmdbId;
 	final int nbSaisons;
+	final List<dynamic> seasons;
 	const DownloadPopUp({
 		super.key,
 		required this.movie,
 		required this.func,
 		required this.title,
 		required this.tmdbId,
-		required this.nbSaisons
+		required this.nbSaisons,
+		required this.seasons
 	});
 
   @override
@@ -46,7 +48,7 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 	@override
 	void initState() {
 		super.initState();
-		for (int x = 1; x < widget.nbSaisons; x++) {
+		for (int x = 1; x <= widget.nbSaisons; x++) {
 			seasonList.add("Saison $x");
 		}
 		for (int x = 1; x <= 30; x++) {
@@ -323,7 +325,7 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 	/// ajoutes les seasons specs pour les saisons complètes
 	void addSeasonSpec(Map<String, dynamic> serverContent) {
 		seasonEp["seasons"] = {};
-		for (int x = 1; x < widget.nbSaisons; x++) {
+		for (int x = 1; x <= widget.nbSaisons; x++) {
 			seasonEp["seasons"]["S$x"] = {
 				"complete" : false,
 				"episode" : [],
@@ -348,7 +350,8 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 	/// ajoutes les seasons specs pour les saisons complètes
 	void addEpisodeSpec(Map<String, dynamic> serverContent) {
 		final serverCheck = serverContent[widget.tmdbId] != null;
-		final tempData = serverContent[widget.tmdbId]["seasons"] as Map<String, dynamic>;
+		Map<String, dynamic> tempData = {};
+		if (serverCheck) tempData = serverContent[widget.tmdbId]["seasons"];
 		List<int> toAdd = [];
 		if (serverCheck) {
 			if (tempData.containsKey("S${datas.seasonEp}")) {
@@ -356,7 +359,7 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 			}
 		}
 		seasonEp["seasons"] = {};
-		for (int x = 1; x < widget.nbSaisons; x++) {
+		for (int x = 1; x <= widget.nbSaisons; x++) {
 			seasonEp["seasons"]["S$x"] = {
 				"complete" : false,
 				"episode" : [],
@@ -364,7 +367,7 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 			};
 			if (x == datas.seasonEp) {
 				seasonEp["seasons"]["S$x"] = {
-					"complete" : true,
+					"complete" : widget.seasons[x - 1]['episode_count'] == datas.episode,
 					"episode" : [...toAdd, datas.episode],
 					"title" : widget.title,
 				};

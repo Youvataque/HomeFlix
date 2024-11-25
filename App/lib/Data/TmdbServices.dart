@@ -116,7 +116,13 @@ class TMDBService {
 							),
 						);
 					} else {
-						return Text("Image non disponible $movieId");
+						return SizedBox(
+							width: width,
+							child: AspectRatio(
+								aspectRatio: 2 / 3,
+								child: Text("Image non disponible $movieId", style: const TextStyle(color: Colors.white),)
+							),
+						);
 					}
 				} else {
 					return Container(

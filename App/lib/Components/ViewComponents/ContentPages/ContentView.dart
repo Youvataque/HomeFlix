@@ -277,35 +277,40 @@ class _ContentviewState extends State<Contentview> {
 	///////////////////////////////////////////////////////////////
 	/// partie gérant l'affichage du YggGestionnary ou des messages de téléchargement
 	Widget downloadZone() {
-		return AnimatedCrossFade(
-			firstChild: Padding(
-					padding: const EdgeInsets.symmetric(horizontal: 10),
-					child: Ygggestionnary(
-						key: ValueKey(searchName),
-						originalName: originalName,
-						name: searchName,
-						selectData: widget.datas,
-						movie: widget.movie,
-						func: () {
-							Future.delayed(
-								const Duration(seconds: 2),
-								() => CupertinoActivityIndicator(
-									radius: 20,
-									color: Theme.of(context).colorScheme.secondary,
-								)
-							);
-							setState(() {});
-						}
-					),
-			),
-			secondChild: AnimatedCrossFade(
-				duration: const Duration(milliseconds: 300),
-				firstChild: alreadyInDB("En cours de téléchargement ! C'est pour bientôt."),
-				secondChild: alreadyInDB("Contenue déjà téléchargé. Bon visionnage !"),
-				crossFadeState: mainKey.currentState!.dataStatusNotifier.value["queue"][widget.datas['id'].toString()] != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-			),
-			crossFadeState: mainKey.currentState!.dataStatusNotifier.value["movie"][widget.datas['id'].toString()] == null && mainKey.currentState!.dataStatusNotifier.value["queue"][widget.datas['id'].toString()] == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-			duration: const Duration(milliseconds: 300),
+		return ValueListenableBuilder<Map<String, dynamic>>(
+			valueListenable: mainKey.currentState!.dataStatusNotifier,
+			builder: (context, dataStatus, child) {
+				return AnimatedCrossFade(
+						firstChild: Padding(
+								padding: const EdgeInsets.symmetric(horizontal: 10),
+								child: Ygggestionnary(
+									key: ValueKey(searchName),
+									originalName: originalName,
+									name: searchName,
+									selectData: widget.datas,
+									movie: widget.movie,
+									func: () {
+										Future.delayed(
+											const Duration(seconds: 2),
+											() => CupertinoActivityIndicator(
+												radius: 20,
+												color: Theme.of(context).colorScheme.secondary,
+											)
+										);
+										setState(() {});
+									}
+								),
+						),
+						secondChild: AnimatedCrossFade(
+							duration: const Duration(milliseconds: 300),
+							firstChild: alreadyInDB("En cours de téléchargement ! C'est pour bientôt."),
+							secondChild: alreadyInDB("Contenue déjà téléchargé. Bon visionnage !"),
+							crossFadeState: dataStatus["queue"][widget.datas['id'].toString()] != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+						),
+						crossFadeState: isDownload(dataStatus) ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+						duration: const Duration(milliseconds: 300),
+					);
+			},
 		);
 	}
 
@@ -381,5 +386,31 @@ class _ContentviewState extends State<Contentview> {
 				),
 			],
 		);
+	}
+
+	bool isDownload(Map<String, dynamic> dataStatus)
+	{
+		final id = widget.datas['id'].toString();
+		if (widget.movie) {
+			if (dataStatus["movie"][id] == null && dataStatus["queue"][id] == null) return true;
+		} else {
+			List<int> alreadyIn = [];
+			int nbSeasons = 0;
+			if (dataStatus['tv'][id] != null) {
+				alreadyIn = (dataStatus['tv'][id]["seasons"] as Map<String, dynamic>)
+					.entries
+					.where((entry) => entry.value["complete"] == true)
+					.map((entry) => int.parse(entry.key.substring(1)))
+					.toList()
+					..sort();
+			}
+			for (int x = 0; x < widget.datas['seasons'].length; x++) {
+				print(widget.datas['seasons']);
+				if (widget.datas['seasons'][x]['season_number'] > 0) nbSeasons++;
+			}
+			if (alreadyIn.length != nbSeasons) return true;
+		}
+		
+		return false;
 	}
 }
