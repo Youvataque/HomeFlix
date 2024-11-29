@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { qbittorrentAPI, removeAccents } from '../tools';
+import { qbittorrentAPI, removeAccents, searchTorrent } from '../tools';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.CONTENT_FOLDER ?? "";
@@ -25,22 +25,20 @@ interface DataStructure {
 
 /////////////////////////////////////////////////////////////////////////////////
 // fonction pour récupérer toutes les infos d'un torrent
-async function getTorrentProgress(torrentName: string, originalName: string): Promise<number | undefined> {
+async function getTorrentProgress(torrentName: string,): Promise<number | undefined> {
 	try {
+		const torrentHash = await searchTorrent(torrentName);
+		if (torrentHash == "")
+			return undefined;
 		await qbittorrentAPI.post('/auth/login');
-		const response = await qbittorrentAPI.get('/torrents/info');
-		const searchTerms = removeAccents(torrentName.toLowerCase().replace('&', "et")).split(/[\s._\-:(),]+/).filter(Boolean);
-		const originalSearchTerms = removeAccents(originalName.toLowerCase().replace("&", "and")).split(/[\s._\-:(),]+/).filter(Boolean);
-
-		const torrent = response.data.find((t: any) => 
-			searchTerms.every(term => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/).includes(term)) ||
-			originalSearchTerms.every(term => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/).includes(term))
-		);
-		if (torrent) {
-			console.log("Torrent trouvé : ", torrent.name);
-			return parseFloat((torrent.progress * 100).toFixed(2));
+		const response = await qbittorrentAPI.get(`/torrents/properties`, {
+			params: { hash: torrentHash }
+		});
+		if (response.data) {
+			console.log("Torrent trouvé : ", response.data);
+			return parseFloat((response.data.total_downloaded * 100 / response.data.total_size).toFixed(2));
 		} else {
-			console.error(`Torrent "${torrentName}" ou "${originalName}" non trouvé.`);
+			console.error(`Torrent "${torrentName}" non trouvé.`);
 		}
 	} catch (error) {
 		console.error('Erreur lors de la récupération de l\'état du torrent:', error);
@@ -58,13 +56,13 @@ async function checkAndProcessQueue() {
 
 		for (const key in jsonData.queue) {
 			const item = jsonData.queue[key];
-			const percent = await getTorrentProgress(item.title, item.originalTitle);
+			const percent = await getTorrentProgress(item.name);
 			if (percent !== undefined) {
 				item.percent = percent;
 				jsonData.queue[key].percent = percent;
 			}
 
-			if (percent === 100) { 
+			if (item.percent >= 99.5) { 
 				if (item.media) {
 					jsonData.movie[key] = item;
 				} else {

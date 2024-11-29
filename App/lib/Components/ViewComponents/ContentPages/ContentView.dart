@@ -396,6 +396,7 @@ class _ContentviewState extends State<Contentview> {
 		} else {
 			List<int> alreadyIn = [];
 			int nbSeasons = 0;
+			if (dataStatus['queue'][id] != null) return false;
 			if (dataStatus['tv'][id] != null) {
 				alreadyIn = (dataStatus['tv'][id]["seasons"] as Map<String, dynamic>)
 					.entries
@@ -405,7 +406,6 @@ class _ContentviewState extends State<Contentview> {
 					..sort();
 			}
 			for (int x = 0; x < widget.datas['seasons'].length; x++) {
-				print(widget.datas['seasons']);
 				if (widget.datas['seasons'][x]['season_number'] > 0) nbSeasons++;
 			}
 			if (alreadyIn.length != nbSeasons) return true;

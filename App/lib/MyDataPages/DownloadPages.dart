@@ -27,26 +27,6 @@ class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateM
 			color: Theme.of(context).colorScheme.secondary
 		);
 	}
-	
-	///////////////////////////////////////////////////////////////
-	/// Ui du bouton image 
-	Widget imgButton(Widget img, Map<String, dynamic> selectData) {
-		return SizedBox(
-			height: double.infinity,
-			child: ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					padding: EdgeInsets.zero,
-					backgroundColor: Colors.transparent,
-					surfaceTintColor: Colors.transparent,
-					disabledBackgroundColor: Colors.transparent
-				),
-				onPressed: () {
-					print(selectData["name"]);
-				},
-				child: img,
-			),
-		);
-	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -117,8 +97,8 @@ class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateM
 								crossAxisAlignment: CrossAxisAlignment.start,
 								children: [
 									Text(
-										entry.value['title'].toString(),
-										maxLines: 3,
+										entry.value['name'].replaceAll(RegExp(r'[._\-]'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim(),								
+										maxLines: 2,
 										style: sousText()
 									),
 									const Gap(10),

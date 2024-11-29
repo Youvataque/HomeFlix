@@ -1,7 +1,6 @@
 import axios from "axios";
 import fs from 'fs';
 import path from 'path';
-
 /////////////////////////////////////////////////////////////////////////////////
 // déclaration de l'api qbittorrent
 export const qbittorrentAPI = axios.create({
@@ -16,7 +15,13 @@ export function removeAccents(str: string): string {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// fonction pour récupérer toutes les infos d'un torrent
+// normalise une str
+function cleanName(name: string): string {
+    return removeAccents(name.toLowerCase().replace('&', "and").replace(/[\s._\-:(),]+/g, ' ').trim());
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// fonction pour supprimer un torrent
 export async function deleteTorrent(torrentName: string, originalName: string): Promise<boolean> {
 	try {
 		await qbittorrentAPI.post('/auth/login');
@@ -90,4 +95,58 @@ export function isValidJson(jsonString: string): boolean {
 	} catch (e) {
 		return false;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// calclue la probabilité que le nom corresponde au torrent en cours
+function calculateWordSimilarity(name: string, torrentName: string): number {
+    const splitedName = name.split(' ');
+    const splitedTorrentName = torrentName.split(' ');
+    let commonWordsCount = 0;
+    let totalWords = new Set();
+
+    for (let i = 0; i < splitedName.length; i++) {
+        for (let j = 0; j < splitedTorrentName.length; j++) {
+            if (splitedName[i] === splitedTorrentName[j]) {
+                commonWordsCount++;
+                break;
+            }
+        }
+    }
+
+    for (let i = 0; i < splitedName.length; i++) {
+        totalWords.add(splitedName[i]);
+    }
+    for (let j = 0; j < splitedTorrentName.length; j++) {
+        totalWords.add(splitedTorrentName[j]);
+    }
+    const similarity = (commonWordsCount / totalWords.size) * 100;
+    return similarity;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// recherche un torrent dans qbittorrent à partir d'un nom unique (nom d'archive)
+export async function searchTorrent(name: string): Promise<string> {
+	let probability = {
+		percent: 60,
+		content: ""
+	};
+	try {
+		await qbittorrentAPI.post('/auth/login');
+		const response = await qbittorrentAPI.get('/torrents/info');
+		name = cleanName(name);
+		response.data.forEach((torrent: { name: string, hash: string }) => {
+			const torrentName = cleanName(torrent.name);
+			const similarityPercentage = calculateWordSimilarity(name, torrentName);
+			if (similarityPercentage > probability.percent) {
+				probability.percent = similarityPercentage;
+				probability.content = torrent.hash;
+			}
+		});
+		console.log(`Le torrent le plus similaire est "${probability.content}" avec ${probability.percent}% de similarité.`);
+	} catch (error) {
+		console.error("Erreur lors de la recherche des torrents : ", error);
+	}
+
+	return probability.content;
 }
