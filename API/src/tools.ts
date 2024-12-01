@@ -103,7 +103,6 @@ function calculateWordSimilarity(name: string, torrentName: string): number {
     const splitedName = name.split(' ');
     const splitedTorrentName = torrentName.split(' ');
     let commonWordsCount = 0;
-    let totalWords = new Set();
 
     for (let i = 0; i < splitedName.length; i++) {
         for (let j = 0; j < splitedTorrentName.length; j++) {
@@ -114,13 +113,7 @@ function calculateWordSimilarity(name: string, torrentName: string): number {
         }
     }
 
-    for (let i = 0; i < splitedName.length; i++) {
-        totalWords.add(splitedName[i]);
-    }
-    for (let j = 0; j < splitedTorrentName.length; j++) {
-        totalWords.add(splitedTorrentName[j]);
-    }
-    const similarity = (commonWordsCount / totalWords.size) * 100;
+    const similarity = (commonWordsCount / splitedTorrentName.length) * 100;
     return similarity;
 }
 
