@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 *.env
 /API/node_modules/
+/API/contentData.json
 /build/
 build/
 
