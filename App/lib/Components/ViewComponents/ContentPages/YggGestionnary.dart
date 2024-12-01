@@ -142,8 +142,10 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 	/// UI des boutons de téléchargement
 	SizedBox linkButton(List<dynamic> results, int index) {
 		List<dynamic> seasons = [];
-		for (int x = 0; x < widget.selectData['seasons'].length; x++) {
-			if (widget.selectData['seasons'][x]['season_number'] > 0) seasons.add(widget.selectData['seasons'][x]);
+		if (!widget.movie) {
+			for (int x = 0; x < widget.selectData['seasons'].length; x++) {
+				if (widget.selectData['seasons'][x]['season_number'] > 0) seasons.add(widget.selectData['seasons'][x]);
+			}
 		}
 		return SizedBox(
 			height: 80,

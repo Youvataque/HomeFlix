@@ -182,7 +182,7 @@
     "37680": {
       "title": "Suits",
       "originalTitle": "Suits, avocats sur mesure",
-      "name": "Suits.S01.Multi.Bluray.1080p.x265.HEVC-SN2P",
+      "name": "Suits.S04.Multi.Bluray.1080p.x265.HEVC-SN2P",
       "media": false,
       "percent": 100,
       "seasons": {
@@ -194,19 +194,25 @@
           "title": "Suits.S01.Multi.Bluray.1080p.x265.HEVC-SN2P"
         },
         "S2": {
-          "complete": false,
-          "episode": [],
-          "title": "Suits.S01.Multi.Bluray.1080p.x265.HEVC-SN2P"
+          "complete": true,
+          "episode": [
+            -1
+          ],
+          "title": "Suits.S02.Multi.Bluray.1080p.x265.HEVC-SN2P"
         },
         "S3": {
-          "complete": false,
-          "episode": [],
-          "title": "Suits.S01.Multi.Bluray.1080p.x265.HEVC-SN2P"
+          "complete": true,
+          "episode": [
+            -1
+          ],
+          "title": "Suits.S03.Multi.Bluray.1080p.x265.HEVC-SN2P"
         },
         "S4": {
-          "complete": false,
-          "episode": [],
-          "title": "Suits.S01.Multi.Bluray.1080p.x265.HEVC-SN2P"
+          "complete": true,
+          "episode": [
+            -1
+          ],
+          "title": "Suits.S04.Multi.Bluray.1080p.x265.HEVC-SN2P"
         },
         "S5": {
           "complete": false,

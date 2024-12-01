@@ -392,7 +392,9 @@ class _ContentviewState extends State<Contentview> {
 	{
 		final id = widget.datas['id'].toString();
 		if (widget.movie) {
-			if (dataStatus["movie"][id] == null && dataStatus["queue"][id] == null) return true;
+			if (dataStatus["movie"][id] == null && dataStatus["queue"][id] == null) {
+				return true;
+			} 
 		} else {
 			List<int> alreadyIn = [];
 			int nbSeasons = 0;
@@ -410,7 +412,6 @@ class _ContentviewState extends State<Contentview> {
 			}
 			if (alreadyIn.length != nbSeasons) return true;
 		}
-		
 		return false;
 	}
 }
