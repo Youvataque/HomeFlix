@@ -21,6 +21,10 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 - (Optionnel) ouvrir les ports 4000, 20 et 21 sur votre box pour que le serveur fonctionne en dehors de votre réseau.
 
 - Copiez le fichier API dans votre home
+  
+- Créer un fichier contentData.json à la racine de l'api
+
+- écrivez : {"tv" : {}, "movie": {}, "queue":{}} dans le fichier contentData.json
 
 - Créer un fichier .env à la racine du dossier API.
 
