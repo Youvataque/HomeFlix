@@ -3,7 +3,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { deleteTorrent, removeFromJson } from '../tools';
+import { deleteAllTorrent, deleteOneTorrent, removeFromJson, searchTorrent } from '../tools';
 
 dotenv.config();
 const API_KEY = process.env.API_KEY;
@@ -126,8 +126,14 @@ router.post('/contentDl', apiKeyMiddleware, async (req, res) => {
 // Route pour supprimer une oeuvre
 router.post('/contentErase', apiKeyMiddleware, async (req: Request, res: Response) => {
 	const {newData} = req.body;
-	const del = await deleteTorrent(newData['title'], newData['originalTitle']);
-	if (del) await removeFromJson(newData["where"], newData["id"]);
+	let del = false;
+	if (newData['media']) {
+		const torrentHash = await searchTorrent(newData["name"]);
+		del = await deleteOneTorrent(torrentHash);
+	} else {
+		del = await deleteAllTorrent(newData);
+	}
+	if (del) await removeFromJson(newData["media"] ? "movie" : "tv", newData["id"]);
     
 });
 

@@ -347,15 +347,17 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 	}
 	
 	///////////////////////////////////////////////////////////////
-	/// ajoutes les seasons specs pour les saisons complètes
+	/// ajoutes les seasons specs pour les saisons épisode par épisode
 	void addEpisodeSpec(Map<String, dynamic> serverContent) {
 		final serverCheck = serverContent[widget.tmdbId] != null;
 		Map<String, dynamic> tempData = {};
 		if (serverCheck) tempData = serverContent[widget.tmdbId]["seasons"];
 		List<int> toAdd = [];
+		List<String> titles = [];
 		if (serverCheck) {
 			if (tempData.containsKey("S${datas.seasonEp}")) {
 				toAdd = tempData["S${datas.seasonEp}"]["episode"].cast<int>();
+				titles = tempData["S${datas.seasonEp}"]["titles"].cast<String>();
 			}
 		}
 		seasonEp["seasons"] = {};
@@ -363,12 +365,14 @@ class _DownloadPopUpState extends State<DownloadPopUp> {
 			seasonEp["seasons"]["S$x"] = {
 				"complete" : false,
 				"episode" : [],
+				"titles": [],
 				"title" : widget.title,
 			};
 			if (x == datas.seasonEp) {
 				seasonEp["seasons"]["S$x"] = {
 					"complete" : widget.seasons[x - 1]['episode_count'] == datas.episode,
 					"episode" : [...toAdd, datas.episode],
+					"titles" : [...titles, widget.title],
 					"title" : widget.title,
 				};
 			} else if (serverCheck) {

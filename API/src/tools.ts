@@ -22,22 +22,13 @@ function cleanName(name: string): string {
 
 /////////////////////////////////////////////////////////////////////////////////
 // fonction pour supprimer un torrent
-export async function deleteTorrent(torrentName: string, originalName: string): Promise<boolean> {
+export async function deleteOneTorrent(torrentHash: string): Promise<boolean> {
 	try {
-		await qbittorrentAPI.post('/auth/login');
-		const response = await qbittorrentAPI.get('/torrents/info');
-		const searchTerms = removeAccents(torrentName.toLowerCase().replace('&', "et")).split(/[\s._\-:(),]+/).filter(Boolean);
-		const originalSearchTerms = removeAccents(originalName.toLowerCase().replace("&", "and")).split(/[\s._\-:(),]+/).filter(Boolean);
-
-		const torrent = response.data.find((t: any) => 
-			searchTerms.every(term => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/).includes(term)) ||
-			originalSearchTerms.every(term => removeAccents(t.name.toLowerCase()).split(/[\s._\-:(),]+/).includes(term))
-		);
-		if (torrent) {
-			console.log(`Tentative de suppression du torrent avec le hash : ${torrent.hash}`);
+		if (torrentHash != "") {
+			console.log("tentative de suppression du torrent avec le hash :" + torrentHash);
 			await qbittorrentAPI.post('/torrents/delete', 
 				new URLSearchParams({
-				  hashes: torrent.hash,
+				  hashes: torrentHash,
 				  deleteFiles: "true"
 				}), 
 				{
@@ -46,16 +37,43 @@ export async function deleteTorrent(torrentName: string, originalName: string): 
 				  }
 				}
 			  );
-			console.log(`Torrent ${torrent.name} supprimé avec succès.`);
+			console.log(`Torrent ${torrentHash} supprimé avec succès.`);
 			return true;
-		} else {
+		}  else {
 			console.log('Aucun torrent correspondant trouvé.');
 			return false;
 		}
 	} catch (error) {
-		console.error('Erreur lors de la recherche du torrent', error);
+		console.error("erreur lors de la suppression", error);
 		return false;
-	} 
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// fonction pour supprimer chaques torrent d'une série
+export async function deleteAllTorrent(newData: any) : Promise<boolean>{
+	let lastTitle = "";
+	try {
+		const seasons = newData['seasons'];
+		for (const key in seasons) {
+			if (seasons[key]["episode"].length == 1) {
+				const torrentHash = await searchTorrent(seasons[key]["title"]);
+				await deleteOneTorrent(torrentHash);
+			} else {
+				if (seasons[key]["episode"].length > 1) {
+					const titles = seasons[key]["titles"];
+					for (let x = 0; x < titles.length; x++) {
+						const torrenthash = await searchTorrent(titles[x]);
+						await deleteOneTorrent(torrenthash);
+					}
+				}
+			}
+		}
+		return true;
+	} catch (error) {
+		console.error("une erreur a été rencontré", error);
+		return false;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +139,7 @@ function calculateWordSimilarity(name: string, torrentName: string): number {
 // recherche un torrent dans qbittorrent à partir d'un nom unique (nom d'archive)
 export async function searchTorrent(name: string): Promise<string> {
 	let probability = {
-		percent: 60,
+		percent: 70,
 		content: ""
 	};
 	try {

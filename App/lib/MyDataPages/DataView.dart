@@ -48,7 +48,7 @@ class _DataviewState extends State<Dataview> {
 	Widget imgButton(Widget img, Map<String, dynamic> selectData, String id) {
 		return GestureDetector(
 			onTap: () {
-				print(selectData["name"]);
+				print(selectData);
 			},
 			onLongPressStart: (LongPressStartDetails details) {
 				HapticFeedback.heavyImpact();
@@ -71,12 +71,8 @@ class _DataviewState extends State<Dataview> {
 							icon: CupertinoIcons.trash,
 							color: Theme.of(context).colorScheme.tertiary,
 							func: () async {
-								await NIGHTServices().deleteData({
-									"id": id,
-									'title': selectData['title'].toString(),
-									'originalTitle': selectData['originalTitle'].toString(),
-									"where": widget.where
-								});
+								selectData["id"] = id;
+								await NIGHTServices().deleteData(selectData);
 								mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
 							}
 						)
@@ -107,10 +103,7 @@ class _DataviewState extends State<Dataview> {
 										width: MediaQuery.sizeOf(context).width,
 										child: ValueListenableBuilder<Map<String, dynamic>>(
 											valueListenable: mainKey.currentState!.dataStatusNotifier,
-											builder: (context, dataStatus, child) {
-												print(dataStatus);
-												return contentBody(dataStatus);
-											},
+											builder: (context, dataStatus, child) => contentBody(dataStatus)
 										)
 									),
 								),
