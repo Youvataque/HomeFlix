@@ -8,6 +8,7 @@ import 'package:homeflix/Components/ViewComponents/MenueItem.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
+import 'package:homeflix/MyDataPages/SeriesPages.dart';
 import 'package:homeflix/main.dart';
 
 class Dataview extends StatefulWidget {
@@ -49,6 +50,10 @@ class _DataviewState extends State<Dataview> {
 		return GestureDetector(
 			onTap: () {
 				print(selectData);
+				Navigator.push(
+					context,
+					MaterialPageRoute(builder: (context) => SeriesPages(datas: selectData))
+				);
 			},
 			onLongPressStart: (LongPressStartDetails details) {
 				HapticFeedback.heavyImpact();

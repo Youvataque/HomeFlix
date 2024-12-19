@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { execFile } from 'child_process';
 import dotenv from 'dotenv';
+import FormData from 'form-data';
+import { qbittorrentAPI } from '../tools';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.TORRENT_FOLDER ?? "";
@@ -18,19 +19,27 @@ function openFileWhenComplete(filepath: string): void {
             clearInterval(checkFileComplete);
             console.log(`Fichier complet : ${filepath}`);
 
-            const command = `xdg-open "${filepath}"`;
+            const formData = new FormData();
+            formData.append('torrents', fs.createReadStream(filepath));
 
-            execFile('sh', ['-c', command], (error) => {
-                if (error) {
-                    console.error(`Erreur lors de l'ouverture du fichier : ${error.message}`);
-                    return;
-                }
-                console.log(`Fichier ouvert : ${filepath}`);
-            });
+            qbittorrentAPI
+                .post('/torrents/add', formData, {
+                    headers: formData.getHeaders(),
+                })
+                .then(() => {
+                    console.log(`Torrent ajouté avec succès : ${path.basename(filepath)}`);
+                })
+                .catch((error) => {
+                    console.error(
+                        `Erreur lors de l'ajout du torrent : ${
+                            error.response?.data || error.message
+                        }`
+                    );
+                });
         } else {
             lastSize = currentSize;
         }
-    }, 1000); 
+    }, 1000);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +48,7 @@ export function startFolderWatcher(): void {
     fs.watch(DIRECTORY_TO_WATCH, (eventType, filename) => {
         if (eventType === 'rename' && filename) {
             const filepath = path.join(DIRECTORY_TO_WATCH, filename);
-            
+
             if (fs.existsSync(filepath) && !fs.lstatSync(filepath).isDirectory()) {
                 console.log(`Fichier détecté : ${filepath}`);
                 openFileWhenComplete(filepath);
