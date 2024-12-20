@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { qbittorrentAPI, removeAccents, searchTorrent } from '../tools';
+import { qbittorrentAPI, searchTorrent } from '../tools';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.CONTENT_FOLDER ?? "";
@@ -10,17 +10,17 @@ const JSON_CONTENT_PATH = path.join(__dirname, '../../contentData.json');
 /////////////////////////////////////////////////////////////////////////////////
 // interface  pour faciliter la lisibilité
 interface MediaItem {
-    title: string;
+	title: string;
 	originalTitle: string;
-    name: string;
-    media: boolean;
+	name: string;
+	media: boolean;
 	percent:number;
 }
 
 interface DataStructure {
-    tv: Record<string, MediaItem>;
-    movie: Record<string, MediaItem>;
-    queue: Record<string, MediaItem>;
+	tv: Record<string, MediaItem>;
+	movie: Record<string, MediaItem>;
+	queue: Record<string, MediaItem>;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -88,6 +88,6 @@ async function checkAndProcessQueue() {
 /////////////////////////////////////////////////////////////////////////////////
 // lancement du listener
 export function startJsonWatcher(): void {
-    setInterval(checkAndProcessQueue, 4000);
-    console.log(`Surveillance du dossier : ${DIRECTORY_TO_WATCH}`);
+	setInterval(checkAndProcessQueue, 4000);
+	console.log(`Surveillance du dossier : ${DIRECTORY_TO_WATCH}`);
 }

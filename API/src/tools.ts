@@ -17,7 +17,7 @@ export function removeAccents(str: string): string {
 /////////////////////////////////////////////////////////////////////////////////
 // normalise une str
 function cleanName(name: string): string {
-    return removeAccents(name.toLowerCase().replace('&', "and").replace(/[\s._\-:(),]+/g, ' ').trim());
+	return removeAccents(name.toLowerCase().replace('&', "and").replace(/[\s._\-:(),]+/g, ' ').trim());
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -118,21 +118,21 @@ export function isValidJson(jsonString: string): boolean {
 /////////////////////////////////////////////////////////////////////////////////
 // calclue la probabilité que le nom corresponde au torrent en cours
 function calculateWordSimilarity(name: string, torrentName: string): number {
-    const splitedName = name.split(' ');
-    const splitedTorrentName = torrentName.split(' ');
-    let commonWordsCount = 0;
+	const splitedName = name.split(' ');
+	const splitedTorrentName = torrentName.split(' ');
+	let commonWordsCount = 0;
 
-    for (let i = 0; i < splitedName.length; i++) {
-        for (let j = 0; j < splitedTorrentName.length; j++) {
-            if (splitedName[i] === splitedTorrentName[j]) {
-                commonWordsCount++;
-                break;
-            }
-        }
-    }
+	for (let i = 0; i < splitedName.length; i++) {
+		for (let j = 0; j < splitedTorrentName.length; j++) {
+			if (splitedName[i] === splitedTorrentName[j]) {
+				commonWordsCount++;
+				break;
+			}
+		}
+	}
 
-    const similarity = (commonWordsCount / splitedTorrentName.length) * 100;
-    return similarity;
+	const similarity = (commonWordsCount / splitedTorrentName.length) * 100;
+	return similarity;
 }
 
 /////////////////////////////////////////////////////////////////////////////////

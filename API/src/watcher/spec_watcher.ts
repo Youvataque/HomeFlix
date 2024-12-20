@@ -134,7 +134,6 @@ async function runAllChecks() {
 		jsonData.spec.dlSpeed = await getQbittorrentStats();
 		jsonData.spec.nbUser = await getNbUser();
 
-		// Vérification de la validité du JSON avant l'écriture
 		const jsonString = JSON.stringify(jsonData, null, 2);
 		if (isValidJson(jsonString)) {
 			await fs.promises.writeFile(JSON_FILE_PATH, jsonString, 'utf8');
