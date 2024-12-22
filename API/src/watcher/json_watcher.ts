@@ -35,13 +35,13 @@ async function getTorrentProgress(torrentName: string,): Promise<number | undefi
 			params: { hash: torrentHash }
 		});
 		if (response.data) {
-			console.log("Torrent trouvé : ", response.data);
+			console.log(`\x1b[0mTorrent trouvé : ${response.data}\x1b[0m`);
 			return parseFloat((response.data.total_downloaded * 100 / response.data.total_size).toFixed(2));
 		} else {
-			console.error(`Torrent "${torrentName}" non trouvé.`);
+			console.error(`\x1b[31mTorrent "${torrentName}" non trouvé.\x1b[0m`);
 		}
 	} catch (error) {
-		console.error('Erreur lors de la récupération de l\'état du torrent:', error);
+		console.error(`\x1b[31mErreur lors de la récupération de l\'état du torrent : ${error}\x1b[0m`);
 	}
 	return undefined; 
 }
@@ -70,18 +70,18 @@ async function checkAndProcessQueue() {
 				}
 				delete jsonData.queue[key];
 			} else {
-				console.log(`Encore du boulot : ${percent}`);
+				console.log(`\x1b[33mEncore du boulot : ${percent}\x1b[0m`);
 			}
 		}
 
 		try {
 			await fs.promises.writeFile(JSON_CONTENT_PATH, JSON.stringify(jsonData, null, 2), 'utf8');
-			console.log('Fichier JSON mis à jour avec succès');
+			console.log('\x1b[32mFichier JSON mis à jour avec succès\x1b[0m');
 		} catch (err) {
-			console.error('Erreur lors de l\'écriture du fichier JSON:', err);
+			console.error(`\x1b[31mErreur lors de l\'écriture du fichier JSON : ${err}\x1b[0m`);
 		}
 	} catch (err) {
-		console.error('Erreur lors de la lecture du fichier JSON:', err);
+		console.error(`\x1b[31mErreur lors de la lecture du fichier JSON : ${err}\x1b[0m`);
 	}
 }
 

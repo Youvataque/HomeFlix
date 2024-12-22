@@ -17,7 +17,7 @@ function openFileWhenComplete(filepath: string): void {
 
 		if (currentSize === lastSize) {
 			clearInterval(checkFileComplete);
-			console.log(`Fichier complet : ${filepath}`);
+			console.log(`\x1b[32mFichier complet : ${filepath}\x1b[0m`);
 
 			const formData = new FormData();
 			formData.append('torrents', fs.createReadStream(filepath));
@@ -27,14 +27,10 @@ function openFileWhenComplete(filepath: string): void {
 					headers: formData.getHeaders(),
 				})
 				.then(() => {
-					console.log(`Torrent ajouté avec succès : ${path.basename(filepath)}`);
+					console.log(`\x1b[32mTorrent ajouté avec succès : ${path.basename(filepath)}\x1b[0m`);
 				})
 				.catch((error) => {
-					console.error(
-						`Erreur lors de l'ajout du torrent : ${
-							error.response?.data || error.message
-						}`
-					);
+					console.error(`\x1b[31mErreur lors de l'ajout du torrent : ${error.response?.data || error.message}\x1b[0m`);
 				});
 		} else {
 			lastSize = currentSize;

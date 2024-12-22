@@ -35,12 +35,12 @@ function getSystemInfo(): Promise<infoSpec> {
 	return new Promise((resolve, reject) => {
 		exec('sensors', (error, stdout, stderr) => {
 			if (error) {
-				console.error(`Erreur: ${error.message}`);
+				console.error(`\x1b[31mErreur: ${error.message}\x1b[0m`);
 				reject(error);
 				return;
 			}
 			if (stderr) {
-				console.error(`Erreur: ${stderr}`);
+				console.error(`\x1b[31mErreur: ${stderr}\x1b[0m`);
 				reject(stderr);
 				return;
 			}
@@ -54,12 +54,12 @@ function getSystemInfo(): Promise<infoSpec> {
 
 				exec('df -h /dev/sdb1', (error, stdout, stderr) => {
 					if (error) {
-						console.error(`Erreur df: ${error.message}`);
+						console.error(`Erreur df: ${error.message}\x1b[0m`);
 						resolve({ cpu, fan: fanSpeed, ram: ramUsage, storage: 'Erreur on stockage' });
 						return;
 					}
 					if (stderr) {
-						console.error(`Erreur df: ${stderr}`);
+						console.error(`Erreur df: ${stderr}\x1b[0m`);
 						resolve({ cpu, fan: fanSpeed, ram: ramUsage, storage: 'Erreur on stockage' });
 						return;
 					}
@@ -82,7 +82,7 @@ function checkVpnStatus(): Promise<boolean> {
 	return new Promise((resolve) => {
 		exec('ip link show', (error:any, stdout:string) => {
 			if (error) {
-				console.error(`Erreur: ${error.message}`);
+				console.error(`\x1b[31mErreur: ${error.message}`);
 				resolve(false);
 				return;
 			}
@@ -99,7 +99,7 @@ async function getQbittorrentStats(): Promise<string> {
 		const data = response.data;
 		return `${(data.dl_info_speed / (1024 * 1024)).toFixed(2)}`
 	} catch (error:any) {
-		console.error(`Erreur qBittorrent: ${error.message}`);
+		console.error(`\x1b[31mErreur qBittorrent: ${error.message}\x1b[0m`);
 		return "no value";
 	}
 }
@@ -110,7 +110,7 @@ async function getNbUser(): Promise<string> {
 	return new Promise((resolve) => {
 		exec('netstat -tu | grep ESTABLISHED | grep NightCenter:ftp | grep -v 10.170.88.92.rev | cut -d: -f2 | sort | uniq | wc -l', (error:any, stdout:string) => {
 			if (error) {
-				console.error(`Erreur: ${error.message}`);
+				console.error(`\x1b[31mErreur: ${error.message}\x1b[0m`);
 				resolve("no value");
 				return;
 			}
@@ -137,12 +137,12 @@ async function runAllChecks() {
 		const jsonString = JSON.stringify(jsonData, null, 2);
 		if (isValidJson(jsonString)) {
 			await fs.promises.writeFile(JSON_FILE_PATH, jsonString, 'utf8');
-			console.log('Specs ajoutés avec succès au json');
+			console.log('\x1b[32mSpecs ajoutés avec succès au json\x1b[0m');
 		} else {
-			console.error('JSON mal formé, écriture annulée');
+			console.error('\x1b[31mJSON mal formé, écriture annulée\x1b[0m');
 		}
 	} catch (err) {
-		console.error('Erreur lors de la lecture ou de l\'écriture du fichier JSON:', err);
+		console.error(`\x1b[31mErreur lors de la lecture ou de l\'écriture du fichier JSON : ${err}\x1b[0m`);
 	}
 }
 

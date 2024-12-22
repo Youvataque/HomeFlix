@@ -52,7 +52,6 @@ export async function deleteOneTorrent(torrentHash: string): Promise<boolean> {
 /////////////////////////////////////////////////////////////////////////////////
 // fonction pour supprimer chaques torrent d'une série
 export async function deleteAllTorrent(newData: any) : Promise<boolean>{
-	let lastTitle = "";
 	try {
 		const seasons = newData['seasons'];
 		for (const key in seasons) {
@@ -158,6 +157,5 @@ export async function searchTorrent(name: string): Promise<string> {
 	} catch (error) {
 		console.error("Erreur lors de la recherche des torrents : ", error);
 	}
-
 	return probability.content;
 }
