@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/MyTabbar.dart';
 import 'package:homeflix/Components/Tools/Theme/ColorsTheme.dart';
+import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
 final GlobalKey<MainState> mainKey = GlobalKey<MainState>();
@@ -67,10 +68,7 @@ class MainState extends State<Main> {
 				future: downloadData(),
 				builder: (context, snapshot) {
 					if (snapshot.connectionState == ConnectionState.waiting) {
-						return CupertinoActivityIndicator(
-							radius: 20,
-							color: Theme.of(context).colorScheme.secondary,	
-						);
+						return myIndicator(context, 20);
 					} else if (snapshot.connectionState == ConnectionState.done) {
 						return const MyTabbar();
 					} else {

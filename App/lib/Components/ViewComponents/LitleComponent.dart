@@ -91,3 +91,12 @@ void toCategView(BuildContext context, Map<String, dynamic> details, String left
 			);
 		}
 	}
+
+	///////////////////////////////////////////////////////////////
+	/// affiche une roue de chargement
+	CupertinoActivityIndicator myIndicator(BuildContext context, int radius) {
+		return CupertinoActivityIndicator(
+			radius: radius.toDouble(),
+			color: Theme.of(context).colorScheme.secondary,	
+		);
+	}

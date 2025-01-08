@@ -34,7 +34,7 @@ class _CachedImageWidgetState extends State<CachedImageWidget> {
 	@override
 	void initState() {
 		super.initState();
-		_imageFuture = TMDBService().getLocalImageOrDownload(
+		_imageFuture = TMDBService().getImgWithoutPath(
 			widget.movieId,
 			widget.movie,
 			widget.mode,

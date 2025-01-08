@@ -28,6 +28,8 @@ class MainContentPages extends StatefulWidget {
 }
 
 class _MainContentPagesState extends State<MainContentPages> {
+	List<Map<String, dynamic>> seasContent = [];	
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////// zone des sous composants
@@ -110,15 +112,7 @@ class _MainContentPagesState extends State<MainContentPages> {
 									const Gap(10),
 									descripZone(),
 									const Gap(15),
-									widget.movie ? 
-											MoviePages(
-												serveurData: widget.serveurData
-											)
-										: 
-											SeriesPages(
-												serveurData: widget.serveurData,
-												bigData: widget.bigData,
-											)
+									dedicatedPages()
 								],
 							),
 						)
@@ -279,8 +273,46 @@ class _MainContentPagesState extends State<MainContentPages> {
 		);
 	}
 
+	//////////////////////////////////////////////////////////////
+	/// renvoie vers la page dédiée
+	Widget dedicatedPages() {
+		return widget.movie ? 
+				MoviePages(
+					serveurData: widget.serveurData
+				)
+			: 
+				FutureBuilder(
+					future: fetchAll(),
+					builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+						if (snapshot.connectionState == ConnectionState.waiting) {
+							return myIndicator(context, 10);
+						} else {
+							return SeriesPages(
+								serveurData: widget.serveurData,
+								bigData: widget.bigData,
+								seasContent: seasContent,
+							);
+						}
+					},
+				);
+	}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////// zone des fonctions
 
+	///////////////////////////////////////////////////////////////
+	/// récupération des données par saison
+	Future<bool> fetchAll() async {
+		for (int x = 0; x < widget.bigData['seasons'].length; x++) {
+			if (widget.bigData['seasons'][x]['season_number'] > 0) {
+				final seasonTemp = await TMDBService().fetchSerieDetails(
+					int.parse(widget.id),
+					widget.bigData['seasons'][x]['season_number']
+				);
+				seasContent.add(seasonTemp);
+			}
+		}
+		return true;
+	}
 	
 }
