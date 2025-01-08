@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/EpTemplate.dart';
+import 'package:homeflix/Data/NightServices.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Template des pages de séries
@@ -35,6 +36,8 @@ class _SeriesPagesState extends State<SeriesPages> {
 		}
 	}
 
+	///////////////////////////////////////////////////////////////
+	/// corp du code
 	@override
 	Widget build(BuildContext context) {
 		return SizedBox(
@@ -118,12 +121,17 @@ class _SeriesPagesState extends State<SeriesPages> {
 						),
 						child: Eptemplate(
 							index: index,
-							time: tempS[index]['runtime'],
-							title: tempS[index]['name'],
+							time: tempS[index]['runtime'] ?? 0,
+							title: tempS[index]['name'] ?? "incconu",
 							imgPath: "https://image.tmdb.org/t/p/w300/${tempS[index]['still_path']}?api_key=${dotenv.get('TMDB_KEY')}",
 							overview: tempS[index]['overview'],
 							id: "${widget.bigData['id']}_${widget.seasContent[season - 1]['_id']}_${tempS[index]['id']}",
-							onTap: () {},
+							onTap: () async {
+								String name = widget.serveurData['title'];
+								name += " S${season.toString().padLeft(2, '0')} E${(index + 1).toString().padLeft(2, '0')}";
+								print(widget.bigData['name']);
+								print(await NIGHTServices().searchContent(name));
+							},
 						),
 					);
 				},

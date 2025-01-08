@@ -9,6 +9,7 @@ import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.d
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/PopUpTemplate.dart';
 import 'package:homeflix/main.dart';
+import 'package:readmore/readmore.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Affiche le contenu d'un film ou d'une série et permet son téléchargement
@@ -263,8 +264,22 @@ class _ContentviewState extends State<Contentview> {
 	Widget descripZone() {
 		return Padding(
 			padding: const EdgeInsets.symmetric(horizontal: 10),
-			child: Text(
+			child: ReadMoreText(
+				trimExpandedText: " Lire moins",
+				trimCollapsedText: "Lire plus",
 				widget.datas['overview'],
+				moreStyle: TextStyle(
+					color: Theme.of(context).colorScheme.tertiary,
+					fontSize: 13,
+					fontStyle: FontStyle.italic,
+					fontWeight: FontWeight.w500
+				),
+				lessStyle: TextStyle(
+					color: Theme.of(context).colorScheme.tertiary,
+					fontSize: 13,
+					fontStyle: FontStyle.italic,
+					fontWeight: FontWeight.w500
+				),
 				style: TextStyle(
 					color: Theme.of(context).colorScheme.secondary,
 					fontSize: 13,

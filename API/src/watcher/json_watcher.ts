@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { qbittorrentAPI, removeFromJson, searchTorrent } from '../tools';
+import { qbittorrentAPI, removeFromJson, searchContent, searchTorrent } from '../tools';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.CONTENT_FOLDER ?? "";

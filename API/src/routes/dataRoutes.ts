@@ -3,7 +3,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { deleteAllTorrent, deleteOneTorrent, isValidJson, removeFromJson, searchTorrent } from '../tools';
+import { deleteAllTorrent, deleteOneTorrent, isValidJson, removeFromJson, searchContent, searchTorrent } from '../tools';
 
 dotenv.config();
 const API_KEY = process.env.API_KEY;
@@ -142,5 +142,23 @@ router.post('/contentErase', apiKeyMiddleware, async (req: Request, res: Respons
 	if (del) await removeFromJson(newData["media"] ? "movie" : "tv", newData["id"]);
     
 });
+
+/////////////////////////////////////////////////////////////////////////////////
+// Route pour rechercher un contenu
+router.post('/contentSearch', apiKeyMiddleware, async (req: Request, res: Response) => {
+	const { name } = req.body;
+
+	if (!name || typeof name !== 'string') {
+		return res.status(400).json({error: 'Le paramètre "name" est requis et doit être une chaîne de caractères.'});
+	}
+	try {
+		const contentPath = await searchContent(name); // Appel à votre fonction existante
+		res.status(200).json({ path: contentPath });
+	} catch (error) {
+		console.error('\x1b[31mErreur lors de la recherche du contenu :\x1b[0m', error);
+		res.status(500).json({error: 'Une erreur est survenue lors de la recherche du contenu.'});
+	}
+});
+
 
 export default router;

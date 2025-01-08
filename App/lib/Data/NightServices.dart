@@ -71,4 +71,33 @@ class NIGHTServices {
 			print('Message: ${response.body}');
 		}
   	}
+
+	///////////////////////////////////////////////////////////////
+	/// Fonction pour appeler la route `contentSearch`
+	Future<String?> searchContent(String name) async {
+		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentSearch?api_key=${dotenv.get('NIGHTCENTER_KEY')}';
+
+		try {
+			final response = await http.post(
+				Uri.parse(apiUrl),
+				headers: {
+				'Content-Type': 'application/json',
+				},
+				body: jsonEncode({
+				'name': name,
+				}),
+			);
+
+			if (response.statusCode == 200) {
+				final data = json.decode(response.body);
+				return data['path'] as String?;
+			} else {
+				print('Erreur lors de la recherche du contenu : ${response.body}');
+				return null;
+			}
+		} catch (e) {
+		print('Erreur lors de la requête : $e');
+		return null;
+		}
+	}
 }

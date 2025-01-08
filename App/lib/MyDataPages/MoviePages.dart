@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Data/NightServices.dart';
 
 ///////////////////////////////////////////////////////////////
-///
+/// template des pages de film
 class MoviePages extends StatefulWidget {
 	final Map<String, dynamic> serveurData;
 	const MoviePages({
@@ -14,6 +15,8 @@ class MoviePages extends StatefulWidget {
 	State<MoviePages> createState() => _MoviePagesState();
 }
 
+///////////////////////////////////////////////////////////////
+/// corps du code
 class _MoviePagesState extends State<MoviePages> {
 	@override
 	Widget build(BuildContext context) {
@@ -21,7 +24,9 @@ class _MoviePagesState extends State<MoviePages> {
 			width: MediaQuery.sizeOf(context).width - 16,
 			height: 40,
 			child: ElevatedButton(
-				onPressed: () {},
+				onPressed: () async {
+					print(await NIGHTServices().searchContent(widget.serveurData['title']) ?? "null");
+				},
 				style: ElevatedButton.styleFrom(
 					backgroundColor: Theme.of(context).colorScheme.secondary,
 					foregroundColor: Theme.of(context).scaffoldBackgroundColor,

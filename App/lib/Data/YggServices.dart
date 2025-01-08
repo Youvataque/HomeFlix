@@ -26,7 +26,7 @@ class YGGService {
 	///////////////////////////////////////////////////////////////
 	/// fonction pour envoyer la requète de téléchargement au serveur et la lui faire éxécuter
 	Future<void> sendDownloadRequest(String fileUrl, String filename) async {
-		final apiUrl = 'http://84.4.230.45:4000/api/contentDl?api_key=${dotenv.get('NIGHTCENTER_KEY')}';
+		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentDl?api_key=${dotenv.get('NIGHTCENTER_KEY')}';
 
 		try {
 			final response = await http.post(
@@ -48,5 +48,5 @@ class YGGService {
 		} catch (e) {
 			print('Erreur lors de la requête : $e');
 		}
-		}
+	}
 }

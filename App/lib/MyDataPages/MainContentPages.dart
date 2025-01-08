@@ -82,6 +82,8 @@ class _MainContentPagesState extends State<MainContentPages> {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////// zone des composants
 
+//////////////////////////////////////////////////////////////////
+/// corp du code
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
@@ -115,6 +117,20 @@ class _MainContentPagesState extends State<MainContentPages> {
 									dedicatedPages()
 								],
 							),
+						),
+						AbsorbPointer(
+							absorbing: true,
+							child: SizedBox(
+								height: 100,
+								width: MediaQuery.sizeOf(context).width,
+							),
+						),
+						Align(
+							alignment: Alignment.topRight,
+							child: Padding(
+								padding: const EdgeInsets.all(10),
+								child: backButton()
+							)
 						)
 					],
 				),
@@ -155,25 +171,14 @@ class _MainContentPagesState extends State<MainContentPages> {
 
 	///////////////////////////////////////////////////////////////
 	/// partie haute comprenant backdropImg + backButton
-	Stack imgTop() {
-		return Stack(
-			children: [
-				TMDBService().createImg(
+	Widget imgTop() {
+		return TMDBService().createImg(
 					widget.id,
 					MediaQuery.of(context).size.width,
 					widget.movie,
 					16 / 9,
 					true,
 					"1280"
-				),
-				Align(
-					alignment: Alignment.topRight,
-					child: Padding(
-						padding: const EdgeInsets.all(10),
-						child: backButton()
-					)
-				)
-			],
 		);
 	}
 

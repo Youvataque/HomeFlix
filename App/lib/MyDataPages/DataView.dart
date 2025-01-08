@@ -51,7 +51,6 @@ class _DataviewState extends State<Dataview> {
 		return GestureDetector(
 			onTap: () async {
 				List<Map<String, dynamic>> bigData = await TMDBService().fetchContent(1, "https://api.themoviedb.org/3/${widget.where == "movie" ? "movie" : "tv"}/$id?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
-				debugPrint(bigData.first.toString(), wrapWidth: 1024);
 				showModalBottomSheet(
 					context: context,
 					isScrollControlled: true,
