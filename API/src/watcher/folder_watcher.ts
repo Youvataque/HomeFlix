@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import FormData from 'form-data';
-import { qbittorrentAPI } from '../tools';
+import { qbittorrentAPI, removeFromJson } from '../tools';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.TORRENT_FOLDER ?? "";
@@ -31,6 +31,7 @@ function openFileWhenComplete(filepath: string): void {
 				})
 				.catch((error) => {
 					console.error(`\x1b[31mErreur lors de l'ajout du torrent : ${error.response?.data || error.message}\x1b[0m`);
+					removeFromJson("queue", "");
 				});
 		} else {
 			lastSize = currentSize;

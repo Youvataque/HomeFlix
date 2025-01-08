@@ -29,19 +29,28 @@ class _SeriesState extends State<Series> {
 			img10.add(TMDBService().createImg(
 				TMDBService.the10serieTren[x]['id'].toString(),
 				MediaQuery.of(context).size.width,
-				false
+				false,
+				2 / 3,
+				false,
+				"1280"
 			));
 		}
 		for (int x = 0; x < 20; x++) {
 			img20.add(TMDBService().createImg(
 				TMDBService.the20seriePop[x]['id'].toString(),
 				150,
-				false
+				false,
+				2 / 3,
+				false,
+				"500"
 			));
 			recentImg20.add(TMDBService().createImg(
 				TMDBService.the20serieTop[x]['id'].toString(),
-				150,
-				false
+				150, 
+				false,
+				2 / 3,
+				false,
+				"500"
 			));
 		}
 	}

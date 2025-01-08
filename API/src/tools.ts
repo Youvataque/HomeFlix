@@ -25,7 +25,7 @@ function cleanName(name: string): string {
 export async function deleteOneTorrent(torrentHash: string): Promise<boolean> {
 	try {
 		if (torrentHash != "") {
-			console.log("tentative de suppression du torrent avec le hash :" + torrentHash);
+			console.log(`\x1b[33mTrying to delete torrent with hash : ${torrentHash}\x1b[0m`);
 			await qbittorrentAPI.post('/torrents/delete', 
 				new URLSearchParams({
 				  hashes: torrentHash,
@@ -37,14 +37,14 @@ export async function deleteOneTorrent(torrentHash: string): Promise<boolean> {
 				  }
 				}
 			  );
-			console.log(`Torrent ${torrentHash} supprimé avec succès.`);
+			console.log(`\x1b[32m${torrentHash} has been deleted with success.\x1b[0m`);
 			return true;
 		}  else {
-			console.log('Aucun torrent correspondant trouvé.');
+			console.error('\x1b[31mNo torrent has been found !\x1b[0m');
 			return false;
 		}
 	} catch (error) {
-		console.error("erreur lors de la suppression", error);
+		console.error(`\x1b[31mError during deleting : ${error}\x1b[0m`);
 		return false;
 	}
 }
@@ -70,7 +70,7 @@ export async function deleteAllTorrent(newData: any) : Promise<boolean>{
 		}
 		return true;
 	} catch (error) {
-		console.error("une erreur a été rencontré", error);
+		console.error(`\x1b[31mAn error has occured : ${error}\x1b[0m`);
 		return false;
 	}
 }
@@ -81,21 +81,21 @@ export async function removeFromJson(where:string, id:string):Promise<boolean> {
 	const filePath = path.join(__dirname, '../contentData.json');
 	fs.readFile(
 		filePath, 'utf8', (err, data) => {
-			if (err) console.error("impossible de lire le json : " + err);
+			if (err) console.error(`\x1b[31mCan't read json : ${err}\x1b[0m`);
 			const jsonData = JSON.parse(data);
 			if (jsonData[where] && jsonData[where][id]) {
 				delete jsonData[where][id];
 				fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), 'utf8', (err) => {
 					if (err) {
-						console.error("Erreur lors de l'écriture du fichier JSON : " + err);
+						console.error(`\x1b[31mError during writing json : ${err}\x1b[0m`);
 						return false;
 					} else {
-						console.log(`Élément ${id} supprimé avec succès de ${where}.`);
+						console.log(`\x1b[32m${id} has been deleted from ${where} with success.\x1b[0m`);
 						return true;
 					}
 				});
 			} else {
-				console.log(`Élément ${id} non trouvé dans ${where}.`);
+				console.error(`\x1b[31m${id} not found in ${where}.\x1b[0m`);
 				return false;
 			}
 		}
@@ -153,9 +153,9 @@ export async function searchTorrent(name: string): Promise<string> {
 				probability.content = torrent.hash;
 			}
 		});
-		console.log(`Le torrent le plus similaire est "${probability.content}" avec ${probability.percent}% de similarité.`);
+		console.log(`\x1b[32mThe most comparable torrent is : "${probability.content}" with ${probability.percent}% of similarity.\x1b[0m`);
 	} catch (error) {
-		console.error("Erreur lors de la recherche des torrents : ", error);
+		console.error(`\x1b[31mError during torrent search : ${error}\x1b[0m`);
 	}
 	return probability.content;
 }

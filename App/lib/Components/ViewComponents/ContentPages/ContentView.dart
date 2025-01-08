@@ -6,6 +6,7 @@ import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
 import 'package:homeflix/Components/Tools/FormatTool/NumberWithCom.dart';
 import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.dart';
+import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/PopUpTemplate.dart';
 import 'package:homeflix/main.dart';
 
@@ -170,15 +171,15 @@ class _ContentviewState extends State<Contentview> {
 		return Row(
 			crossAxisAlignment: CrossAxisAlignment.center,
 			children: [
-				Icon(
-					CupertinoIcons.heart_fill,
-					color: Theme.of(context).colorScheme.tertiary,
-					size: 18,
-				),
+				selectIcon(widget.datas['vote_average'], context),
 				const Gap(5),
 				Text(
 					widget.datas['vote_average'].toString(),
-					style: sousText()
+					style: TextStyle(
+						fontSize: 14,
+						fontWeight: FontWeight.w400,
+						color: Theme.of(context).colorScheme.secondary
+					),
 				)
 			],
 		);
@@ -198,16 +199,15 @@ class _ContentviewState extends State<Contentview> {
 					titleText(), 
 					const Gap(5),
 					Text(
-						widget.movie ? 
-								(widget.datas['release_date'] != null && widget.datas['release_date'].toString().split('-').length >= 2) ? 
-										"${widget.datas['release_date'].toString().split('-').sublist(0, 2).join('/')} - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
-									:
-										"Date inconnue - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
-							:
-								(widget.datas['first_air_date'] != null && widget.datas['first_air_date'].toString().split('-').isNotEmpty) ? 
-										"${widget.datas['first_air_date'].toString().split('-')[0]} - ${widget.datas['seasons'].where((season) => season['name'].toString().toLowerCase().contains('saison')).length} saisons - ${widget.datas['origin_country'][0]}"
-									: 
-										"Date inconnue - ${widget.datas['seasons'].length}saisons - ${widget.datas['origin_country'][0]}",
+						widget.movie
+							? (widget.datas['release_date'] != null &&
+									widget.datas['release_date'].toString().split('-').length >= 2)
+								? "${widget.datas['release_date'].toString().split('-').sublist(0, 2).join('/')} - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
+								: "Date inconnue - ${minToHour(widget.datas['runtime'])} - ${widget.datas['origin_country'][0]}"
+							: (widget.datas['first_air_date'] != null &&
+									widget.datas['first_air_date'].toString().split('-').isNotEmpty)
+								? "${widget.datas['first_air_date'].toString().split('-')[0]} - ${(widget.datas['seasons'] as List).where((season) => season['season_number'] > 0).length} saisons - ${widget.datas['origin_country'][0]}"
+								: "Date inconnue - ${(widget.datas['seasons'] as List).length} saisons - ${widget.datas['origin_country'][0]}",
 						style: sousText(),
 					),
 					const Gap(3),

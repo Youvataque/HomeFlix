@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { qbittorrentAPI, searchTorrent } from '../tools';
+import { qbittorrentAPI, removeFromJson, searchTorrent } from '../tools';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.CONTENT_FOLDER ?? "";
@@ -49,6 +49,7 @@ async function getTorrentProgress(torrentName: string,): Promise<number | undefi
 /////////////////////////////////////////////////////////////////////////////////
 // fonction pour vérifer l'état des films dans la queu, l'enregistrer et déplacer si besoin les contenu  terminés
 async function checkAndProcessQueue() {
+	let countError: number = 0;
 	try {
 		const data = await fs.promises.readFile(JSON_CONTENT_PATH, 'utf8');
 		const jsonData: DataStructure = JSON.parse(data);
@@ -61,7 +62,12 @@ async function checkAndProcessQueue() {
 				item.percent = percent;
 				jsonData.queue[key].percent = percent;
 			}
-
+			else if (percent == undefined && countError !== 3) {
+				countError++;
+			} else {
+				removeFromJson("queue", key);
+			}
+			
 			if (item.percent >= 99.5) { 
 				if (item.media) {
 					jsonData.movie[key] = item;

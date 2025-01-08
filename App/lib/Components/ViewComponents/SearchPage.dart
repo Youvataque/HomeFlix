@@ -108,6 +108,9 @@ class _SearchpageState extends State<Searchpage> {
 					result['id'].toString(),
 					100,
 					result['media_type'] == "movie" ? true : false,
+					2 / 3,
+					false,
+					"500"
 				) :  const SizedBox.shrink();
 				return result['poster_path'] != null ?
 						Padding(

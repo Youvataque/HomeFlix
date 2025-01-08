@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/Tools/CheckTool/searchScript.dart';
@@ -8,7 +9,7 @@ import 'package:homeflix/Components/ViewComponents/MenueItem.dart';
 import 'package:homeflix/Components/ViewComponents/SecondTitle.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
-import 'package:homeflix/MyDataPages/SeriesPages.dart';
+import 'package:homeflix/MyDataPages/MainContentPages.dart';
 import 'package:homeflix/main.dart';
 
 class Dataview extends StatefulWidget {
@@ -46,13 +47,29 @@ class _DataviewState extends State<Dataview> {
 
 	///////////////////////////////////////////////////////////////
 	/// Ui du bouton image 
-	Widget imgButton(Widget img, Map<String, dynamic> selectData, String id) {
+	Widget imgButton(Widget img, Map<String, dynamic> serverData, String id) {
 		return GestureDetector(
-			onTap: () {
-				print(selectData);
-				Navigator.push(
-					context,
-					MaterialPageRoute(builder: (context) => SeriesPages(datas: selectData))
+			onTap: () async {
+				List<Map<String, dynamic>> bigData = await TMDBService().fetchContent(1, "https://api.themoviedb.org/3/${widget.where == "movie" ? "movie" : "tv"}/$id?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
+				debugPrint(bigData.first.toString(), wrapWidth: 1024);
+				showModalBottomSheet(
+					context: context,
+					isScrollControlled: true,
+					useSafeArea: true,
+					builder: (context) {
+						return ClipRRect(
+							borderRadius: const BorderRadius.only(
+								topLeft: Radius.circular(17.5),
+								topRight: Radius.circular(17.5)
+							),
+							child: MainContentPages(
+								serveurData: serverData,
+								bigData: bigData.first,
+								id: id,
+								movie: widget.where == "movie" ? true : false
+							),
+						);
+					}
 				);
 			},
 			onLongPressStart: (LongPressStartDetails details) {
@@ -76,8 +93,8 @@ class _DataviewState extends State<Dataview> {
 							icon: CupertinoIcons.trash,
 							color: Theme.of(context).colorScheme.tertiary,
 							func: () async {
-								selectData["id"] = id;
-								await NIGHTServices().deleteData(selectData);
+								serverData["id"] = id;
+								await NIGHTServices().deleteData(serverData);
 								mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
 							}
 						)
@@ -108,7 +125,7 @@ class _DataviewState extends State<Dataview> {
 										width: MediaQuery.sizeOf(context).width,
 										child: ValueListenableBuilder<Map<String, dynamic>>(
 											valueListenable: mainKey.currentState!.dataStatusNotifier,
-											builder: (context, dataStatus, child) => contentBody(dataStatus)
+											builder: (context, dataStatus, child) => contentBody(dataStatus),
 										)
 									),
 								),
@@ -156,7 +173,10 @@ class _DataviewState extends State<Dataview> {
 							TMDBService().createImg(
 								entry.key,
 								(MediaQuery.of(context).size.width / 2 - 15),
-								widget.where == "movie" ? true : false
+								widget.where == "movie" ? true : false,
+								2 / 3,
+								false,
+								"500"
 							),
 							entry.value,
 							entry.key

@@ -31,19 +31,28 @@ class _FilmsState extends State<Films> {
 			img10.add(TMDBService().createImg(
 				TMDBService.the10movieTren[x]['id'].toString(),
 				MediaQuery.of(context).size.width,
-				true
+				true,
+				2 / 3,
+				false,
+				"1280"
 			));
 		}
 		for (int x = 0; x < 20; x++) {
 			img20.add(TMDBService().createImg(
 				TMDBService.the20moviePop[x]['id'].toString(),
 				150,
-				true
+				true,
+				2 / 3,
+				false,
+				"500"
 			));
 			recentImg20.add(TMDBService().createImg(
 				TMDBService.the20movieRecent[x]['id'].toString(),
 				150,
-				true
+				true,
+				2 / 3,
+				false,
+				"500"
 			));
 		}
 	}

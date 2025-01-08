@@ -86,13 +86,13 @@ class MainState extends State<Main> {
 	Future<bool> downloadData() async {
 		dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
 		NIGHTServices.specStatus = await NIGHTServices().fetchSpecStatus();
-		TMDBService.the10movieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=false&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
-		TMDBService.the20moviePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=false&include_video=false&language=fr-FR&sort_by=popularity.desc", -1);
-		TMDBService.the20movieRecent = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=false&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
+		TMDBService.the10movieTren = await TMDBService().fetchContent(10, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=false&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 1);
+		TMDBService.the20moviePop = await TMDBService().fetchContent(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=false&include_video=false&language=fr-FR&sort_by=popularity.desc", -1);
+		TMDBService.the20movieRecent = await TMDBService().fetchContent(20, "https://api.themoviedb.org/3/discover/movie?api_key=${dotenv.get('TMDB_KEY')}&include_adult=false&include_video=false&language=fr-FR&primary_release_date.gte=2024-01-01&sort_by=popularity.desc", 2);
 		TMDBService.movieCateg = await TMDBService().fetchCateg(true);
-		TMDBService.the10serieTren = await TMDBService().fetchRandom(10, "https://api.themoviedb.org/3/tv/on_the_air?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", -1);		
-		TMDBService.the20seriePop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR&vote_average.gte=8&vote_count.gte=100", -1);
-		TMDBService.the20serieTop = await TMDBService().fetchRandom(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
+		TMDBService.the10serieTren = await TMDBService().fetchContent(10, "https://api.themoviedb.org/3/tv/on_the_air?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", -1);		
+		TMDBService.the20seriePop = await TMDBService().fetchContent(20, "https://api.themoviedb.org/3/trending/tv/day?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR&vote_average.gte=8&vote_count.gte=100", -1);
+		TMDBService.the20serieTop = await TMDBService().fetchContent(20, "https://api.themoviedb.org/3/tv/top_rated?api_key=${dotenv.get('TMDB_KEY')}&language=fr-FR", 1);
 		TMDBService.serieCateg = await TMDBService().fetchCateg(false);
 		return true;
 	}

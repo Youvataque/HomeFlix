@@ -3,7 +3,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { deleteAllTorrent, deleteOneTorrent, removeFromJson, searchTorrent } from '../tools';
+import { deleteAllTorrent, deleteOneTorrent, isValidJson, removeFromJson, searchTorrent } from '../tools';
 
 dotenv.config();
 const API_KEY = process.env.API_KEY;
@@ -50,13 +50,18 @@ router.get('/specStatus', apiKeyMiddleware,(req: Request, res: Response) => {
 router.post('/contentStatus', apiKeyMiddleware, (req: Request, res: Response) => {
 	const filePath = path.join(__dirname, '../../contentData.json');
 	const {newData, where} = req.body;
+	let countDelay: number = 0;
 
 	fs.readFile(filePath, 'utf8', (err, data) => {
 		if (err) {
 			res.status(500).json({ error: 'Erreur lors de la lecture du fichier JSON' });
 			return;
 		}
-
+		while (!isValidJson(data) && countDelay < 10) {
+			console.error('\x1b[31mJSON invalide nouvelle tentative dans 2s !\x1b[0m');
+			setTimeout(() => {}, 2000);
+			countDelay++;
+		}
 		const jsonData = JSON.parse(data);
 		jsonData[where][newData['id']] = {
 			"title": newData["title"],
@@ -114,8 +119,9 @@ router.post('/contentDl', apiKeyMiddleware, async (req, res) => {
 		writer.on('finish', () => {
 			return res.status(200).json({ message: 'Fichier téléchargé avec succès.' });
 		});
-		writer.on('error', () => {
-			return res.status(500).json({ message: 'Erreur lors du téléchargement du fichier.' });
+		writer.on('error', (err) => {
+			console.error(err);
+			return res.status(500).json({ message: 'Erreur lors de l\'écriture du fichier.' });
 		});
 	} catch (error) {
 		return res.status(500).json({ message: 'Erreur lors de la requête HTTP.' });

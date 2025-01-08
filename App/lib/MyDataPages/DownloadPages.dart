@@ -84,7 +84,10 @@ class _DownloadpagesState extends State<Downloadpages> with TickerProviderStateM
 									child: TMDBService().createImg(
 										entry.key,
 										70,
-										entry.value['media']
+										entry.value['media'],
+										2 / 3,
+										false,
+										"500"
 									),
 								)
 							),

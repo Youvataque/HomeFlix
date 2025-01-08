@@ -91,7 +91,10 @@ class _CategviewState extends State<Categview> {
 										return TMDBService().createImg(
 											widget.favData[x]['id'].toString(),
 											(MediaQuery.sizeOf(context).width - 30) / 2,
-											widget.movie
+											widget.movie,
+											2 / 3,
+											false,
+											"500"
 										);
 									}),
 									datas: favData,
@@ -111,7 +114,10 @@ class _CategviewState extends State<Categview> {
 										return TMDBService().createImg(
 											newData[x]['id'].toString(),
 											(MediaQuery.sizeOf(context).width - 30) / 2,
-											widget.movie
+											widget.movie,
+											2 / 3,
+											false,
+											"500"
 										);
 									}),
 									datas: newData,
@@ -129,12 +135,12 @@ class _CategviewState extends State<Categview> {
 						leftWord: widget.leftWord,
 						color: Theme.of(context).primaryColor.withOpacity(0.5),
 						func: () async {
-							final fetchedFavData = await TMDBService().fetchRandom(
+							final fetchedFavData = await TMDBService().fetchContent(
 								20, 
 								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${widget.details['id']}&vote_count.gte=100&sort_by=vote_average.desc&language=fr-FR', 
 								-1
 							);
-							final fetchedNewData = await TMDBService().fetchRandom(
+							final fetchedNewData = await TMDBService().fetchContent(
 								20, 
 								'https://api.themoviedb.org/3/discover/${widget.movie ? 'movie' : 'tv'}?api_key=${dotenv.get('TMDB_KEY')}&with_genres=${widget.details['id']}&include_adult=false&include_null_first_air_dates=false&language=fr-FR&page=1&sort_by=first_air_date.desc&vote_count.gte=100', 
 								1

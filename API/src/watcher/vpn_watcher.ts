@@ -21,7 +21,7 @@ function searchServer(): Promise<nameVpn> {
 	return new Promise((resolve) => {
 		exec("nmcli connection", (error, stdout) => {
 			if (error) {
-				console.error("\x1b[31mError with nmcli command.\x1b[0m");
+				console.error("\x1b[31mError avec le gestionnaire réseau.\x1b[0m");
 				resolve(result);
 				return;
 			}
@@ -35,7 +35,7 @@ function searchServer(): Promise<nameVpn> {
 			}
 			result.selected = possibilities[randomInt(possibilities.length)];
 			if (!result.selected) {
-				console.error("\x1b[31mNo available VPN to connect.\x1b[0m");
+				console.error("\x1b[31mAucun serveur vpn n'est disponnible.\x1b[0m");
 				resolve(result);
 				return;
 			}
@@ -51,7 +51,7 @@ function checkIfRunning(): Promise<boolean> {
 		(resolve) => {
 			exec("ping -I tun0 google.com", (errror, stdout) => {
 				if (errror) {
-					console.error("\x1b[31mError with VPN. Reboot needed\x1b[0m");
+					console.error("\x1b[31mErreur avec vpn, redémarrage nécéssaire !\x1b[0m");
 					resolve(false);
 				} 
 				resolve(stdout.includes('octets de'));
@@ -68,10 +68,10 @@ async function controlUpdateVpn() {
 	{
 		const names: nameVpn = await searchServer();
 		exec(`nmcli connection down ${names.running}`);
-		console.log(`\x1b[33mTrying to connect to : ${names.selected}\x1b[0m`);
+		console.log(`\x1b[33mTentative de connexion à : ${names.selected}\x1b[0m`);
 		exec(`echo ${process.env.VPN_PASS} | nmcli connection up ${names.selected} --ask`, (error, stdout) => {
 			if (stdout.includes('Connexion activée')) {
-				console.log(`\x1b[32mConnexion to ${names.selected} established !\x1b[0m`);
+				console.log(`\x1b[32mConnexion vers ${names.selected} établie !\x1b[0m`);
 			}
 		})
 	} 
