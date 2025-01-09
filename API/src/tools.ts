@@ -127,23 +127,58 @@ export function isValidJson(jsonString: string): boolean {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// calclue la probabilité que le nom corresponde au fichier à lire
+// Calcule la similarité entre deux noms avec pondération pour titre et métadonnées
 function calculateWordSimilarity2(name: string, comparedName: string): number {
 	const targetInfo = extractInfo(name).split(" ");
 	const comparedInfo = extractInfo(comparedName).split(" ");
-
 	let matchScore = 0;
 	let totalScore = 0;
 
 	targetInfo.forEach((word, index) => {
-		const weight = word.match(/^s\d{2}|e\d{2}$/) ? 2 : 1; 
+		let weight = 1;
+		if (index === 0) {
+			weight = 5;
+		} 
+		if (word.match(/^s\d{2}$/i)) {
+			weight = 4;
+		}
+		if (word.match(/^e\d{2}$/i)) {
+			weight = 3;
+		}
 		totalScore += weight;
 		if (comparedInfo.includes(word)) {
-		matchScore += weight;
+			matchScore += weight;
 		}
 	});
+	const titleSimilarity = calculateLevenshtein(cleanName(name), cleanName(comparedName));
+	const finalScore = (matchScore / totalScore) * 100;
+	return 0.7 * finalScore + 0.3 * titleSimilarity;
+}
 
-	return (matchScore / totalScore) * 100;	
+/////////////////////////////////////////////////////////////////////////////////
+// Distance de Levenshtein pour complément de similarité
+function calculateLevenshtein(a: string, b: string): number {
+	const matrix = Array.from({ length: a.length + 1 }, () =>
+		Array(b.length + 1).fill(0)
+	);
+
+	for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+	for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+	for (let i = 1; i <= a.length; i++) {
+		for (let j = 1; j <= b.length; j++) {
+			const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+			matrix[i][j] = Math.min(
+				matrix[i - 1][j] + 1,
+				matrix[i][j - 1] + 1,
+				matrix[i - 1][j - 1] + cost
+			);
+		}
+	}
+
+	const distance = matrix[a.length][b.length];
+	const maxLength = Math.max(a.length, b.length);
+	return ((maxLength - distance) / maxLength) * 100;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -157,22 +192,22 @@ function calculateWordSimilarity(str1: string, str2: string): number {
 /////////////////////////////////////////////////////////////////////////////////
 // extrait les informations d'un nom de fichier
 function extractInfo(name: string): string {
-	const cleanName = name
-	  .toLowerCase()
-	  .replace(/[\.\-_]/g, " ")
-	  .trim();
-  
-	const match = cleanName.match(/s\d{2}e\d{2}/);
-  	let season = "";
+	const match = name.match(/s\d{2}e\d{2}|s\d{2}/i);
+
+	let season = "";
 	let episode = "";
+	let title = "";
+
 	if (match) {
-	  const [seasonEpisode] = match;
-	  season = seasonEpisode.slice(0, 3);
-	  episode = seasonEpisode.slice(3);
+		const seasonEpisode = match[0].toLowerCase();
+		season = seasonEpisode.startsWith("s") ? seasonEpisode.slice(0, 3) : "";
+		episode = seasonEpisode.includes("e") ? seasonEpisode.slice(3) : "";
+		title = name.split(match[0])[0].trim();
+	} else {
+		title = name.trim();
 	}
-  	const title = match ? cleanName.split(match[0])[0].trim() : cleanName;
-  	return `${title} ${season} ${episode}`.trim();
-  }
+	return `${title} ${season} ${episode}`.trim();
+}
 
 /////////////////////////////////////////////////////////////////////////////////
 // recherche un torrent dans qbittorrent à partir d'un nom unique (nom d'archive)
@@ -226,18 +261,15 @@ export async function searchContent(name: string): Promise<string> {
 	while (true) {
 		const { stdout: lsOutput } = await execAsync(`ls -l "${contentPath}"`);
 		const items = parseLsOutput(lsOutput);
-	
 		items.forEach(item => {
-			const similarity = calculateWordSimilarity2(cleanName(name), cleanName(extractInfo(item.name)));
-			console.log("je tourne", similarity, extractInfo(name), extractInfo(item.name));
+			const similarity = calculateWordSimilarity2(cleanName(name), extractInfo(cleanName(item.name)));
 			if (similarity > probability.percent) {
 				probability = { percent: similarity, content: item.name, type: item.type };
 			}
 		});
-	
-		// Vérifiez si le type est un dossier avant de mettre à jour le chemin
 		if (probability.type === "directory") {
 			contentPath = path.join(contentPath, probability.content);
+			probability = { percent: 0, content: "", type: "" };
 		} else if (probability.type === "file" || !items.some(item => item.type === "directory")) {
 			break;
 		}

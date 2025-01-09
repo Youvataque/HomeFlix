@@ -152,7 +152,7 @@ router.post('/contentSearch', apiKeyMiddleware, async (req: Request, res: Respon
 		return res.status(400).json({error: 'Le paramètre "name" est requis et doit être une chaîne de caractères.'});
 	}
 	try {
-		const contentPath = await searchContent(name); // Appel à votre fonction existante
+		const contentPath = await searchContent(name);
 		res.status(200).json({ path: contentPath });
 	} catch (error) {
 		console.error('\x1b[31mErreur lors de la recherche du contenu :\x1b[0m', error);
