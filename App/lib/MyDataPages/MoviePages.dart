@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Components/ViewComponents/PlayerPages/VideoPlayer.dart';
 import 'package:homeflix/Data/NightServices.dart';
 
 ///////////////////////////////////////////////////////////////
@@ -25,7 +27,14 @@ class _MoviePagesState extends State<MoviePages> {
 			height: 40,
 			child: ElevatedButton(
 				onPressed: () async {
-					print(await NIGHTServices().searchContent(widget.serveurData['title']) ?? "null");
+					final path = await NIGHTServices().searchContent(widget.serveurData['title']) ?? "null";
+					final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu
+					final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
+					print(path);
+					Navigator.push(
+						context,
+						MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
+					);
 				},
 				style: ElevatedButton.styleFrom(
 					backgroundColor: Theme.of(context).colorScheme.secondary,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/EpTemplate.dart';
+import 'package:homeflix/Components/ViewComponents/PlayerPages/VideoPlayer.dart';
 import 'package:homeflix/Data/NightServices.dart';
 
 ///////////////////////////////////////////////////////////////
@@ -129,8 +130,14 @@ class _SeriesPagesState extends State<SeriesPages> {
 							onTap: () async {
 								String name = widget.serveurData['title'];
 								name += " S${season.toString().padLeft(2, '0')} E${(index + 1).toString().padLeft(2, '0')}";
-								print(widget.bigData['name']);
-								print(await NIGHTServices().searchContent(name));
+								final path = await NIGHTServices().searchContent(name) ?? "null";
+								final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu
+								final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
+								print(path);
+								Navigator.push(
+									context,
+									MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
+								);
 							},
 						),
 					);

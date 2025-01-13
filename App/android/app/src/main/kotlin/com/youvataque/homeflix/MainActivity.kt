@@ -1,4 +1,4 @@
-package com.example.homeflix
+package com.youvataque.homeflix
 
 import io.flutter.embedding.android.FlutterActivity
 
