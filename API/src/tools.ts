@@ -164,6 +164,17 @@ function calculateWordSimilarity(str1: string, str2: string): number {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+// vérifie si le titre est un film
+function isMovie(title: string): boolean {
+	const seasonPattern = /S\d{2}/i;
+	const episodePattern = /E\d{2}/i;
+	if (seasonPattern.test(title) || episodePattern.test(title)) {
+		return false;
+	}
+	return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 // extrait les informations d'un nom de fichier
 function extractInfo(name: string): string {
 	const match = name.match(/s\d{2}e\d{2}|s\d{2}/i);
@@ -196,7 +207,7 @@ export async function searchTorrent(name: string): Promise<string> {
 		name = cleanName(name);
 		response.data.forEach((torrent: { name: string, hash: string }) => {
 			const torrentName = cleanName(torrent.name);
-			const similarityPercentage = calculateWordSimilarity(name, torrentName);
+			const similarityPercentage = calculateWordSimilarity2(name, torrentName);
 			if (similarityPercentage > probability.percent) {
 				probability.percent = similarityPercentage;
 				probability.content = torrent.hash;
@@ -228,7 +239,7 @@ const execAsync = util.promisify(exec);
 
 /////////////////////////////////////////////////////////////////////////////////
 // recherche un contenu à partir de son nom d'archive dans le serveur
-export async function searchContent(name: string): Promise<string> {
+export async function searchContent(name: string, movie: boolean): Promise<string> {
 	let probability = { percent: 0, content: "", type: "" };
 	let contentPath = process.env.CONTENT_FOLDER ?? ".";
 
@@ -237,7 +248,7 @@ export async function searchContent(name: string): Promise<string> {
 		const items = parseLsOutput(lsOutput);
 		items.forEach(item => {
 			const similarity = calculateWordSimilarity2(cleanName(name), extractInfo(cleanName(item.name)));
-			if (similarity > probability.percent) {
+			if (similarity > probability.percent && isMovie(item.name) === movie) {
 				probability = { percent: similarity, content: item.name, type: item.type };
 			}
 		});
@@ -249,4 +260,20 @@ export async function searchContent(name: string): Promise<string> {
 		}
 	}
 	return `${contentPath}/${probability.content}`;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Fonction utilitaire pour détecter le type MIME via l'extension
+export function getMimeType(filePath:string) {
+	const extension: string = filePath.toLowerCase().split('.')[-1];
+	const mimeTypes:Record<string, string> = {
+		mp4: 'video/mp4',
+		mkv: 'video/x-matroska',
+		avi: 'video/x-msvideo',
+		mov: 'video/quicktime',
+		webm: 'video/webm',
+		flv: 'video/x-flv',
+	};
+
+	return mimeTypes[extension] || 'application/octet-stream';
 }

@@ -3,7 +3,15 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { deleteAllTorrent, deleteOneTorrent, isValidJson, removeFromJson, searchContent, searchTorrent } from '../tools';
+import {
+	deleteAllTorrent,
+	deleteOneTorrent,
+	getMimeType,
+	isValidJson,
+	removeFromJson,
+	searchContent,
+	searchTorrent
+} from '../tools';
 
 dotenv.config();
 const API_KEY = process.env.API_KEY;
@@ -146,35 +154,19 @@ router.post('/contentErase', apiKeyMiddleware, async (req: Request, res: Respons
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour rechercher la localisation d'un contenu
 router.post('/contentSearch', apiKeyMiddleware, async (req: Request, res: Response) => {
-	const { name } = req.body;
+	const { name, type } = req.body;
 
 	if (!name || typeof name !== 'string') {
-		return res.status(400).json({error: 'Le paramètre "name" est requis et doit être une chaîne de caractères.'});
+		return res.status(400).json({error: 'Le nom et le type de contenu sont requis.'});
 	}
 	try {
-		const contentPath = await searchContent(name);
+		const contentPath = await searchContent(name, type);
 		res.status(200).json({ path: contentPath });
 	} catch (error) {
 		console.error('\x1b[31mErreur lors de la recherche du contenu :\x1b[0m', error);
 		res.status(500).json({error: 'Une erreur est survenue lors de la recherche du contenu.'});
 	}
 });
-
-/////////////////////////////////////////////////////////////////////////////////
-// Fonction utilitaire pour détecter le type MIME via l'extension
-function getMimeType(filePath:string) {
-	const extension: string = filePath.toLowerCase().split('.')[-1];
-	const mimeTypes:Record<string, string> = {
-		mp4: 'video/mp4',
-		mkv: 'video/x-matroska',
-		avi: 'video/x-msvideo',
-		mov: 'video/quicktime',
-		webm: 'video/webm',
-		flv: 'video/x-flv',
-	};
-
-	return mimeTypes[extension] || 'application/octet-stream';
-}
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour lire une vidéo en streaming
@@ -190,11 +182,8 @@ router.get('/streamVideo', apiKeyMiddleware, (req, res) => {
 			console.error(`Erreur lors de l'accès au fichier : ${err.message}`);
 			return res.status(404).json({ message: 'Fichier non trouvé.' });
 		}
-
 		const fileSize = stats.size;
 		const range = req.headers.range;
-
-		// Si aucun Range n'est spécifié
 		if (!range) {
 			const contentType = getMimeType(videoPath);
 			res.writeHead(200, {
@@ -204,13 +193,9 @@ router.get('/streamVideo', apiKeyMiddleware, (req, res) => {
 			fs.createReadStream(videoPath).pipe(res);
 			return;
 		}
-
-		// Traiter le Range
 		const parts = range.replace(/bytes=/, '').split('-');
 		const start = parseInt(parts[0], 10);
 		const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-
-		// Vérifier si la plage est valide
 		if (start >= fileSize || end >= fileSize) {
 			res.status(416).header({
 				'Content-Range': `bytes */${fileSize}`,
@@ -220,16 +205,13 @@ router.get('/streamVideo', apiKeyMiddleware, (req, res) => {
 
 		const contentLength = end - start + 1;
 		const contentType = getMimeType(videoPath);
-
 		const headers = {
 			'Content-Range': `bytes ${start}-${end}/${fileSize}`,
 			'Accept-Ranges': 'bytes',
 			'Content-Length': contentLength,
 			'Content-Type': contentType,
 		};
-
 		res.writeHead(206, headers);
-
 		const videoStream = fs.createReadStream(videoPath, { start, end });
 		videoStream.pipe(res);
 	});

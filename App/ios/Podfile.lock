@@ -26,10 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_vlc_player: 68553dec38187c14a7800e6d27a30bf9b25b53bc
-  haptic_feedback: 8cb3ee0cb6b797946c2b0df9c99ebc8f7ed79c71
+  flutter_vlc_player: adffbf4816d69407ca712e4cc1ff1d257b4fd0a9
+  haptic_feedback: fd1d8509833f58f164fc12122c0357fa9b2750e0
   MobileVLCKit: 2d9c7c373393ae43086aeeff890bf0b1afc15c5c
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

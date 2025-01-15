@@ -115,7 +115,7 @@ class _FilmsState extends State<Films> {
 							viewportFraction: 1,
 							autoPlay: true,
 							aspectRatio: 2 / 3,
-							onPageChanged: (index, reason) => current10 = index, 
+							onPageChanged: (index, reason) => current10 = index,
 						),
 					),
 					openOnOf7()

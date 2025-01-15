@@ -8,9 +8,11 @@ import 'package:homeflix/Data/NightServices.dart';
 /// template des pages de film
 class MoviePages extends StatefulWidget {
 	final Map<String, dynamic> serveurData;
+	final bool movie;
 	const MoviePages({
 		super.key,
-		required this.serveurData
+		required this.serveurData,
+		required this.movie
 	});
 
 	@override
@@ -27,7 +29,10 @@ class _MoviePagesState extends State<MoviePages> {
 			height: 40,
 			child: ElevatedButton(
 				onPressed: () async {
-					final path = await NIGHTServices().searchContent(widget.serveurData['title']) ?? "null";
+					final path = await NIGHTServices().searchContent(
+						widget.serveurData['title'],
+						widget.movie
+					) ?? "null";
 					final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu
 					final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
 					print(path);

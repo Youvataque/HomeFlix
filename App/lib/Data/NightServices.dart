@@ -74,7 +74,7 @@ class NIGHTServices {
 
 	///////////////////////////////////////////////////////////////
 	/// Fonction pour appeler la route `contentSearch`
-	Future<String?> searchContent(String name) async {
+	Future<String?> searchContent(String name, bool type) async {
 		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentSearch?api_key=${dotenv.get('NIGHTCENTER_KEY')}';
 
 		try {
@@ -84,7 +84,8 @@ class NIGHTServices {
 				'Content-Type': 'application/json',
 				},
 				body: jsonEncode({
-				'name': name,
+					'name': name,
+					'type': type,
 				}),
 			);
 

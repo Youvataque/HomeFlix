@@ -283,7 +283,8 @@ class _MainContentPagesState extends State<MainContentPages> {
 	Widget dedicatedPages() {
 		return widget.movie ? 
 				MoviePages(
-					serveurData: widget.serveurData
+					serveurData: widget.serveurData,
+					movie: widget.movie,
 				)
 			: 
 				FutureBuilder(
@@ -296,6 +297,7 @@ class _MainContentPagesState extends State<MainContentPages> {
 								serveurData: widget.serveurData,
 								bigData: widget.bigData,
 								seasContent: seasContent,
+								movie: widget.movie,
 							);
 						}
 					},

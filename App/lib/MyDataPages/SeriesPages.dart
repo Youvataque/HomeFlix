@@ -12,11 +12,13 @@ class SeriesPages extends StatefulWidget {
 	final Map<String, dynamic> serveurData;
 	final Map<String, dynamic> bigData;
 	final List<Map<String, dynamic>> seasContent;
+	final bool movie;
 	const SeriesPages({
 		super.key,
 		required this.serveurData,
 		required this.bigData,
-		required this.seasContent
+		required this.seasContent,
+		required this.movie
 	});
 
 	@override
@@ -123,15 +125,18 @@ class _SeriesPagesState extends State<SeriesPages> {
 						child: Eptemplate(
 							index: index,
 							time: tempS[index]['runtime'] ?? 0,
-							title: tempS[index]['name'] ?? "incconu",
+							title: tempS[index]['name'] ?? "inconue",
 							imgPath: "https://image.tmdb.org/t/p/w300/${tempS[index]['still_path']}?api_key=${dotenv.get('TMDB_KEY')}",
 							overview: tempS[index]['overview'],
 							id: "${widget.bigData['id']}_${widget.seasContent[season - 1]['_id']}_${tempS[index]['id']}",
 							onTap: () async {
 								String name = widget.serveurData['title'];
 								name += " S${season.toString().padLeft(2, '0')} E${(index + 1).toString().padLeft(2, '0')}";
-								final path = await NIGHTServices().searchContent(name) ?? "null";
-								final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu
+								final path = await NIGHTServices().searchContent(
+									name,
+									widget.movie
+								) ?? "null";
+								final encodedPath = Uri.encodeComponent(path);
 								final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
 								print(path);
 								Navigator.push(
