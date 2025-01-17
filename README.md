@@ -32,15 +32,19 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Ajouter [TORRENT_FOLDER="le chemin d'accès de vos fichier .torrent"] à votre .env
 
-- 1jouter [CONTENT_FOLDER="le chemin d'accès de vos films et serie"] à votre .env
+- Ajouter [CONTENT_FOLDER="le chemin d'accès de vos films et serie"] à votre .env
 
 ### (optionnel mais fortement recommandé) VPN
 
-- Installer votre VPN favori avec un fichier de configuration openVPN (car celui-ci ne réécrit pas systématiquement les priorités des interfaces réseaux).
+- Installer votre VPN favori avec un fichier de configuration openVPN (openvpn.udp) (car celui-ci ne réécrit pas systématiquement les priorités des interfaces réseaux).
 
-- Modifier la priorité des interfaces réseaux pour qu'elle soit donnée à votre connexion standard et en seconde position au VPN : 'sudo ip route del default via 192.168.1.1 dev enp2s0f0 proto dhcp src ... ' puis 'sudo ip route add default via 192.168.1.1 dev enp2s0f0 proto dhcp src ... metric 20 (ou inférieur à celui de tun0)'.
+- Modifier sa priorité réseau avec : sudo nmcli connection modify "nom du fichier openvpn.udp" ipv4.route-metric 200
 
-- Enfin, allez dans qbittorrent et dans les paramètres avancés, sélectionnez tun0 dans Network interface.
+- Lancer le vpn avec : sudo nmcli connection up "nom du fichier openvpn.udp" --ask (il faudra saisir la clef trouvable sur le site du vpn choisi)
+
+- ajouter [VPN_PASS="votre clef vpn"] à votre .env (coté serveur).
+
+- Enfin, aller dans qbittorrent et dans les paramètres avancés, sélectionner tun0 dans Network interface.
 
 ### App mobile
 
