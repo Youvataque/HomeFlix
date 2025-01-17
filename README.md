@@ -40,6 +40,8 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Modifier sa priorité réseau avec : sudo nmcli connection modify "nom du fichier openvpn.udp" ipv4.route-metric 200
 
+- Lancer le vpn avec : sudo nmcli connection up "nom du fichier openvpn.udp" --ask (il faudra saisir la clef trouvable sur le site du vpn choisi)
+
 - Enfin, aller dans qbittorrent et dans les paramètres avancés, sélectionner tun0 dans Network interface.
 
 ### App mobile
