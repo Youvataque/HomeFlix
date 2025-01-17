@@ -136,7 +136,7 @@ async function runAllChecks() {
 
 		const jsonString = JSON.stringify(jsonData, null, 2);
 		if (isValidJson(jsonString)) {
-			await fs.promises.writeFile(JSON_FILE_PATH, jsonString, 'utf8');
+			await fs.promises.writeFile(JSON_FILE_PATH, jsonString, { encoding: 'utf8', flag: 'w' });
 			console.log('\x1b[32mSpecs ajoutés avec succès au json\x1b[0m');
 		} else {
 			console.error('\x1b[31mJSON mal formé, écriture annulée\x1b[0m');
