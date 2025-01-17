@@ -32,7 +32,7 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Ajouter [TORRENT_FOLDER="le chemin d'accès de vos fichier .torrent"] à votre .env
 
-- 1jouter [CONTENT_FOLDER="le chemin d'accès de vos films et serie"] à votre .env
+- Ajouter [CONTENT_FOLDER="le chemin d'accès de vos films et serie"] à votre .env
 
 ### (optionnel mais fortement recommandé) VPN
 
