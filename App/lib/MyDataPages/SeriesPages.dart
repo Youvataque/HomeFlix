@@ -139,10 +139,12 @@ class _SeriesPagesState extends State<SeriesPages> {
 								final encodedPath = Uri.encodeComponent(path);
 								final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
 								print(path);
-								Navigator.push(
-									context,
-									MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
-								);
+								if (mounted) {
+									Navigator.push(
+											context,
+											MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
+									);
+								}
 							},
 						),
 					);

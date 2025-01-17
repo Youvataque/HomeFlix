@@ -13,13 +13,24 @@ interface FileSystemItem {
 
 dotenv.config();
 
+const trashWord: (string | RegExp)[] = [
+    'multi', 'vff', 'vfi', 'vfq', 'vf2', 'vo', 'vostfr', 'truefrench', 'french', 'en', 'fr', 'vof',
+    'bluray', 'web', 'webrip', 'web-dl', 'bdrip', 'hdrip', 'dvdrip', 'nf', 'amazon', 'amzn', 'hdtv', 'rip', 'hddvd',
+    '1080p', '720p', '2160p', '4k', '2k', '10bit', 'hdr', 'hdr10', 'hdr10plus', 'dolby vision', 'dv', 'hdlight', 'fullhd', 'imax',
+    'x264', 'x265', 'h264', 'h265', 'hevc', 'aac', 'dts', 'ddp', 'ac3', 'eac3', 'mp4', 'mkv', 'av1',
+    'fw', 'pophd', 'neostark', 'serqph', 'bonbon', 'qtz', 'slay3r', 'idys', 'r3mix', 'asko', 'btt', 'tox', 'gwen', 'hdgz', 'mhgz', 'preums',
+    /\b(19|20)\d{2}\b/g,
+    'extended', 'remastered', 'final', 'complete', 'repack', 'custom', 'unrated', 'super duper cut', 'integrale', 'collection', 'edition', 'part', 'vol', 'volume', 'chapter',
+    'saison', 'season', 'episode', 'ep', 's', 'e'
+];
+
 /////////////////////////////////////////////////////////////////////////////////
 // déclaration de l'api qbittorrent
 export const qbittorrentAPI = axios.create({
 	baseURL: 'http://localhost:8080/api/v2',
 	timeout: 3700,
 });
-  
+
 /////////////////////////////////////////////////////////////////////////////////
 // fonction pour retirer les accents des titres avant comparaison
 export function removeAccents(str: string): string {
@@ -38,11 +49,11 @@ export async function deleteOneTorrent(torrentHash: string): Promise<boolean> {
 	try {
 		if (torrentHash != "") {
 			console.log(`\x1b[33mTrying to delete torrent with hash : ${torrentHash}\x1b[0m`);
-			await qbittorrentAPI.post('/torrents/delete', 
+			await qbittorrentAPI.post('/torrents/delete',
 				new URLSearchParams({
 				  hashes: torrentHash,
 				  deleteFiles: "true"
-				}), 
+				}),
 				{
 				  headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
@@ -127,7 +138,7 @@ export function isValidJson(jsonString: string): boolean {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// Calcule la similarité entre deux noms avec pondération pour titre et métadonnées
+// Calcule la similarité entre deux noms avec pondération pour titre et métadonnées serie
 function calculateWordSimilarity2(name: string, comparedName: string): number {
 	const targetInfo = extractInfo(name).split(" ");
 	const comparedInfo = extractInfo(comparedName).split(" ");
@@ -138,7 +149,7 @@ function calculateWordSimilarity2(name: string, comparedName: string): number {
 		let weight = 1;
 		if (index === 0) {
 			weight = 5;
-		} 
+		}
 		if (word.match(/^s\d{2}$/i)) {
 			weight = 4;
 		}
@@ -153,6 +164,43 @@ function calculateWordSimilarity2(name: string, comparedName: string): number {
 	const titleSimilarity = calculateWordSimilarity(cleanName(name), cleanName(comparedName));
 	const finalScore = (matchScore / totalScore) * 100;
 	return 0.7 * finalScore + 0.3 * titleSimilarity;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Calcule la similarité entre deux noms avec pondération pour titre et métadonnées pour film
+function calculateMovieSimilarity(name: string, comparedName: string): number {
+    const targetInfo = extractInfo(name).split(" ");
+    const comparedInfo = extractInfo(comparedName).split(" ");
+    let matchScore = 0;
+    let totalScore = 0;
+    targetInfo.forEach((word, index) => {
+        let weight = 1;
+        if (index === 0) {
+            weight = 15;
+        }
+        if (word.match(/^\d+$/)) {
+            weight = 5;
+        }
+        totalScore += weight;
+        if (comparedInfo.includes(word)) {
+            matchScore += weight;
+        } else {
+            if (word.match(/^\d+$/)) {
+                matchScore -= 12;
+            }
+            if (index === 0 && !comparedInfo.includes(word)) {
+                matchScore -= 20;
+            }
+        }
+    });
+    comparedInfo.forEach((word) => {
+        if (word.match(/^\d+$/) && !targetInfo.includes(word)) {
+            matchScore -= 15; // Pénalité plus forte
+        }
+    });
+    const titleSimilarity = calculateWordSimilarity(cleanName(name), cleanName(comparedName));
+    const finalScore = Math.max(0, (matchScore / totalScore) * 100); // Pas de score négatif
+    return 0.85 * finalScore + 0.15 * titleSimilarity;  // Focus plus fort sur la correspondance pondérée
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -177,21 +225,26 @@ function isMovie(title: string): boolean {
 /////////////////////////////////////////////////////////////////////////////////
 // extrait les informations d'un nom de fichier
 function extractInfo(name: string): string {
-	const match = name.match(/s\d{2}e\d{2}|s\d{2}/i);
-
-	let season = "";
-	let episode = "";
-	let title = "";
-
-	if (match) {
-		const seasonEpisode = match[0].toLowerCase();
-		season = seasonEpisode.startsWith("s") ? seasonEpisode.slice(0, 3) : "";
-		episode = seasonEpisode.includes("e") ? seasonEpisode.slice(3) : "";
-		title = name.split(match[0])[0].trim();
-	} else {
-		title = name.trim();
-	}
-	return `${title} ${season} ${episode}`.trim();
+    let cleanedName = removeAccents(name.toLowerCase())
+        .replace(/[\s._\-:(),\[\]]+/g, ' ')
+        .trim();
+    trashWord.forEach(keyword => {
+        const regex = keyword instanceof RegExp ? keyword : new RegExp(`\\b${keyword}\\b`, 'gi');
+        cleanedName = cleanedName.replace(regex, '');
+    });
+    const match = cleanedName.match(/s\d{2}e\d{2}|s\d{2}/i);
+    let season = "";
+    let episode = "";
+    let title = "";
+    if (match) {
+        const seasonEpisode = match[0].toLowerCase();
+        season = seasonEpisode.startsWith("s") ? seasonEpisode.slice(0, 3) : "";
+        episode = seasonEpisode.includes("e") ? seasonEpisode.slice(3) : "";
+        title = cleanedName.split(match[0])[0].trim();
+    } else {
+        title = cleanedName.trim();
+    }
+    return `${title} ${season} ${episode}`.trim();
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -250,6 +303,7 @@ export async function searchContent(name: string, movie: boolean): Promise<strin
 			const similarity = calculateWordSimilarity2(cleanName(name), extractInfo(cleanName(item.name)));
 			if (similarity > probability.percent && isMovie(item.name) === movie) {
 				probability = { percent: similarity, content: item.name, type: item.type };
+				console.log(`name : ${cleanName(name)} onserveur : ${extractInfo(cleanName(item.name))}`);
 			}
 		});
 		if (probability.type === "directory") {
