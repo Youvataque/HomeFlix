@@ -42,6 +42,8 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 - Lancer le vpn avec : sudo nmcli connection up "nom du fichier openvpn.udp" --ask (il faudra saisir la clef trouvable sur le site du vpn choisi)
 
+- ajouter [VPN_PASS="votre clef vpn"] à votre .env (coté serveur).
+
 - Enfin, aller dans qbittorrent et dans les paramètres avancés, sélectionner tun0 dans Network interface.
 
 ### App mobile
