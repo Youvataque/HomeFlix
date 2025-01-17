@@ -5,81 +5,106 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 interface nameVpn {
-	running: String,
-	selected: String
+    running: String,
+    selected: String
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// cherche le server vpn actuellement connecté et tous ceux disponible
+// Recherche du serveur VPN actif et des serveurs disponibles
 function searchServer(): Promise<nameVpn> {
-	let result: nameVpn = {
-		running: "", 
-		selected: "",
-	};
-	let possibilities: Array<String> = [];
+    let result: nameVpn = {
+        running: "",
+        selected: "",
+    };
+    let possibilities: Array<String> = [];
 
-	return new Promise((resolve) => {
-		exec("nmcli connection", (error, stdout) => {
-			if (error) {
-				console.error("\x1b[31mError avec le gestionnaire réseau.\x1b[0m");
-				resolve(result);
-				return;
-			}
-			const lines = stdout.split("\n");
-			for (const line of lines) {
-				const splitLine = line.trim().split(/\s+/);
-				if (splitLine[2] == "vpn" && splitLine[3] != "--")
-					result.running = splitLine[0];
-				else if (splitLine[2] == "vpn" && splitLine[3] == "--")
-					possibilities.push(splitLine[0]);
-			}
-			result.selected = possibilities[randomInt(possibilities.length)];
-			if (!result.selected) {
-				console.error("\x1b[31mAucun serveur vpn n'est disponnible.\x1b[0m");
-				resolve(result);
-				return;
-			}
-			resolve(result);
-		});
-	});
+    return new Promise((resolve) => {
+        exec("nmcli connection", (error, stdout, stderr) => {
+            if (error) {
+                console.error(`\x1b[31mErreur avec le gestionnaire réseau : ${error.message}\x1b[0m`);
+                console.error(`\x1b[31mDétail : ${stderr}\x1b[0m`);
+                resolve(result);
+                return;
+            }
+            const lines = stdout.split("\n");
+            for (const line of lines) {
+                const splitLine = line.trim().split(/\s+/);
+                if (splitLine[2] === "vpn" && splitLine[3] !== "--") {
+                    result.running = splitLine[0];
+                } else if (splitLine[2] === "vpn" && splitLine[3] === "--") {
+                    possibilities.push(splitLine[0]);
+                }
+            }
+            result.selected = possibilities[randomInt(possibilities.length)];
+            if (!result.selected) {
+                console.error("\x1b[31mAucun serveur VPN n'est disponible.\x1b[0m");
+                resolve(result);
+                return;
+            }
+            resolve(result);
+        });
+    });
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// vérifie que le vpn est fonctionnel est en connecté
+// Vérifie si le VPN est actif en testant la connexion via ping
 function checkIfRunning(): Promise<boolean> {
-	return new Promise(
-		(resolve) => {
-			exec("ping -I tun0 google.com", (errror, stdout) => {
-				if (errror) {
-					console.error("\x1b[31mErreur avec vpn, redémarrage nécéssaire !\x1b[0m");
-					resolve(false);
-				} 
-				resolve(stdout.includes('octets de'));
-			})
-		}
-	)
+    return new Promise((resolve) => {
+        exec("ping -I tun0 -c 2 google.com", (error, stdout, stderr) => {
+            if (error) {
+                console.error(`\x1b[31mErreur avec le VPN : ${error.message}\x1b[0m`);
+                console.error(`\x1b[31mDétail : ${stderr}\x1b[0m`);
+                resolve(false);
+                return;
+            }
+            const isConnected = stdout.includes('bytes from') || stdout.includes('octets de');
+            if (!isConnected) {
+                console.warn("\x1b[33mLe VPN semble inactif.\x1b[0m");
+            }
+            resolve(isConnected);
+        });
+    });
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// fonction principale vérifiant l'état du vpn et le métant à jour au besoin
+// Fonction principale de gestion du VPN
 async function controlUpdateVpn() {
-	let isRunning: boolean = await checkIfRunning();
-	if (!isRunning)
-	{
-		const names: nameVpn = await searchServer();
-		exec(`nmcli connection down ${names.running}`);
-		console.log(`\x1b[33mTentative de connexion à : ${names.selected}\x1b[0m`);
-		exec(`echo ${process.env.VPN_PASS} | nmcli connection up ${names.selected} --ask`, (error, stdout) => {
-			if (stdout.includes('Connexion activée')) {
-				console.log(`\x1b[32mConnexion vers ${names.selected} établie !\x1b[0m`);
-			}
-		})
-	} 
+    const isRunning: boolean = await checkIfRunning();
+    if (!isRunning) {
+        const names: nameVpn = await searchServer();
+
+        if (names.running) {
+            console.log(`\x1b[33mDéconnexion du VPN actuel : ${names.running}\x1b[0m`);
+            exec(`nmcli connection down ${names.running}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`\x1b[31mErreur de déconnexion : ${error.message}\x1b[0m`);
+                    console.error(`\x1b[31mDétail : ${stderr}\x1b[0m`);
+                } else {
+                    console.log(`\x1b[32mDéconnecté de ${names.running}\x1b[0m`);
+                }
+            });
+        }
+
+        console.log(`\x1b[33mConnexion au serveur VPN : ${names.selected}\x1b[0m`);
+            console.log("Mot de passe VPN :", process.env.VPN_PASS);
+        exec(`echo ${process.env.VPN_PASS} | nmcli connection up ${names.selected} --ask`, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`\x1b[31mErreur de connexion : ${error.message}\x1b[0m`);
+                console.error(`\x1b[31mDétail : ${stderr}\x1b[0m`);
+                return;
+            }
+            if (stdout.includes('connexion activée') || stdout.includes('Connection successfully activated')) {
+                console.log(`\x1b[32mConnexion réussie à ${names.selected}.\x1b[0m`);
+            } else {
+                console.warn(`\x1b[33mLa connexion à ${names.selected} n'a pas été confirmée.\x1b[0m`);
+            }
+        });
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-// lance le listener
+// Démarrage du watcher
 export function startVpnWatcher(): void {
-	setInterval(controlUpdateVpn, 20000);
-	console.log(`Surveillance de l'état du vpn en cours !`);
+    setInterval(controlUpdateVpn, 20000);
+    console.log(`\x1b[34mSurveillance de l'état du VPN en cours...\x1b[0m`);
 }
