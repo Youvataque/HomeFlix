@@ -134,6 +134,7 @@ class _SeriesPagesState extends State<SeriesPages> {
 								name += " S${season.toString().padLeft(2, '0')} E${(index + 1).toString().padLeft(2, '0')}";
 								final path = await NIGHTServices().searchContent(
 									name,
+									widget.serveurData['name'],
 									widget.movie
 								) ?? "null";
 								final encodedPath = Uri.encodeComponent(path);

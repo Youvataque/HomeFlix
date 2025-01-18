@@ -31,6 +31,7 @@ class _MoviePagesState extends State<MoviePages> {
 				onPressed: () async {
 					final path = await NIGHTServices().searchContent(
 						widget.serveurData['title'],
+							widget.serveurData['name'],
 						widget.movie
 					) ?? "null";
 					final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu

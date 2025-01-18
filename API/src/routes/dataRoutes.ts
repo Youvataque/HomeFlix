@@ -3,15 +3,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import {
-	deleteAllTorrent,
-	deleteOneTorrent,
-	getMimeType,
-	isValidJson,
-	removeFromJson,
-	searchContent,
-	searchTorrent
-} from '../tools';
+import { deleteAllTorrent, deleteOneTorrent, removeFromJson, searchContent, searchTorrent } from '../actions';
+import { getMimeType, isValidJson } from "../tools";
 
 dotenv.config();
 const API_KEY = process.env.API_KEY;
@@ -154,13 +147,13 @@ router.post('/contentErase', apiKeyMiddleware, async (req: Request, res: Respons
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour rechercher la localisation d'un contenu
 router.post('/contentSearch', apiKeyMiddleware, async (req: Request, res: Response) => {
-	const { name, type } = req.body;
+	const { name, fileName, type } = req.body;
 
 	if (!name || typeof name !== 'string') {
 		return res.status(400).json({error: 'Le nom et le type de contenu sont requis.'});
 	}
 	try {
-		const contentPath = await searchContent(name, type);
+		const contentPath = await searchContent(name, fileName, type);
 		res.status(200).json({ path: contentPath });
 	} catch (error) {
 		console.error('\x1b[31mErreur lors de la recherche du contenu :\x1b[0m', error);

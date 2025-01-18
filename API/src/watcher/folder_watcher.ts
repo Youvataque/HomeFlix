@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import FormData from 'form-data';
-import { qbittorrentAPI, removeFromJson } from '../tools';
+import { qbittorrentAPI, removeFromJson } from '../actions';
 
 dotenv.config();
 const DIRECTORY_TO_WATCH = process.env.TORRENT_FOLDER ?? "";
