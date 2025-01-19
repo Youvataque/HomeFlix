@@ -33,7 +33,8 @@ class _SeriesPagesState extends State<SeriesPages> {
 	void initState() {
 		super.initState();
 		for (int x = 0; x < widget.bigData['seasons'].length; x++) {
-			if (widget.bigData['seasons'][x]['season_number'] > 0) {
+			final seriesNb = widget.bigData['seasons'][x]['season_number'];
+			if ( seriesNb > 0 && widget.serveurData['seasons']['S$seriesNb']['complete']) {
 				seasons.add(widget.bigData['seasons'][x]['season_number']);
 			}
 		}
@@ -63,6 +64,12 @@ class _SeriesPagesState extends State<SeriesPages> {
 	///////////////////////////////////////////////////////////////
 	/// bouton de sélection de saison
 	Widget seasonSelector() {
+		if (seasons.isEmpty) {
+			return SizedBox.shrink();
+		}
+		if (!seasons.contains(season)) {
+			season = seasons.first;
+		}
 		return Container(
 			height: 32,
 			width: 110,
@@ -75,12 +82,11 @@ class _SeriesPagesState extends State<SeriesPages> {
 				borderRadius: BorderRadius.circular(7),
 			),
 			child: Center(
-				child: DropdownButton<String>(
-					enableFeedback: true,
-					value: "Saison $season",
+				child: DropdownButton<int>(
+					value: season,
 					items: seasons.map((int season) {
-						return DropdownMenuItem<String>(
-							value: "Saison $season",
+						return DropdownMenuItem<int>(
+							value: season,
 							child: Text(
 								"Saison $season",
 								style: TextStyle(
@@ -90,10 +96,10 @@ class _SeriesPagesState extends State<SeriesPages> {
 							),
 						);
 					}).toList(),
-					onChanged: (String? newValue) {
+					onChanged: (int? newValue) {
 						if (newValue != null) {
 							setState(() {
-								season = int.parse(newValue.split(' ')[1]);
+								season = newValue;
 							});
 						}
 					},
@@ -106,7 +112,7 @@ class _SeriesPagesState extends State<SeriesPages> {
 					underline: const SizedBox(),
 					borderRadius: BorderRadius.circular(10),
 				),
-			)
+			),
 		);
 	}
 

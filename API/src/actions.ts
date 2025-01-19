@@ -136,6 +136,8 @@ function calculateContentSimilarity(name: string, comparedName: string): number 
 	return 0.7 * finalScore + 0.3 * titleSimilarity;
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+// Calcule la similarité entre deux noms de séries
 export function calculateSeriesSimilarity(name: string, comparedName: string): number {
 	const targetInfo = name.split(" ");
 	const comparedInfo = comparedName.split(" ");
