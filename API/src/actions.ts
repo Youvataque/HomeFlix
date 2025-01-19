@@ -5,7 +5,7 @@ import Levenshtein from "levenshtein";
 import path from 'path';
 import util from "util";
 import dotenv from "dotenv";
-import {cleanName, extractInfo, isMovie, parseLsOutput} from "./tools";
+import {cleanName, extractInfo, extractTitle, isMovie, parseLsOutput} from "./tools";
 
 dotenv.config();
 
@@ -131,13 +131,25 @@ function calculateContentSimilarity(name: string, comparedName: string): number 
 			matchScore += weight;
 		}
 	});
-	const titleSimilarity = calculateWordSimilarity(cleanName(name), cleanName(comparedName));
+	const titleSimilarity = calculateWordSimilarity(cleanName(name, false), cleanName(comparedName, false));
 	const finalScore = (matchScore / totalScore) * 100;
 	return 0.7 * finalScore + 0.3 * titleSimilarity;
 }
 
+export function calculateSeriesSimilarity(name: string, comparedName: string): number {
+	const targetInfo = name.split(" ");
+	const comparedInfo = comparedName.split(" ");
+	let score = 0;
+	targetInfo.forEach((word, index) => {
+		if (comparedInfo.includes(word)) {
+			score += 1;
+		}
+	});
+	return score;
+}
+
 /////////////////////////////////////////////////////////////////////////////////
-// Calcule la similarité entre deux noms avec pondération pour titre et métadonnées pour film
+// Calcule la similarité entre deux noms avec pondération pour titre et métadonnées (Films)
 function calculateMovieSimilarity(name: string, comparedName: string): number {
     const targetInfo = extractInfo(name).split(" ");
     const comparedInfo = extractInfo(comparedName).split(" ");
@@ -168,7 +180,7 @@ function calculateMovieSimilarity(name: string, comparedName: string): number {
             matchScore -= 15;
         }
     });
-    const titleSimilarity = calculateWordSimilarity(cleanName(name), cleanName(comparedName));
+    const titleSimilarity = calculateWordSimilarity(cleanName(name, true), cleanName(comparedName, true));
     const finalScore = Math.max(0, (matchScore / totalScore) * 100);
     return 0.85 * finalScore + 0.15 * titleSimilarity;
 }
@@ -183,9 +195,9 @@ export async function searchTorrent(name: string): Promise<string> {
 	try {
 		await qbittorrentAPI.post('/auth/login');
 		const response = await qbittorrentAPI.get('/torrents/info');
-		name = cleanName(name);
+		name = cleanName(name, false);
 		response.data.forEach((torrent: { name: string, hash: string }) => {
-			const torrentName = cleanName(torrent.name);
+			const torrentName = cleanName(torrent.name, false);
 			const similarityPercentage = calculateContentSimilarity(name, torrentName);
 			if (similarityPercentage > probability.percent) {
 				probability.percent = similarityPercentage;
@@ -204,6 +216,7 @@ const execAsync = util.promisify(exec);
 /////////////////////////////////////////////////////////////////////////////////
 // recherche un contenu à partir de son nom d'archive dans le serveur
 export async function searchContent(name: string, fileName: string, movie: boolean): Promise<string> {
+	const excludedExtensions = ["nfo", "txt", "jpg", "sfv"];
 	let probability = { percent: 0, content: "", type: "" };
 	let contentPath = process.env.CONTENT_FOLDER ?? ".";
 	let count: number = 0;
@@ -212,11 +225,13 @@ export async function searchContent(name: string, fileName: string, movie: boole
 		const { stdout: lsOutput } = await execAsync(`ls -l "${contentPath}"`);
 		const items = parseLsOutput(lsOutput);
 		items.forEach(item => {
-			const similarity = movie ? calculateMovieSimilarity(extractInfo(count < 2 ? fileName : name), extractInfo(item.name)) : calculateContentSimilarity(extractInfo(count < 2 ? fileName : name), extractInfo(item.name));
-			if (similarity > probability.percent && isMovie(item.name) === movie) {
+			const similarity = movie ?
+					calculateMovieSimilarity(extractInfo(cleanName(count < 2 ? fileName : name, movie)), extractInfo(cleanName(item.name, movie)))
+				:
+					calculateSeriesSimilarity(cleanName(name, movie), extractInfo(cleanName(item.name, movie)));
+			if (similarity > probability.percent && !excludedExtensions.includes(item.name.split(".").pop()?.toLowerCase() ?? "")) {
 				probability = { percent: similarity, content: item.name, type: item.type };
 				count++;
-				console.log(`name : ${extractInfo(count < 2 ? fileName : name)} onServeur : ${extractInfo(item.name)}`);
 			}
 		});
 		if (probability.type === "directory") {

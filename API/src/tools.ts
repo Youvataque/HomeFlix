@@ -26,8 +26,24 @@ export function removeAccents(str: string): string {
 
 /////////////////////////////////////////////////////////////////////////////////
 // normalise une str
-export function cleanName(name: string): string {
-    return removeAccents(name.toLowerCase().replace('&', "and").replace(/[\s._\-:(),]+/g, ' ').trim());
+export function cleanName(name: string, movie: boolean): string {
+    const numberWords: Record<string, string> = {
+        zero: '0', one: '1', two: '2', three: '3', four: '4',
+        five: '5', six: '6', seven: '7', eight: '8', nine: '9',
+        un: '1', deux: '2', trois: '3', quatre: '4', cinq: '5',
+        sept: '7', huit: '8', neuf: '9', dix: '10'
+    };
+    let result: string = name
+        .toLowerCase()
+        .replace('&', "and")
+        .replace(/r(\d{1,2})/gi, (match, p1) => `s${p1.padStart(2, '0')}`)
+        .replace(/\b(saison|season)\s?(\d{1,2})\b/gi, (match, p1, p2) => `s${p2.padStart(2, '0')}`)
+        .replace(/[\s._\-:(),]+/g, ' ')
+        .trim();
+    return removeAccents(
+        movie ? result : result.replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|un|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)\b/gi, (match) => numberWords[match.toLowerCase()] || match)
+    );
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -46,26 +62,40 @@ export function parseLsOutput(lsOutput: string): FileSystemItem[] {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+// extrait le titre d'un nom de fichier
+export function extractTitle(name: string): string {
+    return name.replace(/s\d{1,2}e\d{1,2}/gi, "")
+        .replace(/s\d{1,2}/gi, "")
+        .replace(/e\d{1,2}/gi, "")
+        .trim();
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 // extrait les informations d'un nom de fichier
 export function extractInfo(name: string): string {
-    let cleanedName = cleanName(name);
     trashWord.forEach(keyword => {
         const regex = keyword instanceof RegExp ? keyword : new RegExp(`\\b${keyword}\\b`, 'gi');
-        cleanedName = cleanedName.replace(regex, '');
+        name = name.replace(regex, '');
     });
-    const match = cleanedName.match(/s\d{2}e\d{2}|s\d{2}/i);
+    const match = name.match(/s(\d{1,2})[.\-_ ]?e(\d{1,2})|s(\d{1,2})/i);
     let season = "";
     let episode = "";
     let title = "";
+
     if (match) {
-        const seasonEpisode = match[0].toLowerCase();
-        season = seasonEpisode.startsWith("s") ? seasonEpisode.slice(0, 3) : "";
-        episode = seasonEpisode.includes("e") ? seasonEpisode.slice(3) : "";
-        title = cleanedName.split(match[0])[0].trim();
+        if (match[1] && match[2]) {
+            season = `s${match[1].padStart(2, '0')}`;
+            episode = `e${match[2].padStart(2, '0')}`;
+        } else if (match[3]) {
+            season = `s${match[3].padStart(2, '0')}`;
+        }
+        const matchStartIndex = name.indexOf(match[0]);
+        title = name.substring(0, matchStartIndex).trim();
     } else {
-        title = cleanedName.trim();
+        title = name.trim();
     }
-    return `${title} ${season} ${episode}`.trim();
+    const temp = [title, season, episode].filter(Boolean).join(' ').trim();
+    return temp;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
