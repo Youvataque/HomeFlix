@@ -131,7 +131,7 @@ function calculateContentSimilarity(name: string, comparedName: string): number 
 			matchScore += weight;
 		}
 	});
-	const titleSimilarity = calculateWordSimilarity(cleanName(name, false), cleanName(comparedName, false));
+	const titleSimilarity = calculateWordSimilarity(cleanName(name, true), cleanName(comparedName, true));
 	const finalScore = (matchScore / totalScore) * 100;
 	return 0.7 * finalScore + 0.3 * titleSimilarity;
 }
@@ -140,12 +140,18 @@ export function calculateSeriesSimilarity(name: string, comparedName: string): n
 	const targetInfo = name.split(" ");
 	const comparedInfo = comparedName.split(" ");
 	let score = 0;
+
 	targetInfo.forEach((word, index) => {
+		let weight = 1;
+		if (index === 0) {
+			weight = 3;
+		}
 		if (comparedInfo.includes(word)) {
-			score += 1;
+			score += weight;
 		}
 	});
-	return score;
+	const max = Math.max(targetInfo.length, comparedInfo.length);
+	return (score / max) * 100;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -195,9 +201,9 @@ export async function searchTorrent(name: string): Promise<string> {
 	try {
 		await qbittorrentAPI.post('/auth/login');
 		const response = await qbittorrentAPI.get('/torrents/info');
-		name = cleanName(name, false);
+		name = cleanName(name, true);
 		response.data.forEach((torrent: { name: string, hash: string }) => {
-			const torrentName = cleanName(torrent.name, false);
+			const torrentName = cleanName(torrent.name, true);
 			const similarityPercentage = calculateContentSimilarity(name, torrentName);
 			if (similarityPercentage > probability.percent) {
 				probability.percent = similarityPercentage;
@@ -229,6 +235,7 @@ export async function searchContent(name: string, fileName: string, movie: boole
 					calculateMovieSimilarity(extractInfo(cleanName(count < 2 ? fileName : name, movie)), extractInfo(cleanName(item.name, movie)))
 				:
 					calculateSeriesSimilarity(cleanName(name, movie), extractInfo(cleanName(item.name, movie)));
+			console.log(`onServeur : ${extractInfo(cleanName(item.name, movie))} tested : ${cleanName(name, movie)} sim : ${similarity}\n`);
 			if (similarity > probability.percent && !excludedExtensions.includes(item.name.split(".").pop()?.toLowerCase() ?? "")) {
 				probability = { percent: similarity, content: item.name, type: item.type };
 				count++;
