@@ -185,6 +185,8 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 					shadowColor: Colors.transparent
 				),
 				child: Column(
+					mainAxisAlignment: MainAxisAlignment.spaceBetween,
+					crossAxisAlignment: CrossAxisAlignment.start,
 					children: [
 						Text(
 							results[index]['title'],
