@@ -125,9 +125,9 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 					style: sousText(),
 				),
 				const Gap(10),
-				Icon(
+				const Icon(
 					Icons.arrow_downward_rounded,
-					color: Theme.of(context).colorScheme.tertiary,
+					color: Color.fromRGBO(229, 72, 77, 1),
 					size: 20,
 				),
 				Text(

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 
 class TopOfView extends StatefulWidget {
 	final VoidCallback refresh;
@@ -48,9 +49,13 @@ class _TopOfViewState extends State<TopOfView> {
 						children: [
 							Padding(
 								padding: const EdgeInsets.only(left: 7),
-								child: SizedBox(
+								child: Container(
 									height: 50,
 									width: 50,
+									decoration: BoxDecoration(
+										borderRadius: BorderRadius.circular(100),
+										boxShadow: [myShadow(context)]
+									),
 									child: Image.asset(
 										"src/images/logo.png",
 										fit: BoxFit.cover,

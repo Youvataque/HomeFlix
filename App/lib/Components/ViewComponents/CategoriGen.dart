@@ -45,10 +45,10 @@ class _CategorigenState extends State<Categorigen> {
 				backgroundColor: Theme.of(context).primaryColor,
 				foregroundColor: Theme.of(context).colorScheme.tertiary,
 				shape: RoundedRectangleBorder(
-					borderRadius: BorderRadius.circular(15),
+					borderRadius: BorderRadius.circular(10),
 					side: BorderSide(
-						width: 1,
-						color: Theme.of(context).dividerColor
+						width: 0.5,
+						color: Theme.of(context).colorScheme.secondary
 					)
 				)
 			),
