@@ -49,3 +49,4 @@ app.*.map.json
 App/android/app/google-services.json
 App/lib/firebase_options.dart
 App/ios/Runner/GoogleService-Info.plist
+API/firebasePass.json

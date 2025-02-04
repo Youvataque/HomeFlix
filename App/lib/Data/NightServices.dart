@@ -1,23 +1,40 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class NIGHTServices {
 	static Map<String, dynamic> dataStatus = {};
 	static Map<String, dynamic> specStatus = {};
 
+	Future<String?> _getIdToken() async {
+		User? user = FirebaseAuth.instance.currentUser;
+		return user != null ? await user.getIdToken() : null;
+	}
+
 	///////////////////////////////////////////////////////////////
 	/// méthode pour récupérer les données des contenues téléchargés sur le server
 	Future<Map<String, dynamic>> fetchDataStatus() async {
 		Map<String, dynamic> results = {};
+		final idToken = await _getIdToken();
+
+		if (idToken == null) {
+			print("Utilisateur non authentifié");
+			return results;
+		}
+
 		final response = await http.get(
-			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
+			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentStatus"),
+			headers: {
+				'Authorization': 'Bearer $idToken',
+			},
 		);
+
 		if (response.statusCode == 200) {
 			final data = json.decode(response.body);
 			results = data;
 		} else {
-			print("error on the status -> ${response.reasonPhrase}");
+			print("Erreur sur le statut -> ${response.reasonPhrase}");
 		}
 		return results;
 	}
@@ -26,23 +43,44 @@ class NIGHTServices {
 	/// méthode pour récupérer les données des contenues téléchargés sur le server
 	Future<Map<String, dynamic>> fetchSpecStatus() async {
 		Map<String, dynamic> results = {};
+		final idToken = await _getIdToken();
+
+		if (idToken == null) {
+			print("Utilisateur non authentifié");
+			return results;
+		}
+
 		final response = await http.get(
-			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/specStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}"),
+			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/specStatus"),
+			headers: {
+				'Authorization': 'Bearer $idToken',
+			},
 		);
+
 		if (response.statusCode == 200) {
 			final data = json.decode(response.body);
 			results = data;
 		} else {
-			print("error on the status -> ${response.reasonPhrase}");
+			print("Erreur sur le statut -> ${response.reasonPhrase}");
 		}
 		return results;
 	}
-	
+
 	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
 	Future<void> postDataStatus(Map<String, dynamic> newData, String where) async {
-		final url = Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentStatus?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
-		final headers = {'Content-Type': 'application/json'};
+		final idToken = await _getIdToken();
+
+		if (idToken == null) {
+			print("Utilisateur non authentifié");
+			return;
+		}
+
+		final url = Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentStatus");
+		final headers = {
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer $idToken',
+		};
 		final body = jsonEncode({'newData': newData, 'where': where});
 
 		final response = await http.post(url, headers: headers, body: body);
@@ -58,8 +96,18 @@ class NIGHTServices {
 	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
 	Future<void> deleteData(Map<String, dynamic> newData) async {
-		final url = Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentErase?api_key=${dotenv.get('NIGHTCENTER_KEY')}");
-		final headers = {'Content-Type': 'application/json'};
+		final idToken = await _getIdToken();
+
+		if (idToken == null) {
+			print("Utilisateur non authentifié");
+			return;
+		}
+
+		final url = Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentErase");
+		final headers = {
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer $idToken',
+		};
 		final body = jsonEncode({'newData': newData});
 
 		final response = await http.post(url, headers: headers, body: body);
@@ -70,18 +118,26 @@ class NIGHTServices {
 			print('Erreur: ${response.statusCode}');
 			print('Message: ${response.body}');
 		}
-  	}
+	}
 
 	///////////////////////////////////////////////////////////////
 	/// Fonction pour appeler la route `contentSearch`
 	Future<String?> searchContent(String name, String fileName, bool type) async {
-		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentSearch?api_key=${dotenv.get('NIGHTCENTER_KEY')}';
+		final idToken = await _getIdToken();
+
+		if (idToken == null) {
+			print("Utilisateur non authentifié");
+			return null;
+		}
+
+		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentSearch';
 
 		try {
 			final response = await http.post(
 				Uri.parse(apiUrl),
 				headers: {
-				'Content-Type': 'application/json',
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer $idToken',
 				},
 				body: jsonEncode({
 					'name': name,
@@ -98,8 +154,8 @@ class NIGHTServices {
 				return null;
 			}
 		} catch (e) {
-		print('Erreur lors de la requête : $e');
-		return null;
+			print('Erreur lors de la requête : $e');
+			return null;
 		}
 	}
 }

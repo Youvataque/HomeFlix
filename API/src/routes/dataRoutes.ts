@@ -5,24 +5,14 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { deleteAllTorrent, deleteOneTorrent, removeFromJson, searchContent, searchTorrent } from '../actions';
 import { getMimeType, isValidJson } from "../tools";
+import authMiddleware from './authMiddleware';
 
 dotenv.config();
-const API_KEY = process.env.API_KEY;
 const router: Router = Router();
 
 /////////////////////////////////////////////////////////////////////////////////
-// Middleware pour vérifier la clé API dans l'URL
-const apiKeyMiddleware = (req: Request, res: Response, next: NextFunction) => {
-	const apiKey = req.query.api_key;
-	if (apiKey !== API_KEY) {
-		return res.status(403).json({ message: 'Clé API invalide' });
-	}
-	next();
-};
-
-/////////////////////////////////////////////////////////////////////////////////
 // Route pour récupérer des données de contenu
-router.get('/contentStatus', apiKeyMiddleware,(req: Request, res: Response) => {
+router.get('/contentStatus', authMiddleware,(req: Request, res: Response) => {
 	const filePath = path.join(__dirname, '../../contentData.json');
 	fs.readFile(filePath, 'utf8', (err, data) => {
 		if (err) {
@@ -35,7 +25,7 @@ router.get('/contentStatus', apiKeyMiddleware,(req: Request, res: Response) => {
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour récupérer des données de spec
-router.get('/specStatus', apiKeyMiddleware,(req: Request, res: Response) => {
+router.get('/specStatus', authMiddleware,(req: Request, res: Response) => {
 	const filePath = path.join(__dirname, '../../specData.json');
 	fs.readFile(filePath, 'utf8', (err, data) => {
 		if (err) {
@@ -48,7 +38,7 @@ router.get('/specStatus', apiKeyMiddleware,(req: Request, res: Response) => {
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour ajouter des données
-router.post('/contentStatus', apiKeyMiddleware, (req: Request, res: Response) => {
+router.post('/contentStatus', authMiddleware, (req: Request, res: Response) => {
 	const filePath = path.join(__dirname, '../../contentData.json');
 	const {newData, where} = req.body;
 	let countDelay: number = 0;
@@ -85,7 +75,7 @@ router.post('/contentStatus', apiKeyMiddleware, (req: Request, res: Response) =>
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour récupérer le requète de téléchargement du content
-router.post('/contentDl', apiKeyMiddleware, async (req, res) => {
+router.post('/contentDl', authMiddleware, async (req, res) => {
 	const { fileUrl, filename } = req.body; 
 
 	if (!fileUrl) {
@@ -131,7 +121,7 @@ router.post('/contentDl', apiKeyMiddleware, async (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour supprimer une oeuvre
-router.post('/contentErase', apiKeyMiddleware, async (req: Request, res: Response) => {
+router.post('/contentErase', authMiddleware, async (req: Request, res: Response) => {
 	const {newData} = req.body;
 	let del = false;
 	if (newData['media']) {
@@ -146,7 +136,7 @@ router.post('/contentErase', apiKeyMiddleware, async (req: Request, res: Respons
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour rechercher la localisation d'un contenu
-router.post('/contentSearch', apiKeyMiddleware, async (req: Request, res: Response) => {
+router.post('/contentSearch', authMiddleware, async (req: Request, res: Response) => {
 	const { name, fileName, type } = req.body;
 
 	if (!name || typeof name !== 'string') {
@@ -163,7 +153,7 @@ router.post('/contentSearch', apiKeyMiddleware, async (req: Request, res: Respon
 
 /////////////////////////////////////////////////////////////////////////////////
 // Route pour lire une vidéo en streaming
-router.get('/streamVideo', apiKeyMiddleware, (req, res) => {
+router.get('/streamVideo', authMiddleware, (req, res) => {
 	const videoPath = req.query.path;
 
 	if (!videoPath || typeof videoPath !== 'string') {
