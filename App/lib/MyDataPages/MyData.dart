@@ -43,21 +43,21 @@ class _MyDataState extends State<MyData> {
 		return SizedBox(
 			width: width,
 			height: 100,
-			child: ClipRRect(
-				borderRadius: BorderRadius.circular(7.5),
-				child: Stack(
-					children: [
-						SizedBox(
-							width: width,
-							height: 100,
-							child: Image.asset(
-								img,
-								fit: BoxFit.cover,
-							),
+			child: Stack(
+				children: [
+					SizedBox(
+						width: width,
+						height: 100,
+						child: Image.asset(
+							img,
+							fit: BoxFit.cover,
 						),
-						SizedBox(
-							width: width,
-							height: 100,
+					),
+					SizedBox(
+						width: width,
+						height: 100,
+						child: ClipRRect(
+							borderRadius: BorderRadius.circular(7.5),
 							child: BackdropFilter(
 								filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
 								child: ElevatedButton(
@@ -84,8 +84,8 @@ class _MyDataState extends State<MyData> {
 								),
 							),
 						),
-					],
-				)
+					),
+				],
 			)
 		);
 	}
