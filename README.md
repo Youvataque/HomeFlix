@@ -4,7 +4,7 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 ![plot](./githubRes/presv1.webp)
 
-## Installation et mise en route
+## Installation et mise en route (version sans auth)
 
 ### Serveur et API
 
