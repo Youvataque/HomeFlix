@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
+import 'package:homeflix/main.dart';
 
 class PlayerOverlay extends StatefulWidget {
 	final bool show;
@@ -104,7 +105,9 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
 			left: 40,
 			child: IconButton(
 				icon: const Icon(Icons.close, color: Colors.white),
-				onPressed: () => Navigator.pop(context),
+				onPressed: () {
+					Navigator.pop(context);
+				}
 			),
 		);
 	}

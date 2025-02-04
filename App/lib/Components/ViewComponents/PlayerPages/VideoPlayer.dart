@@ -2,6 +2,8 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:flutter/material.dart';
 import 'package:homeflix/Components/ViewComponents/PlayerPages/PlayerOverlay.dart';
 
+///////////////////////////////////////////////////////////////
+/// lecteur vidéo
 class VlcVideoPlayer extends StatefulWidget {
 	final String videoUrl;
 

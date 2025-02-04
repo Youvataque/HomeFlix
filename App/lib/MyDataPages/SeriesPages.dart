@@ -5,6 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/EpTemplate.dart';
 import 'package:homeflix/Components/ViewComponents/PlayerPages/VideoPlayer.dart';
 import 'package:homeflix/Data/NightServices.dart';
+import 'package:homeflix/main.dart';
+
+import '../Components/ViewComponents/PlayerPages/VideoProxyServer.dart';
 
 ///////////////////////////////////////////////////////////////
 /// Template des pages de séries
@@ -144,12 +147,13 @@ class _SeriesPagesState extends State<SeriesPages> {
 									widget.movie
 								) ?? "null";
 								final encodedPath = Uri.encodeComponent(path);
-								final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
+								final videoUrl = "http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/streamVideo?path=$encodedPath";
+								final proxyUrl = await mainKey.currentState!.getProxyUrl(videoUrl);
 								print(path);
 								if (mounted) {
 									Navigator.push(
 											context,
-											MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
+											MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: proxyUrl))
 									);
 								}
 							},

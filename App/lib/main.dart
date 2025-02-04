@@ -13,6 +13,7 @@ import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/Data/TmdbServices.dart';
 
+import 'Components/ViewComponents/PlayerPages/VideoProxyServer.dart';
 import 'firebase_options.dart';
 
 GlobalKey<MainState> mainKey = GlobalKey<MainState>();
@@ -41,11 +42,24 @@ class MainState extends State<Main> {
 	Timer? _timer;
 	int	refreshKey = 0;
 	ValueNotifier<Map<String, dynamic>> dataStatusNotifier = ValueNotifier<Map<String, dynamic>>({});
+	final VideoProxyServer _proxyServer = VideoProxyServer();
+	int _proxyPort = 8081;
+
+	Future<void> _startProxy() async {
+		_proxyPort = await _proxyServer.startProxy();
+		print("✅ Proxy démarré sur http://127.0.0.1:$_proxyPort");
+	}
+
+	Future<String> getProxyUrl(String videoUrl) async {
+		final proxyUrl = "http://127.0.0.1:8081?url=${Uri.encodeComponent(videoUrl)}";
+		return proxyUrl;
+	}
 
 	@override
 	void initState() {
 		super.initState();
 		_startPeriodicFetch();
+		_startProxy();
 	}
 
 	@override

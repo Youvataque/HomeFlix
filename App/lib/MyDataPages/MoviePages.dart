@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/ViewComponents/PlayerPages/VideoPlayer.dart';
 import 'package:homeflix/Data/NightServices.dart';
+import 'package:homeflix/Components/ViewComponents/PlayerPages/VideoProxyServer.dart';
+import 'package:homeflix/main.dart';
 
 ///////////////////////////////////////////////////////////////
 /// template des pages de film
@@ -22,53 +24,58 @@ class MoviePages extends StatefulWidget {
 ///////////////////////////////////////////////////////////////
 /// corps du code
 class _MoviePagesState extends State<MoviePages> {
+
+
 	@override
 	Widget build(BuildContext context) {
 		return SizedBox(
 			width: MediaQuery.sizeOf(context).width - 16,
 			height: 40,
 			child: ElevatedButton(
-				onPressed: () async {
-					final path = await NIGHTServices().searchContent(
-						widget.serveurData['title'],
-							widget.serveurData['name'],
-						widget.movie
-					) ?? "null";
-					final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu
-					final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
-					print(path);
-					Navigator.push(
-						context,
-						MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
-					);
-				},
-				style: ElevatedButton.styleFrom(
-					backgroundColor: Theme.of(context).colorScheme.secondary,
-					foregroundColor: Theme.of(context).scaffoldBackgroundColor,
-					shape: RoundedRectangleBorder(
-						borderRadius: BorderRadius.circular(5)
-					)
-				),
-				child: Row(
-					mainAxisAlignment: MainAxisAlignment.center,
-					crossAxisAlignment: CrossAxisAlignment.center,
-					children: [
-						Icon(
-							Icons.play_arrow,
-							color: Theme.of(context).scaffoldBackgroundColor,
-							size: 28,
-						),
-						const Gap(5),
-						Text(
-							"Lecture",
-							style: TextStyle(
-								fontSize: 17,
-								fontWeight: FontWeight.w600,
-								color: Theme.of(context).scaffoldBackgroundColor
+					onPressed: () async {
+						final path = await NIGHTServices().searchContent(
+								widget.serveurData['title'],
+								widget.serveurData['name'],
+								widget.movie
+						) ?? "null";
+						final encodedPath = Uri.encodeComponent(path);
+						final videoUrl = "http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/streamVideo?path=$encodedPath";
+						String proxyUrl = "";
+
+							proxyUrl = await mainKey.currentState!.getProxyUrl(videoUrl);
+
+						Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: proxyUrl))
+						);
+					},
+					style: ElevatedButton.styleFrom(
+							backgroundColor: Theme.of(context).colorScheme.secondary,
+							foregroundColor: Theme.of(context).scaffoldBackgroundColor,
+							shape: RoundedRectangleBorder(
+									borderRadius: BorderRadius.circular(5)
+							)
+					),
+					child: Row(
+						mainAxisAlignment: MainAxisAlignment.center,
+						crossAxisAlignment: CrossAxisAlignment.center,
+						children: [
+							Icon(
+								Icons.play_arrow,
+								color: Theme.of(context).scaffoldBackgroundColor,
+								size: 28,
 							),
-						)
-					],
-				)
+							const Gap(5),
+							Text(
+								"Lecture",
+								style: TextStyle(
+										fontSize: 17,
+										fontWeight: FontWeight.w600,
+										color: Theme.of(context).scaffoldBackgroundColor
+								),
+							)
+						],
+					)
 			),
 		);
 	}
