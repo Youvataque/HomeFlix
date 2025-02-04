@@ -75,7 +75,7 @@ class _MyTabbarState extends State<MyTabbar> {
 
 	///////////////////////////////////////////////////////////////
 	/// Dessine un élément de tabbar
-  	BottomNavigationBarItem item(String title, IconData fill, IconData unFill) {
+	BottomNavigationBarItem item(String title, IconData fill, IconData unFill) {
 		return BottomNavigationBarItem(
 			backgroundColor: Theme.of(context).colorScheme.secondary,
 			icon: Icon(
@@ -103,12 +103,12 @@ class _MyTabbarState extends State<MyTabbar> {
 					)
 				),
 				TopOfView(
-					refresh: () {
-						Navigator.pushAndRemoveUntil(
-							context,
-							MaterialPageRoute(builder: (context) => const Main()),
-							(_) => false
-						);
+					refresh: () async {
+						if (mainKey.currentState != null) {
+							mainKey.currentState!.refreshData();
+						} else {
+							print("⚠️ mainKey.currentState est null !");
+						}
 					},
 					search: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Searchpage()))
 				),

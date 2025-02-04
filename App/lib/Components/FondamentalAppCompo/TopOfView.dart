@@ -50,8 +50,8 @@ class _TopOfViewState extends State<TopOfView> {
 							Padding(
 								padding: const EdgeInsets.only(left: 7),
 								child: Container(
-									height: 50,
-									width: 50,
+									height: 47,
+									width: 47,
 									decoration: BoxDecoration(
 										borderRadius: BorderRadius.circular(100),
 										boxShadow: [myShadow(context)]
@@ -88,7 +88,7 @@ class _TopOfViewState extends State<TopOfView> {
 						},
 						style: ElevatedButton.styleFrom(
 							padding: EdgeInsets.zero,
-							backgroundColor: Theme.of(context).dividerColor.withOpacity(0.2),
+							backgroundColor: Theme.of(context).primaryColor.withOpacity(0.6),
 							foregroundColor: Theme.of(context).primaryColor,
 							shape: RoundedRectangleBorder(
 								borderRadius: BorderRadius.circular(15)
