@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,29 +25,35 @@ class YGGService {
 	}
 
 	///////////////////////////////////////////////////////////////
-	/// fonction pour envoyer la requète de téléchargement au serveur et la lui faire éxécuter
+	/// fonction pour envoyer la requête de téléchargement au serveur
 	Future<void> sendDownloadRequest(String fileUrl, String filename) async {
-		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentDl?api_key=${dotenv.get('NIGHTCENTER_KEY')}';
+		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentDl';
 
 		try {
+			final user = FirebaseAuth.instance.currentUser;
+			if (user == null) {
+				print('❌ Erreur: Utilisateur non authentifié.');
+				return;
+			}
+			final token = await user.getIdToken();
 			final response = await http.post(
 				Uri.parse(apiUrl),
 				headers: {
 					'Content-Type': 'application/json',
+					'Authorization': 'Bearer $token',
 				},
 				body: jsonEncode({
 					'fileUrl': fileUrl,
 					'filename': filename
 				}),
 			);
-
 			if (response.statusCode == 200) {
-			print('Fichier téléchargé avec succès');
+				print('✅ Fichier téléchargé avec succès');
 			} else {
-			print('Erreur lors du téléchargement : ${response.body}');
+				print('❌ Erreur lors du téléchargement : ${response.body}');
 			}
 		} catch (e) {
-			print('Erreur lors de la requête : $e');
+			print('❌ Erreur lors de la requête : $e');
 		}
 	}
 }
