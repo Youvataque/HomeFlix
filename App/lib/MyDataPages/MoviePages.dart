@@ -35,7 +35,7 @@ class _MoviePagesState extends State<MoviePages> {
 						widget.movie
 					) ?? "null";
 					final encodedPath = Uri.encodeComponent(path); // Encode le chemin absolu
-					final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
+					final videoUrl = "http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
 					print(path);
 					Navigator.push(
 						context,

@@ -144,7 +144,7 @@ class _SeriesPagesState extends State<SeriesPages> {
 									widget.movie
 								) ?? "null";
 								final encodedPath = Uri.encodeComponent(path);
-								final videoUrl = "http://84.4.230.45:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
+								final videoUrl = "http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
 								print(path);
 								if (mounted) {
 									Navigator.push(
