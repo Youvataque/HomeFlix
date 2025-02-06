@@ -68,7 +68,6 @@ class VideoProxyServer {
       User? user = FirebaseAuth.instance.currentUser;
       return user != null ? await user.getIdToken() : null;
     } catch (e) {
-      print('Erreur de récupération du token: $e');
       return null;
     }
   }

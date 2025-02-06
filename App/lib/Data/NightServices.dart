@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:homeflix/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class NIGHTServices {
-	static Map<String, dynamic> dataStatus = {};
 	static Map<String, dynamic> specStatus = {};
 
 	Future<String?> _getIdToken() async {
@@ -156,6 +156,24 @@ class NIGHTServices {
 		} catch (e) {
 			print('Erreur lors de la requête : $e');
 			return null;
+		}
+	}
+
+	///////////////////////////////////////////////////////////////
+	/// retourne une liste de saisons  au moins partiellement dl
+	bool checkDlSeason(Map<String, dynamic> season) {
+		if (season['complete']) {
+			return true;
+		} else {
+			List<dynamic> eps = season['episode'];
+			if (eps.length > 1) {
+				return true;
+			} else {
+				if (eps.length == 1 && eps.first != -1) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

@@ -45,15 +45,18 @@ class MainState extends State<Main> {
 	final VideoProxyServer _proxyServer = VideoProxyServer();
 	int _proxyPort = 8081;
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////// proxy vidéo
+
 	Future<void> _startProxy() async {
 		_proxyPort = await _proxyServer.startProxy();
-		print("✅ Proxy démarré sur http://127.0.0.1:$_proxyPort");
 	}
 
 	Future<String> getProxyUrl(String videoUrl) async {
 		final proxyUrl = "http://127.0.0.1:8081?url=${Uri.encodeComponent(videoUrl)}";
 		return proxyUrl;
 	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////// lancement nettoyage
 
 	@override
 	void initState() {
@@ -69,6 +72,20 @@ class MainState extends State<Main> {
 		super.dispose();
 	}
 
+	void refreshData() async {
+		_timer?.cancel();
+		dataStatusNotifier.dispose();
+		dataStatusNotifier = ValueNotifier<Map<String, dynamic>>({});
+		_startPeriodicFetch();
+		if (mounted) {
+			setState(() {
+				refreshKey++;
+			});
+		}
+		await downloadData();
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////// téléchargement des datas (toutes les 4s)
 
 	void _startPeriodicFetch() {
 		_timer = Timer.periodic(const Duration(seconds: 4), (timer) async {
@@ -142,21 +159,5 @@ class MainState extends State<Main> {
 			TMDBService.serieCateg = await TMDBService().fetchCateg(false);
 		}
 		return isUserLoggedIn();
-	}
-
-	///////////////////////////////////////////////////////////////
-	/// fonction de rafraichissement
-	void refreshData() async {
-		print("🔄 Rafraîchissement en cours...");
-		_timer?.cancel();
-		dataStatusNotifier.dispose();
-		dataStatusNotifier = ValueNotifier<Map<String, dynamic>>({});
-		_startPeriodicFetch();
-		if (mounted) {
-			setState(() {
-				refreshKey++;
-			});
-		}
-		await downloadData();
 	}
 }

@@ -1,9 +1,8 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:flutter/material.dart';
 import 'package:homeflix/Components/ViewComponents/PlayerPages/PlayerOverlay.dart';
 
-///////////////////////////////////////////////////////////////
-/// lecteur vidéo
 class VlcVideoPlayer extends StatefulWidget {
 	final String videoUrl;
 
@@ -18,6 +17,7 @@ class VlcVideoPlayer extends StatefulWidget {
 
 class _VlcVideoPlayerState extends State<VlcVideoPlayer> {
 	late VlcPlayerController _vlcPlayerController;
+	double scale = 1.0;
 	bool _show = false;
 	bool _isInitialized = false;
 	Map<int, String> _audioTracks = {};
@@ -27,6 +27,10 @@ class _VlcVideoPlayerState extends State<VlcVideoPlayer> {
 	void initState() {
 		super.initState();
 		_initializePlayer();
+		SystemChrome.setPreferredOrientations([
+			DeviceOrientation.landscapeLeft,
+			DeviceOrientation.landscapeRight,
+		]);
 	}
 
 	void _initializePlayer() {
@@ -34,7 +38,16 @@ class _VlcVideoPlayerState extends State<VlcVideoPlayer> {
 			widget.videoUrl,
 			hwAcc: HwAcc.full,
 			autoPlay: true,
-			options: VlcPlayerOptions(),
+			options: VlcPlayerOptions(
+				advanced: VlcAdvancedOptions([
+					'--fullscreen',
+					'--video-on-top',
+					'--no-video-title-show',
+					'--crop=16:9',
+					'--scale=1.2',
+					'--align=0',
+				]),
+			),
 		);
 
 		_vlcPlayerController.addListener(() {
@@ -51,12 +64,12 @@ class _VlcVideoPlayerState extends State<VlcVideoPlayer> {
 
 	void _fetchTracks() async {
 		try {
-		final audioTracks = await _vlcPlayerController.getAudioTracks();
-		final subtitleTracks = await _vlcPlayerController.getSpuTracks();
-		setState(() {
-			_audioTracks = audioTracks;
-			_subtitleTracks = subtitleTracks;
-		});
+			final audioTracks = await _vlcPlayerController.getAudioTracks();
+			final subtitleTracks = await _vlcPlayerController.getSpuTracks();
+			setState(() {
+				_audioTracks = audioTracks;
+				_subtitleTracks = subtitleTracks;
+			});
 		} catch (e) {
 			print('Erreur lors de la récupération des pistes: $e');
 		}
@@ -81,31 +94,33 @@ class _VlcVideoPlayerState extends State<VlcVideoPlayer> {
 				alignment: Alignment.center,
 				child: Stack(
 					children: [
-						RotatedBox(
-							quarterTurns: 1,
+						Transform.scale(
+							scale: scale,
 							child: SizedBox(
-								width: MediaQuery.sizeOf(context).height,
-								height: MediaQuery.sizeOf(context).width,
-								child: ElevatedButton(
-									onPressed: () {
+								width: MediaQuery.of(context).size.width,
+								height: MediaQuery.of(context).size.height,
+								child: player(),
+							),
+						),
+						SizedBox(
+							width: MediaQuery.of(context).size.width,
+							height: MediaQuery.of(context).size.height,
+							child: GestureDetector(
+									onTap: () {
 										setState(() {
 											_show = !_show;
 										});
-									},
-									style: ElevatedButton.styleFrom(
-										shadowColor: Colors.transparent,
-										backgroundColor: Colors.transparent,
-										foregroundColor: Colors.transparent,
-									),
-									child: player(),
-								)
-							)
-						),
+									}
+								),
+							),
 						PlayerOverlay(
 							show: _show,
 							controller: _vlcPlayerController,
 							audioTracks: _audioTracks,
 							subtitleTracks: _subtitleTracks,
+							updateScale: (value) => setState(() {
+							  scale = value;
+							})
 						),
 					],
 				),

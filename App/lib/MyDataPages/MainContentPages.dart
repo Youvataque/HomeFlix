@@ -228,7 +228,7 @@ class _MainContentPagesState extends State<MainContentPages> {
 						height: 27.5,
 						width: isComplete ? 140 : 160,
 						decoration: BoxDecoration(
-							color: isComplete ? Colors.green: Theme.of(context).colorScheme.tertiary,
+							color: isComplete ? Colors.green: const Color.fromRGBO(229, 72, 77, 1),
 							borderRadius: BorderRadius.circular(5)
 						),
 						child: Center(
