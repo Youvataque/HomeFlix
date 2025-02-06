@@ -102,4 +102,22 @@ class NIGHTServices {
 		return null;
 		}
 	}
+
+	///////////////////////////////////////////////////////////////
+	/// retourne une liste de saisons  au moins partiellement dl
+	bool checkDlSeason(Map<String, dynamic> season) {
+		if (season['complete']) {
+			return true;
+		} else {
+			List<dynamic> eps = season['episode'];
+			if (eps.length > 1) {
+				return true;
+			} else {
+				if (eps.length == 1 && eps.first != -1) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 }

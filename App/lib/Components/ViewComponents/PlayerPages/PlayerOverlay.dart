@@ -9,12 +9,15 @@ class PlayerOverlay extends StatefulWidget {
 	final VlcPlayerController controller;
 	final Map<int, String> audioTracks;
 	final Map<int, String> subtitleTracks;
+	final Function(double) updateScale;
+
 	const PlayerOverlay({
 		super.key,
 		required this.show,
 		required this.controller,
 		required this.audioTracks,
-		required this.subtitleTracks
+		required this.subtitleTracks,
+		required this.updateScale,
 	});
 
 	@override
@@ -23,11 +26,12 @@ class PlayerOverlay extends StatefulWidget {
 
 class _PlayerOverlayState extends State<PlayerOverlay> {
 	bool isPlaying = true;
-	double volume = 0.5;
+	double volume = 1;
 	Duration currentPosition = Duration.zero;
 	Duration totalDuration = Duration.zero;
 	int selectedAudioTrack = 0;
 	int selectedSubtitleTrack = -1;
+	double scaleValue = 1.0;
 
 	@override
 	void initState() {
@@ -69,9 +73,16 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
 
 	void _seek(bool forward) {
 		final newPosition = forward
-			? currentPosition + const Duration(seconds: 10)
-			: currentPosition - const Duration(seconds: 10);
+				? currentPosition + const Duration(seconds: 10)
+				: currentPosition - const Duration(seconds: 10);
 		widget.controller.seekTo(newPosition);
+	}
+
+	void _adjustScale(double delta) {
+		setState(() {
+			scaleValue = (scaleValue + delta).clamp(0.5, 2.0);
+		});
+		widget.updateScale(scaleValue);
 	}
 
 	@override
@@ -81,30 +92,50 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
 			duration: const Duration(milliseconds: 300),
 			child: IgnorePointer(
 				ignoring: !widget.show,
-				child: RotatedBox(
-					quarterTurns: 1,
-					child: Stack(
-						children: [
-							backButton(),
-							volumeController(),
-							movieControls(),
-							audioSelector(),
-          					subtitleSelector(),
-							progressBar()
-						],
-					),
+				child: Stack(
+					children: [
+						closeButtonAndScaleControls(),
+						volumeController(),
+						movieControls(),
+						audioSelector(),
+						subtitleSelector(),
+						progressBar(),
+					],
 				),
-			)
+			),
 		);
 	}
 
-	Widget backButton() {
+	Widget closeButtonAndScaleControls() {
 		return Positioned(
 			top: 20,
-			left: 40,
-			child: IconButton(
-				icon: const Icon(Icons.close, color: Colors.white),
-				onPressed: () => Navigator.pop(context),
+			left: 20,
+			child: Row(
+				children: [
+					IconButton(
+						icon: const Icon(Icons.close, color: Colors.white),
+						onPressed: () {
+							SystemChrome.setPreferredOrientations([
+								DeviceOrientation.portraitUp,
+								DeviceOrientation.portraitDown,
+							]);
+							Navigator.pop(context);
+						},
+					),
+					const Gap(10),
+					IconButton(
+						icon: const Icon(Icons.remove, color: Colors.white),
+						onPressed: () => _adjustScale(-0.1),
+					),
+					const Text(
+						"Zoom",
+						style: const TextStyle(color: Colors.white, fontSize: 16),
+					),
+					IconButton(
+						icon: const Icon(Icons.add, color: Colors.white),
+						onPressed: () => _adjustScale(0.1),
+					),
+				],
 			),
 		);
 	}
@@ -195,66 +226,66 @@ class _PlayerOverlayState extends State<PlayerOverlay> {
 	}
 
 	Widget audioSelector() {
-	return Positioned(
-		bottom: 100,
-		right: 40,
-		child: DropdownButton<int>(
-			dropdownColor: Colors.black87,
-			value: widget.audioTracks.containsKey(selectedAudioTrack)
-				? selectedAudioTrack
-				: (widget.audioTracks.isNotEmpty ? widget.audioTracks.keys.first : null),
-			hint: const Text("Aucune piste audio", style: TextStyle(color: Colors.white)),
-			items: widget.audioTracks.entries.map((entry) {
-				return DropdownMenuItem<int>(
-				value: entry.key,
-				child: Text(entry.value, style: const TextStyle(color: Colors.white)),
-				);
-			}).toList(),
-			onChanged: (value) {
-				if (value != null) {
-					widget.controller.setAudioTrack(value);
-					setState(() {
-						selectedAudioTrack = value;
-					});
-				}
-			},
+		return Positioned(
+			bottom: 100,
+			right: 40,
+			child: DropdownButton<int>(
+				dropdownColor: Colors.black87,
+				value: widget.audioTracks.containsKey(selectedAudioTrack)
+						? selectedAudioTrack
+						: (widget.audioTracks.isNotEmpty ? widget.audioTracks.keys.first : null),
+				hint: const Text("Aucune piste audio", style: TextStyle(color: Colors.white)),
+				items: widget.audioTracks.entries.map((entry) {
+					return DropdownMenuItem<int>(
+						value: entry.key,
+						child: Text(entry.value, style: const TextStyle(color: Colors.white)),
+					);
+				}).toList(),
+				onChanged: (value) {
+					if (value != null) {
+						widget.controller.setAudioTrack(value);
+						setState(() {
+							selectedAudioTrack = value;
+						});
+					}
+				},
 			),
 		);
 	}
 
-Widget subtitleSelector() {
-  return Positioned(
-    bottom: 150,
-    right: 40,
-    child: DropdownButton<int>(
-      dropdownColor: Colors.black87,
-      value: widget.subtitleTracks.containsKey(selectedSubtitleTrack)
-          ? selectedSubtitleTrack
-          : (widget.subtitleTracks.isNotEmpty ? widget.subtitleTracks.keys.first : -1),
-      hint: const Text("Aucun sous-titre", style: TextStyle(color: Colors.white)),
-      items: [
-        const DropdownMenuItem<int>(
-          value: -1,
-          child: Text("Aucun sous-titre", style: TextStyle(color: Colors.white)),
-        ),
-        ...widget.subtitleTracks.entries.map((entry) {
-          return DropdownMenuItem<int>(
-            value: entry.key,
-            child: Text(entry.value, style: const TextStyle(color: Colors.white)),
-          );
-        }).toList(),
-      ],
-      onChanged: (value) {
-        if (value != null) {
-          widget.controller.setSpuTrack(value);
-          setState(() {
-            selectedSubtitleTrack = value;
-          });
-        }
-      },
-    ),
-  );
-}
+	Widget subtitleSelector() {
+		return Positioned(
+			bottom: 150,
+			right: 40,
+			child: DropdownButton<int>(
+				dropdownColor: Colors.black87,
+				value: widget.subtitleTracks.containsKey(selectedSubtitleTrack)
+						? selectedSubtitleTrack
+						: (widget.subtitleTracks.isNotEmpty ? widget.subtitleTracks.keys.first : -1),
+				hint: const Text("Aucun sous-titre", style: TextStyle(color: Colors.white)),
+				items: [
+					const DropdownMenuItem<int>(
+						value: -1,
+						child: Text("Aucun sous-titre", style: TextStyle(color: Colors.white)),
+					),
+					...widget.subtitleTracks.entries.map((entry) {
+						return DropdownMenuItem<int>(
+							value: entry.key,
+							child: Text(entry.value, style: const TextStyle(color: Colors.white)),
+						);
+					}).toList(),
+				],
+				onChanged: (value) {
+					if (value != null) {
+						widget.controller.setSpuTrack(value);
+						setState(() {
+							selectedSubtitleTrack = value;
+						});
+					}
+				},
+			),
+		);
+	}
 
 	String _formatDuration(Duration duration) {
 		return minToHour(duration.inMinutes);

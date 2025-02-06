@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
@@ -34,7 +33,7 @@ class _SeriesPagesState extends State<SeriesPages> {
 		super.initState();
 		for (int x = 0; x < widget.bigData['seasons'].length; x++) {
 			final seriesNb = widget.bigData['seasons'][x]['season_number'];
-			if ( seriesNb > 0 && widget.serveurData['seasons']['S$seriesNb']['complete']) {
+			if ( seriesNb > 0 && NIGHTServices().checkDlSeason(widget.serveurData['seasons']['S$seriesNb'])) {
 				seasons.add(widget.bigData['seasons'][x]['season_number']);
 			}
 		}
@@ -119,40 +118,28 @@ class _SeriesPagesState extends State<SeriesPages> {
 	///////////////////////////////////////////////////////////////
 	/// affichage des épisodes
 	Widget printEp() {
+		final isComplete = widget.serveurData['seasons']['S$season']['complete'];
 		return Column(
 			children: List.generate(
-				widget.seasContent[season - 1]['episodes'].length,
-				(index) {
+				isComplete ?
+				widget.seasContent[season - 1]['episodes'].length
+						:
+				widget.serveurData['seasons']['S$season']['episode'].length,
+						(index) {
 					final tempS = widget.seasContent[season - 1]['episodes'];
+					final tempE = isComplete ? index : widget.serveurData['seasons']['S$season']['episode'][index];
 					return Padding(
 						padding: EdgeInsets.only(
 							bottom: index == tempS.length - 1 ? 0 : 20,
 						),
 						child: Eptemplate(
-							index: index,
-							time: tempS[index]['runtime'] ?? 0,
-							title: tempS[index]['name'] ?? "inconue",
-							imgPath: "https://image.tmdb.org/t/p/w300/${tempS[index]['still_path']}?api_key=${dotenv.get('TMDB_KEY')}",
-							overview: tempS[index]['overview'],
-							id: "${widget.bigData['id']}_${widget.seasContent[season - 1]['_id']}_${tempS[index]['id']}",
-							onTap: () async {
-								String name = widget.serveurData['title'];
-								name += " S${season.toString().padLeft(2, '0')} E${(index + 1).toString().padLeft(2, '0')}";
-								final path = await NIGHTServices().searchContent(
-									name,
-									widget.serveurData['name'],
-									widget.movie
-								) ?? "null";
-								final encodedPath = Uri.encodeComponent(path);
-								final videoUrl = "http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
-								print(path);
-								if (mounted) {
-									Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
-									);
-								}
-							},
+								index: isComplete ? tempE : tempE - 1,
+								time: tempS[tempE]['runtime'] ?? 0,
+								title: tempS[tempE]['name'] ?? "inconue",
+								imgPath: "https://image.tmdb.org/t/p/w300/${tempS[tempE]['still_path']}?api_key=${dotenv.get('TMDB_KEY')}",
+								overview: tempS[tempE]['overview'],
+								id: "${widget.bigData['id']}_${widget.seasContent[season - 1]['_id']}_${tempS[tempE]['id']}",
+								onTap: () => onEpTap(tempE + 1)
 						),
 					);
 				},
@@ -163,5 +150,20 @@ class _SeriesPagesState extends State<SeriesPages> {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////// zone des fonctions
 
-	
+	///////////////////////////////////////////////////////////////
+	/// lance la vidéo lors de l'appuie sur un épisode
+	void onEpTap(int index) async {
+		String name = widget.serveurData['title'];
+		name += " S${season.toString().padLeft(2, '0')} E${index.toString().padLeft(2, '0')}";
+		final path = await NIGHTServices().searchContent(name, widget.serveurData['name'], widget.movie) ?? "null";
+		final encodedPath = Uri.encodeComponent(path);
+		final videoUrl = "http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/streamVideo?api_key=${dotenv.get('NIGHTCENTER_KEY')}&path=$encodedPath";
+		print("donne : $name -- path : $path");
+		if (mounted) {
+			Navigator.push(
+					context,
+					MaterialPageRoute(builder: (context) => VlcVideoPlayer(videoUrl: videoUrl))
+			);
+		}
+	}
 }
