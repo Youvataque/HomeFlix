@@ -2,35 +2,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SeasonPickStruct {
-  int seasonStart;
-  int seasonEnd;
-  int seasonEp;
-  int episode;
+	int seasonStart;
+	int seasonEnd;
+	int seasonEp;
+	int episode;
 
-  SeasonPickStruct({
-    required this.seasonStart,
-    required this.seasonEnd,
-    required this.episode,
-    required this.seasonEp,
-  });
+	SeasonPickStruct({
+		required this.seasonStart,
+		required this.seasonEnd,
+		required this.episode,
+		required this.seasonEp,
+	});
 }
 
 class SeasonPicker extends StatefulWidget {
-  final List<String> strList;
-  final String pickerTitle;
-  final void Function(int) func;
-  final List<int> disabledIndexes;
+	final List<String> strList;
+	final String pickerTitle;
+	final void Function(int) func;
+	final List<int> disabledIndexes;
 
-  const SeasonPicker({
-    required this.strList,
-    required this.pickerTitle,
-    required this.func,
-    required this.disabledIndexes,
-    super.key,
-  });
+	const SeasonPicker({
+		required this.strList,
+		required this.pickerTitle,
+		required this.func,
+		required this.disabledIndexes,
+		super.key,
+	});
 
-  @override
-  State<SeasonPicker> createState() => _SeasonPickerState();
+	@override
+	State<SeasonPicker> createState() => _SeasonPickerState();
 }
 
 class _SeasonPickerState extends State<SeasonPicker> {
@@ -85,7 +85,7 @@ class _SeasonPickerState extends State<SeasonPicker> {
 		return CupertinoAlertDialog(
 			title: Text(widget.pickerTitle),
 			content: SizedBox(
-				height: 200, 
+				height: 200,
 				child: CupertinoPicker(
 					itemExtent: 32.0,
 					onSelectedItemChanged: (int index) {
@@ -99,10 +99,10 @@ class _SeasonPickerState extends State<SeasonPicker> {
 							child: Text(
 								widget.strList[index],
 								style: TextStyle(
-									color: isDisabled ? 
-											Theme.of(context).disabledColor
-										: 
-											Theme.of(context).primaryColor,
+									color: isDisabled ?
+									Theme.of(context).disabledColor
+											:
+									Theme.of(context).primaryColor,
 								),
 							),
 						);
@@ -115,7 +115,7 @@ class _SeasonPickerState extends State<SeasonPicker> {
 					child: Text(
 						"Retour",
 						style: TextStyle(
-							color: Theme.of(context).primaryColor
+								color: Theme.of(context).primaryColor
 						),
 					),
 					onPressed: () {
@@ -127,7 +127,7 @@ class _SeasonPickerState extends State<SeasonPicker> {
 					child: Text(
 						"OK",
 						style: TextStyle(
-							color: Theme.of(context).colorScheme.tertiary
+								color: Theme.of(context).colorScheme.tertiary
 						),
 					),
 					onPressed: () {
@@ -135,8 +135,8 @@ class _SeasonPickerState extends State<SeasonPicker> {
 
 						} else {
 							setState(() {
-							  	title = widget.strList[selectedIndex];
-							  	picked = true;
+								title = widget.strList[selectedIndex];
+								picked = true;
 								widget.func(selectedIndex + 1);
 							});
 							Navigator.pop(context);
