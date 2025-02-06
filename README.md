@@ -4,7 +4,7 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 ![plot](./githubRes/presv1.webp)
 
-## Installation et mise en route
+## Installation et mise en route (version sans auth)
 
 ### Serveur et API
 
@@ -62,4 +62,4 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 ### En cas de besoin ou de suggestion
 
-Vous pouvez trouver de quoi me contacter sur mon site internet (il est joint à ce GitHub). Et oui je concède avoir emprunter l'icon de popcorn time par manque d'inspiration (ça changera surement).
+Vous pouvez trouver de quoi me contacter sur mon site internet (il est joint à ce GitHub).
