@@ -19,48 +19,50 @@ class _SeriesState extends State<Series> {
 	List<Widget> img10 = [];
 	List<Widget> img20 = [];
 	List<Widget> recentImg20 = [];
-	List<Widget> trashImg20 = [];
 	int current10 = 0;
 
-	///////////////////////////////////////////////////////////////
-	/// Ajoute les images à une liste d'image
 	void addImg() {
-		for (int x = 0; x < 10; x++) {
-			img10.add(TMDBService().createImg(
-				TMDBService.the10serieTren[x]['id'].toString(),
-				MediaQuery.of(context).size.width,
-				false,
-				2 / 3,
-				false,
-				"1280"
-			));
-		}
-		for (int x = 0; x < 20; x++) {
-			img20.add(TMDBService().createImg(
-				TMDBService.the20seriePop[x]['id'].toString(),
-				150,
-				false,
-				2 / 3,
-				false,
-				"500"
-			));
-			recentImg20.add(TMDBService().createImg(
-				TMDBService.the20serieTop[x]['id'].toString(),
-				150, 
-				false,
-				2 / 3,
-				false,
-				"500"
-			));
-		}
+		img10 = List.generate(10, (x) => TMDBService().createImg(
+			TMDBService.the10serieTren[x]['id'].toString(),
+			double.infinity,
+			false,
+			2 / 3,
+			false,
+			"1280",
+		));
+
+		img20 = List.generate(20, (x) => TMDBService().createImg(
+			TMDBService.the20seriePop[x]['id'].toString(),
+			150,
+			false,
+			2 / 3,
+			false,
+			"500",
+		));
+
+		recentImg20 = List.generate(20, (x) => TMDBService().createImg(
+			TMDBService.the20serieTop[x]['id'].toString(),
+			150,
+			false,
+			2 / 3,
+			false,
+			"500",
+		));
+	}
+
+	@override
+	void initState() {
+		super.initState();
+		addImg();
 	}
 
 	@override
 	Widget build(BuildContext context) {
-		addImg();
-		return Column(
+		final double screenWidth = MediaQuery.of(context).size.width;
+		return SingleChildScrollView(
+				child: Column(
 			children: [
-				trendZone(),
+				trendZone(screenWidth),
 				const Gap(35),
 				const Secondtitle(title: "Populaires"),
 				const Gap(10),
@@ -85,26 +87,25 @@ class _SeriesState extends State<Series> {
 				const Secondtitle(title: "Genres"),
 				const Gap(10),
 				SizedBox(
-					width: MediaQuery.sizeOf(context).width,
+					width: screenWidth,
 					child: Padding(
 						padding: const EdgeInsets.symmetric(horizontal: 10),
 						child: Categorigen(
 							func: (index) => toCategView(context, TMDBService.serieCateg[index], "Series", false),
 							data: TMDBService.serieCateg,
-						)
+						),
 					),
 				),
-				const Gap(20)
-			]
+				const Gap(20),
+			],
+				)
 		);
 	}
 
-	///////////////////////////////////////////////////////////////
-	/// zone des films du moment
-	Widget trendZone() {
+	Widget trendZone(double screenWidth) {
 		return SizedBox(
-			height: MediaQuery.sizeOf(context).width * 1.5 + 22,
-			width: MediaQuery.sizeOf(context).width,
+			height: screenWidth * 1.5 + 22,
+			width: screenWidth,
 			child: Stack(
 				children: [
 					CarouselSlider(
@@ -113,17 +114,19 @@ class _SeriesState extends State<Series> {
 							viewportFraction: 1,
 							autoPlay: true,
 							aspectRatio: 2 / 3,
-							onPageChanged: (index, reason) => current10 = index, 
+							onPageChanged: (index, reason) {
+								setState(() {
+									current10 = index;
+								});
+							},
 						),
 					),
-					openOnOf7()
+					openOnOf7(),
 				],
 			),
 		);
 	}
 
-	///////////////////////////////////////////////////////////////
-	/// Bouton ouvrant l'un des 10 trend
 	Widget openOnOf7() {
 		return Opencarouselselec(
 			func: () {

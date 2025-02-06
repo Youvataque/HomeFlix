@@ -58,46 +58,54 @@ class _FilmsState extends State<Films> {
 	}
 
 	@override
+	void initState() {
+		super.initState();
+
+	}
+
+	@override
 	Widget build(BuildContext context) {
 		addImg();
-		return Column(
-			children: [
-				trendZone(),
-				const Gap(35),
-				const Secondtitle(title: "Populaires"),
-				const Gap(10),
-				MovieListGen(
-					imgList: img20,
-					datas: TMDBService.the20moviePop,
-					movie: true,
-					leftWord: "Films",
-					imgWidth: 150,
-				),
-				const Gap(35),
-				const Secondtitle(title: "Sorties cette année"),
-				const Gap(10),
-				MovieListGen(
-					imgList: recentImg20,
-					datas: TMDBService.the20movieRecent,
-					movie: true,
-					leftWord: "Films",
-					imgWidth: 150,
-				),
-				const Gap(35),
-				const Secondtitle(title: "Genres"),
-				const Gap(10),
-				SizedBox(
-					width: MediaQuery.sizeOf(context).width,
-					child: Padding(
-						padding: const EdgeInsets.symmetric(horizontal: 10),
-						child: Categorigen(
-							func: (index) => toCategView(context, TMDBService.movieCateg[index], "Films", true),
-							data: TMDBService.movieCateg,
-						)
+		return SingleChildScrollView(
+			child: Column(
+				children: [
+					trendZone(),
+					const Gap(35),
+					const Secondtitle(title: "Populaires"),
+					const Gap(10),
+					MovieListGen(
+						imgList: img20,
+						datas: TMDBService.the20moviePop,
+						movie: true,
+						leftWord: "Films",
+						imgWidth: 150,
 					),
-				),
-				const Gap(20)
-			]
+					const Gap(35),
+					const Secondtitle(title: "Sorties cette année"),
+					const Gap(10),
+					MovieListGen(
+						imgList: recentImg20,
+						datas: TMDBService.the20movieRecent,
+						movie: true,
+						leftWord: "Films",
+						imgWidth: 150,
+					),
+					const Gap(35),
+					const Secondtitle(title: "Genres"),
+					const Gap(10),
+					SizedBox(
+						width: MediaQuery.sizeOf(context).width,
+						child: Padding(
+								padding: const EdgeInsets.symmetric(horizontal: 10),
+								child: Categorigen(
+									func: (index) => toCategView(context, TMDBService.movieCateg[index], "Films", true),
+									data: TMDBService.movieCateg,
+								)
+						),
+					),
+					const Gap(20)
+				]
+			),
 		);
 	}
 

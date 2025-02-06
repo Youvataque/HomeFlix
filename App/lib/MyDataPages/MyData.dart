@@ -92,7 +92,8 @@ class _MyDataState extends State<MyData> {
 
 	@override
 	Widget build(BuildContext context) {
-		return Column(
+		return SingleChildScrollView(
+				child: Column(
 			children: [
 				const Gap(125),
 				const Secondtitle(title: "Gestion contenue"),
@@ -147,6 +148,7 @@ class _MyDataState extends State<MyData> {
 				const SpecWidget(),
 				const Gap(20)
 			],
+				)
 		);
 	}
 }

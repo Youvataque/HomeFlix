@@ -72,9 +72,9 @@ void toCategView(BuildContext context, Map<String, dynamic> details, String left
 				size: 16,
 			);
 		} else if (percent >= 6) {
-			return Icon(
+			return const Icon(
 				CupertinoIcons.heart_fill,
-				color: Theme.of(context).colorScheme.tertiary,
+				color: Color.fromRGBO(229, 72, 77, 1),
 				size: 16,
 			);
 		} else if (percent >= 5) {

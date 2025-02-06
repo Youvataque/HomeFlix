@@ -149,7 +149,8 @@ class _DataviewState extends State<Dataview> {
 	/// contenu de la page
 	Wrap contentBody(Map<String, dynamic> datas) {
 		List<MapEntry> filteredEntries = datas[widget.where].entries.where((entry) {
-			return cleanString(entry.value["title"].toString()).contains(cleanString(queryController.text));
+			String title = entry.value["title"]?.toString() ?? "";
+			return cleanString(title).contains(cleanString(queryController.text));
 		}).toList();
 
 		if (filteredEntries.isNotEmpty) {
@@ -157,9 +158,8 @@ class _DataviewState extends State<Dataview> {
 				return a.value["title"].toString().compareTo(b.value["title"].toString());
 			});
 		}
-
 		return Wrap(
-			key: ValueKey(datas),
+			key: ValueKey(queryController.text),
 			spacing: 10,
 			runSpacing: 20,
 			alignment: WrapAlignment.start,

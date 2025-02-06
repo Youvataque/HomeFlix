@@ -95,13 +95,7 @@ class _MyTabbarState extends State<MyTabbar> {
   	Stack pageHeader(Widget myPage, bool isAdd) {
 		return Stack(
 			children: [
-				SingleChildScrollView(
-					child: Column(
-						children: [
-							myPage
-						],
-					)
-				),
+				myPage,
 				TopOfView(
 					refresh: () async {
 						if (mainKey.currentState != null) {

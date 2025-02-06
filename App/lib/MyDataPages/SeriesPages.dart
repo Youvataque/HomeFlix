@@ -6,8 +6,6 @@ import 'package:homeflix/Components/ViewComponents/PlayerPages/VideoPlayer.dart'
 import 'package:homeflix/Data/NightServices.dart';
 import 'package:homeflix/main.dart';
 
-import '../Components/ViewComponents/PlayerPages/VideoProxyServer.dart';
-
 ///////////////////////////////////////////////////////////////
 /// Template des pages de séries
 class SeriesPages extends StatefulWidget {
@@ -142,7 +140,7 @@ class _SeriesPagesState extends State<SeriesPages> {
 							imgPath: "https://image.tmdb.org/t/p/w300/${tempS[tempE]['still_path']}?api_key=${dotenv.get('TMDB_KEY')}",
 							overview: tempS[tempE]['overview'],
 							id: "${widget.bigData['id']}_${widget.seasContent[season - 1]['_id']}_${tempS[tempE]['id']}",
-							onTap: () => onEpTap(tempE + 1)
+							onTap: () => onEpTap(isComplete ? tempE + 1 : tempE)
 						),
 					);
 				},

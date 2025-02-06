@@ -112,10 +112,10 @@ class _SeasonPickerState extends State<SeasonPicker> {
 			actions: [
 				CupertinoDialogAction(
 					isDefaultAction: true,
-					child: Text(
+					child: const Text(
 						"Retour",
 						style: TextStyle(
-							color: Theme.of(context).primaryColor
+							color: Color.fromRGBO(229, 72, 77, 1),
 						),
 					),
 					onPressed: () {
@@ -127,7 +127,8 @@ class _SeasonPickerState extends State<SeasonPicker> {
 					child: Text(
 						"OK",
 						style: TextStyle(
-							color: Theme.of(context).colorScheme.tertiary
+							color: Theme.of(context).primaryColor,
+							fontWeight: FontWeight.bold
 						),
 					),
 					onPressed: () {
