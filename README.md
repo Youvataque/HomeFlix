@@ -1,4 +1,4 @@
-# HomeFlix
+# HomeFlix (version sans auth)
 
 Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de publicités sur les différentes plateformes de streaming, je me suis mis en tête de créer un système permettant de facilement télécharger des torrents sur un serveur distant piloté par API. L'idée est donc ici de proposer une interface intuitive et conviviale au torrenting pour le rendre accessible à quiconque le souhaite. Vous retrouverez ici une application pour mobile et une API pour serveur Linux, qui bien entendu s'amélioreront au fil du temps. Évidemment, ce système a été conçu dans l'unique but de m'exercer et ne doit être utilisé que sur des œuvres dont on a le droit d’usage privé. Je ne pourrai donc être tenu d'aucune manière responsable de l'utilisation qui en sera faite ;).
 
@@ -62,4 +62,4 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 
 ### En cas de besoin ou de suggestion
 
-Vous pouvez trouver de quoi me contacter sur mon site internet (il est joint à ce GitHub). Et oui je concède avoir emprunter l'icon de popcorn time par manque d'inspiration (ça changera surement).
+Vous pouvez trouver de quoi me contacter sur mon site internet (il est joint à ce GitHub).
