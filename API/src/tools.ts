@@ -10,8 +10,8 @@ interface FileSystemItem {
 const trashWord: (string | RegExp)[] = [
     'multi', 'vff', 'vfi', 'vfq', 'vf2', 'vo', 'vostfr', 'truefrench', 'french', 'en', 'fr', 'vof',
     'bluray', 'web', 'webrip', 'web-dl', 'bdrip', 'hdrip', 'dvdrip', 'nf', 'amazon', 'amzn', 'hdtv', 'rip', 'hddvd',
-    '1080p', '720p', '2160p', '4k', '2k', '10bit', 'hdr', 'hdr10', 'hdr10plus', 'dolby vision', 'dv', 'hdlight', 'fullhd', 'imax',
-    'x264', 'x265', 'h264', 'h265', 'hevc', 'aac', 'dts', 'ddp', 'ac3', 'eac3', 'mp4', 'mkv', 'av1',
+    '1080p', '720p', '2160p', '4k', '4KLight', '2k', '10bit', 'hdr', 'hdr10', 'hdr10plus', 'dolby vision', 'dv', 'hdlight', 'fullhd', 'imax',
+    'x264', 'x265', 'h264', 'h265', 'hevc', 'aac', 'dts', 'ddp', 'ac3', 'eac3', 'mp4', 'mkv', 'av1','atmos', '6ch',
     'fw', 'pophd', 'neostark', 'serqph', 'bonbon', 'qtz', 'slay3r', 'idys', 'r3mix', 'asko', 'btt', 'tox', 'gwen', 'hdgz', 'mhgz', 'preums', 'papaya',
     /\b(19|20)\d{2}\b/g,
     'extended', 'remastered', 'final', 'complete', 'repack', 'custom', 'unrated', 'super duper cut', 'integrale', 'collection', 'edition', 'part', 'vol', 'volume', 'chapter',
