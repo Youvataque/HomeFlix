@@ -1,4 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////
+
+import axios from "axios";
+
 // Définition de l'interface servant à la lecture du contenu d'un dossier (ls -l)
 interface FileSystemItem {
     name: string;
@@ -134,3 +137,23 @@ export function getMimeType(filePath:string) {
     };
     return mimeTypes[extension] || 'application/octet-stream';
 }
+
+export const fetchSourceFunc = async (page: number, name: string) => {
+    try {
+        const response = await axios.get(`http://localhost:1337/api/fetchContent?page=${page}&name=${name}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du contenu:', error);
+        throw error;
+    }
+};
+
+export const fetchSrcUrl = async (id: string) => {
+    try {
+        const response = await axios.get(`http://localhost:1337/api/downloadUrl?id=${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du contenu:', error);
+        throw error;
+    }
+};

@@ -1,10 +1,10 @@
 import express, { Application } from 'express';
 import dataRoute from '../routes/dataRoutes';
-
+import shadowRoute from '../routes/shadowRoutes';
 const app: Application = express();
 const port: number = 4000;
 app.use(express.json());
-app.use('/api', dataRoute);
+app.use('/api', dataRoute, shadowRoute);
 
 /////////////////////////////////////////////////////////////////////////////////
 // Fonction pour démarrer le serveur API
