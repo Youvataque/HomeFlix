@@ -1,16 +1,45 @@
 # HomeFlix
 
-Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de publicités sur les différentes plateformes de streaming, je me suis mis en tête de créer un système permettant de facilement télécharger des torrents sur un serveur distant piloté par API. L'idée est donc ici de proposer une interface intuitive et conviviale au torrenting pour le rendre accessible à quiconque le souhaite. Vous retrouverez ici une application pour mobile et une API pour serveur Linux, qui bien entendu s'amélioreront au fil du temps. Évidemment, ce système a été conçu dans l'unique but de m'exercer et ne doit être utilisé que sur des œuvres dont on a le droit d’usage privé. Je ne pourrai donc être tenu d'aucune manière responsable de l'utilisation qui en sera faite ;).
+Dans le but d’élargir mes compétences, j’ai développé HomeFlix, une application complète permettant de télécharger et de visionner du contenu vidéo (films, séries, documentaires) à partir d’une source distante. L’objectif est d’offrir une expérience utilisateur fluide, moderne et intuitive.
 
 ![plot](./githubRes/presv1.webp)
 
+## Architecture du système
+
+### Le système est divisé en trois parties distinctes :
+
+(A) L’application mobile
+Une application cross-platform développée avec Flutter. Elle permet d’accéder à toute la bibliothèque disponible sur la source, d’effectuer des téléchargements et de visionner les contenus, que ce soit en ligne ou hors ligne.
+
+(B) L’API serveur
+Développée avec Node.js / Express, elle communique avec l’application pour :
+- Gérer les téléchargements,
+- Organiser la bibliothèque de contenu,
+- Transmettre le flux vidéo en streaming,
+- Fournir des informations sur l’état du serveur.
+
+(C) L’API source
+Cette API est conçue pour récupérer et formater les informations issues de la source distante avant de les transmettre aux autres composants du système. Étant adaptable à différentes sources de contenu, elle n’est pas fournie dans ce projet, laissant ainsi chacun libre de l’implémenter selon ses besoins.
+
+⚠️ Responsabilité : Ce projet est fourni à des fins éducatives et son utilisation doit respecter les lois en vigueur. Je décline toute responsabilité quant à l’usage qui en est fait.
+
+## APIs et technologies utilisées
+
+### APIs mobilisées :
+- TMDB API : pour obtenir les informations sur les films et séries,
+- API source : à implémenter selon la source choisie,
+- API serveur (B) : gestion des téléchargements et du streaming,
+- API intermédiaire (C) : traitement et mise en forme des données provenant de la source.
+
+### Technologies principales :
+- Flutter : développement de l’application mobile,
+- Node.js / Express : gestion du backend et des requêtes API.
+	
 ## Installation et mise en route (version sans auth)
 
 ### Serveur et API
 
 - Il vous faudra installer Linux sur une machine.
-
-- Paramétrer un partage FTP (idéalement SFTP) pour l'accès distant aux films et séries.
 
 - Installer qbittorrent.
 
@@ -49,8 +78,6 @@ Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de public
 ### App mobile
 
 - Vous devrez ajouter un fichier .env à la racine du dossier de l'application.
-
-- Ajouter votre pass_key ygg.re (YGG_PASSKEY=...).
 
 - Ajouter votre clé API https://themoviedb.org/ (TMDB_KEY=...).
 
