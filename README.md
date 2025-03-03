@@ -1,65 +1,42 @@
 # HomeFlix
 
-Suite à l'augmentation exagérée des tarifs ainsi qu'à l'apparition de publicités sur les différentes plateformes de streaming, je me suis mis en tête de créer un système permettant de facilement télécharger des torrents sur un serveur distant piloté par API. L'idée est donc ici de proposer une interface intuitive et conviviale au torrenting pour le rendre accessible à quiconque le souhaite. Vous retrouverez ici une application pour mobile et une API pour serveur Linux, qui bien entendu s'amélioreront au fil du temps. Évidemment, ce système a été conçu dans l'unique but de m'exercer et ne doit être utilisé que sur des œuvres dont on a le droit d’usage privé. Je ne pourrai donc être tenu d'aucune manière responsable de l'utilisation qui en sera faite ;).
+Dans le but d’élargir mes compétences, j’ai développé HomeFlix, une application complète permettant de télécharger et de visionner du contenu vidéo (films, séries, documentaires) à partir d’une source distante. L’objectif est d’offrir une expérience utilisateur fluide, moderne et intuitive.
 
 ![plot](./githubRes/presv1.webp)
 
-## Installation et mise en route (version sans auth)
+## Architecture du système
 
-### Serveur et API
+### Le système est divisé en trois parties distinctes :
 
-- Il vous faudra installer Linux sur une machine.
+(A) L’application mobile
+Une application cross-platform développée avec Flutter. Elle permet d’accéder à toute la bibliothèque disponible sur la source, d’effectuer des téléchargements et de visionner les contenus, que ce soit en ligne ou hors ligne.
 
-- Paramétrer un partage FTP (idéalement SFTP) pour l'accès distant aux films et séries.
+(B) L’API serveur
+Développée avec Node.js / Express, elle communique avec l’application pour :
+- Gérer les téléchargements,
+- Organiser la bibliothèque de contenu,
+- Transmettre le flux vidéo en streaming,
+- Fournir des informations sur l’état du serveur.
 
-- Installer qbittorrent.
+(C) L’API source
+Cette API est conçue pour récupérer et formater les informations issues de la source distante avant de les transmettre aux autres composants du système. Étant adaptable à différentes sources de contenu, elle n’est pas fournie dans ce projet, laissant ainsi chacun libre de l’implémenter selon ses besoins.
 
-- Activer l'interface WEBAPI de qbittorrent dans les paramètres (Web user interface ...) et cocher 'bypass authentication for clients on localhost'.
+⚠️ Responsabilité : Ce projet est fourni à des fins éducatives et son utilisation doit respecter les lois en vigueur. Je décline toute responsabilité quant à l’usage qui en est fait.
 
-- Ouvrir le port 4000 avec 'ufw allow 4000' sur votre machine.
+## APIs et technologies utilisées
 
-- (Optionnel) ouvrir les ports 4000, 20 et 21 sur votre box pour que le serveur fonctionne en dehors de votre réseau.
+### APIs mobilisées :
+- TMDB API : pour obtenir les informations sur les films et séries,
+- API source : à implémenter selon la source choisie,
+- API serveur (B) : gestion des téléchargements et du streaming,
+- API intermédiaire (C) : traitement et mise en forme des données provenant de la source.
 
-- Copier le fichier API dans votre home
-  
-- Créer un fichier contentData.json à la racine de l'api
+### Technologies principales :
+- Flutter : développement de l’application mobile,
+- Node.js / Express : gestion du backend et des requêtes API.
+	
+## Installation et mise en route (version avec auth)
 
-- écrir : {"tv" : {}, "movie": {}, "queue":{}} dans le fichier contentData.json
+Concrètement, cette version s’installe de manière similaire à la version classique. Cependant, il est nécessaire de créer un compte Firebase, d’y ajouter les utilisateurs manuellement, puis d’intégrer les fichiers de configuration Firebase dans l’API.
 
-- Créer un fichier .env à la racine du dossier API.
-
-- Ajouter [API_KEY="ce que vous voulez"] à votre .env.
-
-- Ajouter [TORRENT_FOLDER="le chemin d'accès de vos fichier .torrent"] à votre .env
-
-- Ajouter [CONTENT_FOLDER="le chemin d'accès de vos films et serie"] à votre .env
-
-### (optionnel mais fortement recommandé) VPN
-
-- Installer votre VPN favori avec un fichier de configuration openVPN (openvpn.udp) (car celui-ci ne réécrit pas systématiquement les priorités des interfaces réseaux).
-
-- Modifier sa priorité réseau avec : sudo nmcli connection modify "nom du fichier openvpn.udp" ipv4.route-metric 200
-
-- Lancer le vpn avec : sudo nmcli connection up "nom du fichier openvpn.udp" --ask (il faudra saisir la clef trouvable sur le site du vpn choisi)
-
-- ajouter [VPN_PASS="votre clef vpn"] à votre .env (coté serveur).
-
-- Enfin, aller dans qbittorrent et dans les paramètres avancés, sélectionner tun0 dans Network interface.
-
-### App mobile
-
-- Vous devrez ajouter un fichier .env à la racine du dossier de l'application.
-
-- Ajouter votre pass_key ygg.re (YGG_PASSKEY=...).
-
-- Ajouter votre clé API https://themoviedb.org/ (TMDB_KEY=...).
-
-- Ajouter la clé API du serveur (NIGHTCENTER_KEY=...) (celle que vous avez choisie précédemment).
-  
-- Ajouter l'ip du serveur (NIGHTCENTER_IP=...) (votre ip public en cas d'ouverture ou privé sur votre réseau local)
-
-- Enfin il ne vous reste plus qu'à build l'application pour l'os souhaité (il vous faudra une licence payante pour iOS).
-
-### En cas de besoin ou de suggestion
-
-Vous pouvez trouver de quoi me contacter sur mon site internet (il est joint à ce GitHub). Et oui je concède avoir emprunter l'icon de popcorn time par manque d'inspiration (ça changera surement).
+Le système étant relativement complexe à expliquer — et le deviendra encore davantage avec le temps —, je vous recommande d’opter pour la version simple. Cela évitera également toute dérive, comme la commercialisation d’un service illégal.
