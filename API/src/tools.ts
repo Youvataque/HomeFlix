@@ -1,4 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////
+
+import axios from "axios";
+
 // Définition de l'interface servant à la lecture du contenu d'un dossier (ls -l)
 interface FileSystemItem {
     name: string;
@@ -10,9 +13,9 @@ interface FileSystemItem {
 const trashWord: (string | RegExp)[] = [
     'multi', 'vff', 'vfi', 'vfq', 'vf2', 'vo', 'vostfr', 'truefrench', 'french', 'en', 'fr', 'vof',
     'bluray', 'web', 'webrip', 'web-dl', 'bdrip', 'hdrip', 'dvdrip', 'nf', 'amazon', 'amzn', 'hdtv', 'rip', 'hddvd',
-    '1080p', '720p', '2160p', '4k', '4KLight', '2k', '10bit', 'hdr', 'hdr10', 'hdr10plus', 'dolby vision', 'dv', 'hdlight', 'fullhd', 'imax',
-    'x264', 'x265', 'h264', 'h265', 'hevc', 'aac', 'dts', 'ddp', 'ac3', 'eac3', 'mp4', 'mkv', 'av1','atmos', '6ch',
-    'fw', 'pophd', 'neostark', 'serqph', 'bonbon', 'qtz', 'slay3r', 'idys', 'r3mix', 'asko', 'btt', 'tox', 'gwen', 'hdgz', 'mhgz', 'preums', 'papaya',
+    '1080p', '720p', '2160p', '4k', '4KLight', '2k', '10bit', 'hdr', 'hdr10', 'hdr10plus', 'dolby vision', 'dv', 'hdlight', 'fullhd', 'imax', '5.1', '7.1', 
+    'x264', 'x265', 'h264', 'h265', 'hevc', 'aac', 'dts', 'ddp', 'ac3', 'eac3', 'mp4', 'mkv', 'av1','atmos', '6ch', 'k7', 
+    'fw', 'pophd', 'neostark', 'serqph', 'bonbon', 'qtz', 'slay3r', 'idys', 'r3mix', 'asko', 'btt', 'tox', 'gwen', 'hdgz', 'mhgz', 'preums', 'papaya', 'qtz', 
     /\b(19|20)\d{2}\b/g,
     'extended', 'remastered', 'final', 'complete', 'repack', 'custom', 'unrated', 'super duper cut', 'integrale', 'collection', 'edition', 'part', 'vol', 'volume', 'chapter',
     'saison', 'season', 'episode', 'ep', 's', 'e'
@@ -134,3 +137,23 @@ export function getMimeType(filePath:string) {
     };
     return mimeTypes[extension] || 'application/octet-stream';
 }
+
+export const fetchSourceFunc = async (page: number, name: string) => {
+    try {
+        const response = await axios.get(`http://localhost:1337/api/fetchContent?page=${page}&name=${name}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du contenu:', error);
+        throw error;
+    }
+};
+
+export const fetchSrcUrl = async (id: string) => {
+    try {
+        const response = await axios.get(`http://localhost:1337/api/downloadUrl?id=${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du contenu:', error);
+        throw error;
+    }
+};

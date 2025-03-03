@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Router, Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -71,52 +70,6 @@ router.post('/contentStatus', authMiddleware, (req: Request, res: Response) => {
 			res.status(201).json({ message: 'Données ajoutées avec succès' });
 		});
 	});
-});
-
-/////////////////////////////////////////////////////////////////////////////////
-// Route pour récupérer le requète de téléchargement du content
-router.post('/contentDl', authMiddleware, async (req, res) => {
-	const { fileUrl, filename } = req.body; 
-
-	if (!fileUrl) {
-		return res.status(400).json({ message: 'L\'URL du fichier est requise.' });
-	}
-
-	try {
-		const response = await axios({
-			method: 'GET',
-			url: fileUrl,
-			responseType: 'stream'
-		});
-
-		let finalFilename = filename || 'downloaded_file.torrent';
-		if (!filename) {
-			const contentDisposition = response.headers['content-disposition'];
-			if (contentDisposition) {
-				const match = contentDisposition.match(/filename\*?=['"]?(.+?)['"]?$/);
-				if (match) {
-					finalFilename = decodeURIComponent(match[1]);
-				}
-			}
-		}
-		if (!finalFilename.endsWith('.torrent')) {
-			finalFilename += '.torrent';
-		}
-
-		const filePath = path.resolve(__dirname, process.env.TORRENT_FOLDER ?? "", finalFilename);
-		const writer = fs.createWriteStream(filePath);
-
-		response.data.pipe(writer);
-		writer.on('finish', () => {
-			return res.status(200).json({ message: 'Fichier téléchargé avec succès.' });
-		});
-		writer.on('error', (err) => {
-			console.error(err);
-			return res.status(500).json({ message: 'Erreur lors de l\'écriture du fichier.' });
-		});
-	} catch (error) {
-		return res.status(500).json({ message: 'Erreur lors de la requête HTTP.' });
-	}
 });
 
 /////////////////////////////////////////////////////////////////////////////////

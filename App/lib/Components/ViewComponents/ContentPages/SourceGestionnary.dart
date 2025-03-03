@@ -1,23 +1,21 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gap/gap.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MultiSplit.dart';
 import 'package:homeflix/Components/ViewComponents/ContentPages/DownloadPopUp.dart';
 import 'package:homeflix/Data/NightServices.dart';
-import 'package:homeflix/Data/YggServices.dart';
 import 'package:homeflix/main.dart';
 
 ///////////////////////////////////////////////////////////////
 /// composant gérant le téléchargement et l'affichage des torrents
-class Ygggestionnary extends StatefulWidget {
+class SourceGestionnary extends StatefulWidget {
 	final String name;
 	final String originalName;
 	final Map<String, dynamic> selectData;
 	final bool movie;
 	final VoidCallback func;
-	const Ygggestionnary({
+	const SourceGestionnary({
 		super.key,
 		required this.name,
 		required this.originalName,
@@ -27,10 +25,10 @@ class Ygggestionnary extends StatefulWidget {
 	});
 
 	@override
-	State<Ygggestionnary> createState() => _YgggestionnaryState();
+	State<SourceGestionnary> createState() => _SourceGestionnaryState();
 }
 
-class _YgggestionnaryState extends State<Ygggestionnary> {
+class _SourceGestionnaryState extends State<SourceGestionnary> {
 	int currentPage = 1;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,8 +197,8 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: [
 								leechSeed(
-									results[index]['seeders'].toString(),
-									results[index]['leechers'].toString()
+									results[index]['seed'].toString(),
+									results[index]['leech'].toString()
 								),
 								Text(
 									"${((results[index]['size'] / (1024 * 1024 * 1024)).toStringAsFixed(2))} Go",
@@ -271,9 +269,8 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 	///////////////////////////////////////////////////////////////
 	/// Télécharge les liens 
 	Widget gestionnaryContent(String nameForSearch) {
-		print(widget.name);
 		return FutureBuilder(
-			future: YGGService().fetchQueryTorrent(currentPage, nameForSearch),
+			future: NIGHTServices().fetchQueryTorrent(currentPage, nameForSearch),
 			builder: (context, snapshot) {
 				if (snapshot.connectionState == ConnectionState.waiting) {
 					return Center(
@@ -327,7 +324,7 @@ class _YgggestionnaryState extends State<Ygggestionnary> {
 				'percent': 0.0
 			};
 		}
-		await YGGService().sendDownloadRequest('https://yggapi.eu/torrent/${results[index]['id']}/download?passkey=${dotenv.get("YGG_PASSKEY")}', results[index]['title']);
+		await NIGHTServices().sendDownloadRequest(results[index]['id'].toString(), results[index]['title']);
 		await NIGHTServices().postDataStatus(result, "queue");
 		mainKey.currentState!.dataStatusNotifier.value = await NIGHTServices().fetchDataStatus();
 		widget.func();

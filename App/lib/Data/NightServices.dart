@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:homeflix/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,6 +66,68 @@ class NIGHTServices {
 	}
 
 	///////////////////////////////////////////////////////////////
+	/// Fonction pour récupérer le contenu d'une page choisie  
+	/// depuis la source (C)
+	Future<List<Map<String, dynamic>>> fetchQueryTorrent(int page, String name) async {
+		List<Map<String, dynamic>> results = [];
+		final idToken = await _getIdToken();
+
+		if (idToken == null) {
+			print("Utilisateur non authentifié");
+			return results;
+		}
+
+		final response = await http.get(
+			Uri.parse("http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/fetchTorrentContent?page=$page&name=$name"),
+			headers: {
+				'Authorization': 'Bearer $idToken',
+			},
+			
+		);
+
+		if (response.statusCode == 200) {
+			final data = json.decode(response.body);
+			results = (data as List).map((item) => item as Map<String, dynamic>).toList();
+		} else {
+			print("Erreur sur la source -> ${response.reasonPhrase}");
+		}
+		return results;
+	}
+
+	//////////////////////////////////////////////////////////////////
+	/// fonction pour envoyer la requête de téléchargement au serveur
+	Future<void> sendDownloadRequest(String id, String filename) async {
+		final apiUrl = 'http://${dotenv.get('NIGHTCENTER_IP')}:4000/api/contentDl';
+
+		try {
+			final user = FirebaseAuth.instance.currentUser;
+			if (user == null) {
+				print('❌ Erreur: Utilisateur non authentifié.');
+				return;
+			}
+			final token = await user.getIdToken();
+			final response = await http.post(
+				Uri.parse(apiUrl),
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer $token',
+				},
+				body: jsonEncode({
+					'id': id,
+					'filename': filename
+				}),
+			);
+			if (response.statusCode == 200) {
+				print('✅ Fichier téléchargé avec succès');
+			} else {
+				print('❌ Erreur lors du téléchargement : ${response.body}');
+			}
+		} catch (e) {
+			print('❌ Erreur lors de la requête : $e');
+		}
+	}
+
+	///////////////////////////////////////////////////////////////
 	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
 	Future<void> postDataStatus(Map<String, dynamic> newData, String where) async {
 		final idToken = await _getIdToken();
@@ -94,7 +155,7 @@ class NIGHTServices {
 	}
 
 	///////////////////////////////////////////////////////////////
-	/// Méthode pour envoyer un contenu dans le queue de téléchargement du serveur
+	/// Méthode pour supprimer un contenue
 	Future<void> deleteData(Map<String, dynamic> newData) async {
 		final idToken = await _getIdToken();
 

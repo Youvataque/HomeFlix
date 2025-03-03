@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../ViewComponents/ErrorView.dart';
-
 class LogMainBod extends StatelessWidget {
   final Widget child;
   const LogMainBod({

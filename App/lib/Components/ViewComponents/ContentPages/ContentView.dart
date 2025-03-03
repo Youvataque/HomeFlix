@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:homeflix/Components/FondamentalAppCompo/SecondTop.dart';
 import 'package:homeflix/Components/Tools/FormatTool/MinToHour.dart';
 import 'package:homeflix/Components/Tools/FormatTool/NumberWithCom.dart';
-import 'package:homeflix/Components/ViewComponents/ContentPages/YggGestionnary.dart';
+import 'package:homeflix/Components/ViewComponents/ContentPages/SourceGestionnary.dart';
 import 'package:homeflix/Components/ViewComponents/LitleComponent.dart';
 import 'package:homeflix/Components/ViewComponents/PopUpTemplate.dart';
 import 'package:homeflix/main.dart';
@@ -298,7 +298,7 @@ class _ContentviewState extends State<Contentview> {
 				return AnimatedCrossFade(
 						firstChild: Padding(
 								padding: const EdgeInsets.symmetric(horizontal: 10),
-								child: Ygggestionnary(
+								child: SourceGestionnary(
 									key: ValueKey(searchName),
 									originalName: originalName,
 									name: searchName,

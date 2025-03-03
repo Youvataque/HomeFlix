@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -43,12 +42,11 @@ class MainState extends State<Main> {
 	int	refreshKey = 0;
 	ValueNotifier<Map<String, dynamic>> dataStatusNotifier = ValueNotifier<Map<String, dynamic>>({});
 	final VideoProxyServer _proxyServer = VideoProxyServer();
-	int _proxyPort = 8081;
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////// proxy vidéo
 
 	Future<void> _startProxy() async {
-		_proxyPort = await _proxyServer.startProxy();
+		await _proxyServer.startProxy();
 	}
 
 	Future<String> getProxyUrl(String videoUrl) async {
